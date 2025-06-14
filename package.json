@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build:client": "vite build",
+    "build": "vite build",
     "build:server": "tsc -p tsconfig.server.json",
-    "build": "npm run build:client && npm run build:server",
+    "build:full": "npm run build && npm run build:server",
     "lint": "eslint .",
     "preview": "vite preview",
     "server": "nodemon --exec vite-node api.ts",
