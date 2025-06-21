@@ -41,7 +41,7 @@ const ProfilePage = () => {
   const [updateSuccess, setUpdateSuccess] = useState<boolean>(false);
   const [updateError, setUpdateError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState<boolean>(false);
-  const { user } = useAuth();
+  const { user, getAuthHeader } = useAuth();
   
   // State for profile picture
   const [previewImage, setPreviewImage] = useState<string | null>(null);
@@ -57,6 +57,7 @@ const ProfilePage = () => {
 
   const API_BASE_URL = 
     import.meta.env.VITE_API_URL || "http://localhost:3000";
+
 
   // Check if the current user is viewing their own profile
   const isOwnProfile = user && userId === user._id;
@@ -77,9 +78,7 @@ const ProfilePage = () => {
           `${API_BASE_URL}/users/getprofile/${userId}`,
           {
             method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
+            headers: await getAuthHeader(),
             credentials: "include",
           },
         );
@@ -134,9 +133,7 @@ const ProfilePage = () => {
         `${API_BASE_URL}/shop/userInventory/${userId}`,
         {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: await getAuthHeader(),
           credentials: "include",
         }
       );
@@ -409,6 +406,7 @@ const ProfilePage = () => {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
+          ...(await getAuthHeader()),
         },
         credentials: "include",
         body: JSON.stringify(dataWithImage),

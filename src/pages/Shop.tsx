@@ -43,7 +43,7 @@ type ShopTab = "shop" | "inventory";
 
 const Shop = () => {
   const navigate = useNavigate();
-  const { user, setUser } = useAuth();
+  const { user, setUser, getAuthHeader } = useAuth();
   const [shopItems, setShopItems] = useState<ShopItem[]>([]);
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -65,7 +65,8 @@ const Shop = () => {
       try {
         // Fetch shop items
         const shopResponse = await fetch(`${API_BASE_URL}/shop/getShopItems`, {
-          credentials: "include"
+          credentials: "include",
+          headers: await getAuthHeader()
         });
         
         if (!shopResponse.ok) {
@@ -79,7 +80,9 @@ const Shop = () => {
         if (user?._id) {
           const inventoryResponse = await fetch(
             `${API_BASE_URL}/shop/userInventory/${user._id}`,
-            { credentials: "include" }
+            { credentials: "include",
+              headers: await getAuthHeader()
+             }
           );
           
           if (inventoryResponse.ok) {
@@ -144,7 +147,7 @@ const Shop = () => {
     try {
       const purchaseResponse = await fetch(`${API_BASE_URL}/shop/purchaseItem`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...await getAuthHeader() },
         credentials: "include",
         body: JSON.stringify({
           userId: user._id,
@@ -205,7 +208,7 @@ const Shop = () => {
     try {
       const equipResponse = await fetch(`${API_BASE_URL}/shop/equipItem`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...await getAuthHeader()},
         credentials: "include",
         body: JSON.stringify({
           userId: user._id,

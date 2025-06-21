@@ -156,6 +156,7 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
+  const {getAuthHeader} = useAuth();
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -169,7 +170,8 @@ const Home = () => {
 
         if (user) {
           const userResponse = await fetch(`${API_BASE_URL}/users/getme`, {
-            credentials: "include"
+            credentials: "include",
+            headers: await getAuthHeader()
           });
           if (userResponse.ok) {
             const userData = await userResponse.json();
@@ -187,7 +189,8 @@ const Home = () => {
         const courseBatchesResponse = await fetch(
           `${API_BASE_URL}/courses/getCourseBatches`,
           {
-            credentials: "include"
+            credentials: "include",
+            headers: await getAuthHeader(),
           }
         );
 
@@ -227,7 +230,9 @@ const Home = () => {
           // Adjust if your API behaves differently.
           const allCoursesResponse = await fetch(
             `${API_BASE_URL}/courses/getCourses`, // Potentially add query params if API supports fetching specific IDs
-            { credentials: "include" }
+            { credentials: "include",
+              headers: await getAuthHeader()
+             }
           );
           if (!allCoursesResponse.ok) {
             throw new Error(`Failed to fetch all courses: ${allCoursesResponse.status}`);

@@ -4,6 +4,7 @@ import { useAuth } from "../AuthContext";
 import ExerciseAnimation from "@src/components/ExerciseAnimation";
 import LoadingPage from "@src/components/loading";
 
+
 // Define interfaces for our data
 interface ExerciseData {
   _id: string;
@@ -80,6 +81,7 @@ const AutoExercise = () => {
   const [textAnswer, setTextAnswer] = useState<string>("");
   const [allCompleted, setAllCompleted] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
+  const { getAuthHeader } = useAuth();
 
   const MAX_TIME: number = 50;
   
@@ -104,7 +106,10 @@ const AutoExercise = () => {
       // Step 1: Fetch course details to get exerciseBatchList
       const courseResponse = await fetch(
         `${API_BASE_URL}/courses/getCoursesById/${courseId}`,
-        { credentials: "include" }
+        { 
+          credentials: "include",
+          headers: await getAuthHeader()
+         }
       );
 
       if (!courseResponse.ok) {
@@ -119,7 +124,10 @@ const AutoExercise = () => {
         async (exerciseId: string) => {
           const exerciseResponse = await fetch(
             `${API_BASE_URL}/exercises/getExercise/${exerciseId}`,
-            { credentials: "include" }
+            { 
+              credentials: "include", 
+              headers: await getAuthHeader()
+             }
           );
 
           if (!exerciseResponse.ok) {
@@ -141,7 +149,8 @@ const AutoExercise = () => {
       // Step 3: Get user progress to identify completed exercises
       if (user) {
         const userResponse = await fetch(`${API_BASE_URL}/users/getme`, {
-          credentials: "include"
+          credentials: "include",
+          headers: await getAuthHeader()
         });
         
         if (userResponse.ok) {
@@ -280,6 +289,7 @@ const AutoExercise = () => {
         ? selectedOption === currentExercise.answer
         : textAnswer.trim().toLowerCase() === currentExercise.answer.toLowerCase(); // Case insensitive comparison
       
+
       if (isCorrect) {
         // Correct answer within time limit
         try {
@@ -291,7 +301,8 @@ const AutoExercise = () => {
               method: "POST",
               credentials: "include",
               headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                ...(await getAuthHeader())
               }
             }
           );

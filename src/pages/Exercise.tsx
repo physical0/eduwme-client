@@ -62,6 +62,7 @@ const Exercise = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [retryCount, setRetryCount] = useState<number>(0);
   const [textAnswer, setTextAnswer] = useState<string>("");
+  const {getAuthHeader} = useAuth();
 
 
   const MAX_TIME: number = 50;
@@ -96,7 +97,8 @@ const Exercise = () => {
     try {
       setLoading(true);
       const response = await fetch(`${API_BASE_URL}/exercises/getExercise/${exerciseId}`, {
-        credentials: "include"
+        credentials: "include",
+        headers: await getAuthHeader()
       });
       
       if (response.status === 429) {
@@ -202,8 +204,9 @@ const Exercise = () => {
               method: "POST",
               credentials: "include",
               headers: {
-                "Content-Type": "application/json"
-              }
+              "Content-Type": "application/json",
+              ...(await getAuthHeader())
+            }
             }
           );
           

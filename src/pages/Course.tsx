@@ -57,6 +57,7 @@ const Course = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [courseProgress, setCourseProgress] = useState<CourseProgress[]>([]);
+  const { getAuthHeader } = useAuth();
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -69,7 +70,10 @@ const Course = () => {
         // Step 1: Fetch course details
         const courseResponse = await fetch(
           `${API_BASE_URL}/courses/getCoursesById/${courseId}`,
-          { credentials: "include" }
+          { 
+            credentials: "include",
+            headers: await getAuthHeader() 
+           }
         );
 
         if (!courseResponse.ok) {
@@ -83,7 +87,8 @@ const Course = () => {
         // Step 2: Fetch user progress for this course
         if (user) {
           const userResponse = await fetch(`${API_BASE_URL}/users/getme`, {
-            credentials: "include"
+            credentials: "include",
+            headers: await getAuthHeader()
           });
           
           if (userResponse.ok) {
@@ -108,7 +113,9 @@ const Course = () => {
           async (exerciseId: string) => {
             const exerciseResponse = await fetch(
               `${API_BASE_URL}/exercises/getExercise/${exerciseId}`,
-              { credentials: "include" }
+              { credentials: "include",
+                headers: await getAuthHeader()
+               }
             );
 
             if (!exerciseResponse.ok) {
