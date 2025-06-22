@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router";
+import {useAuth} from "../../AuthContext";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ const Register = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
   const [submitSuccess, setSubmitSuccess] = useState("");
+  const { getAuthHeader } = useAuth();
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -87,6 +89,7 @@ const Register = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          ...(await getAuthHeader())
         },
         body: JSON.stringify({
           username: formData.username,
