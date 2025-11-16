@@ -1,5 +1,6 @@
 import LoadingPage from "@src/components/loading";
 import { useState, useEffect } from "react";
+import {useAuth} from "@src/AuthContext";
 
 // Interface based on your User model schema
 interface LeaderboardUser {
@@ -31,15 +32,14 @@ const LeaderboardPage = () => {
   const [currentUser, setCurrentUser] = useState<currentUser | null>(null);
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
+  const authHeader = useAuth().getAuthHeader;
 
   useEffect(() => {
     const fetchLeaderboard = async () => {
       try {
         const response = await fetch(`${API_BASE_URL}/users/leaderboard`, {
           method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
+          headers: await authHeader(), 
           credentials: "include",
         });
 
@@ -62,7 +62,8 @@ const LeaderboardPage = () => {
         // Get current user
         try {
           const meResponse = await fetch(`${API_BASE_URL}/users/getMe`, {
-            credentials: "include"
+            credentials: "include",
+            headers: await authHeader(), 
           });
           
           if (meResponse.ok) {
