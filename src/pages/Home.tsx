@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import AdditionIcon from "@src/assets/additionIcon.svg";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import EducationalNews from "@src/components/EducationalNews";
 import LoadingPage from "@src/components/loading";
 
@@ -70,24 +70,23 @@ interface UserProgress {
   courses?: CourseProgressDetail[]; // Array of progress for individual courses within the batch
 }
 
-// Updated ButtonStyle with responsive properties
-// - Different sizes for different screen widths
-// - Responsive padding scales with screen size
-// - Responsive border width for better visual weight on large screens
-// - Responsive text sizes for balanced appearance
-// Update ButtonStyle for smaller mobile sizes
+// Enhanced ButtonStyle with modern glassmorphism and gradient effects
 const ButtonStyle = `
-  w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 lg:w-24 lg:h-24
-  p-1.5 sm:p-2 md:p-3 
-  bg-white/20 
+  w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24
+  p-2 sm:p-2.5 md:p-3 
+  relative overflow-hidden
   flex flex-col justify-center items-center 
-  rounded-xl sm:rounded-2xl 
-  border border-[#374DB0] sm:border-2 md:border-3 lg:border-4
+  rounded-2xl sm:rounded-2xl md:rounded-3xl
+  bg-white/80 dark:bg-gray-800/60
+  backdrop-blur-md
+  border-2 border-white/40 dark:border-gray-700/40
+  shadow-lg hover:shadow-2xl
   text-base sm:text-lg md:text-xl lg:text-2xl 
   gap-0.5 sm:gap-1
-  transition-all duration-200
-  hover:scale-105 hover:shadow-lg
-  dark:bg-gray-800/20 dark:border-[#5a6fd1]
+  transition-all duration-300 ease-out
+  hover:scale-110 hover:-translate-y-1
+  group
+  card-lift
 `;
 
 
@@ -95,55 +94,55 @@ const ButtonStyle = `
 const getIconForCourse = (title: string): CourseIcon => {
   // Normalize the title to lowercase for more reliable matching
   const normalizedTitle = title.toLowerCase().trim();
-  
+
   if (normalizedTitle.includes('addition')) {
-    return { 
+    return {
       icon: "➕",
       size: { xs: "text-2xl", sm: "text-3xl", md: "text-4xl", lg: "text-5xl" }
     };
   } else if (normalizedTitle.includes('subtraction')) {
-    return { 
+    return {
       icon: "➖",
       size: { xs: "text-2xl", sm: "text-3xl", md: "text-4xl", lg: "text-5xl" }
     };
   } else if (normalizedTitle.includes('multiplication')) {
-    return { 
+    return {
       icon: "✖️",
       size: { xs: "text-2xl", sm: "text-3xl", md: "text-4xl", lg: "text-5xl" }
     };
   } else if (normalizedTitle.includes('division')) {
-    return { 
+    return {
       icon: "➗",
       size: { xs: "text-2xl", sm: "text-3xl", md: "text-4xl", lg: "text-5xl" }
     };
   } else if (normalizedTitle.includes('fraction')) {
-    return { 
+    return {
       icon: "🧮",
       size: { xs: "text-xl", sm: "text-2xl", md: "text-3xl", lg: "text-4xl" }
     };
   } else if (normalizedTitle.includes('number') || normalizedTitle.includes('counting')) {
-    return { 
+    return {
       icon: "🔢",
       size: { xs: "text-2xl", sm: "text-3xl", md: "text-3xl", lg: "text-4xl" }
     };
   } else if (normalizedTitle.includes('geometry')) {
-    return { 
+    return {
       icon: "📐",
       size: { xs: "text-2xl", sm: "text-3xl", md: "text-3xl", lg: "text-4xl" }
     };
   } else if (normalizedTitle.includes('graph')) {
-    return { 
+    return {
       icon: "📊",
       size: { xs: "text-xl", sm: "text-2xl", md: "text-3xl", lg: "text-4xl" }
     };
   } else if (normalizedTitle.includes('algebra')) {
-    return { 
+    return {
       icon: "🔣",
       size: { xs: "text-2xl", sm: "text-3xl", md: "text-4xl", lg: "text-5xl" }
     };
   } else {
-    return { 
-      icon: "📚", 
+    return {
+      icon: "📚",
       size: { xs: "text-2xl", sm: "text-3xl", md: "text-4xl", lg: "text-5xl" }
     };
   }
@@ -156,7 +155,7 @@ const Home = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const { user } = useAuth();
-  const {getAuthHeader} = useAuth();
+  const { getAuthHeader } = useAuth();
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
@@ -230,9 +229,10 @@ const Home = () => {
           // Adjust if your API behaves differently.
           const allCoursesResponse = await fetch(
             `${API_BASE_URL}/courses/getCourses`, // Potentially add query params if API supports fetching specific IDs
-            { credentials: "include",
+            {
+              credentials: "include",
               headers: await getAuthHeader()
-             }
+            }
           );
           if (!allCoursesResponse.ok) {
             throw new Error(`Failed to fetch all courses: ${allCoursesResponse.status}`);
@@ -270,7 +270,7 @@ const Home = () => {
         {/* Enhanced button with better responsive padding and dark mode */}
         <button
           onClick={() => window.location.reload()}
-          className="px-3 py-1.5 md:px-4 md:py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
+          className="px-3 py-1.5 md:px-4 md:py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
         >
           Retry
         </button>
@@ -279,223 +279,248 @@ const Home = () => {
   }
 
   return (
-    // Smaller padding and narrower max-width on mobile
-    <div className="max-w-[92%] sm:max-w-[85%] md:max-w-5xl lg:max-w-6xl mx-auto px-1 sm:px-2 md:px-4 py-2 sm:py-3 md:py-8 pb-20 md:pb-16">
+    // Main container with gradient background
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20">
+      <div className="max-w-[92%] sm:max-w-[85%] md:max-w-5xl lg:max-w-6xl mx-auto px-1 sm:px-2 md:px-4 py-2 sm:py-3 md:py-8 pb-20 md:pb-16">
 
-      {/* User stats section with better mobile layout */}
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-8">
-        {/* Smaller heading text on mobile */}
-        <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold text-gray-800 dark:text-white">Learning Areas</h1>
-  
-        {/* Smaller user stats badges on mobile */}
-        <div className="flex gap-1.5 sm:gap-2 md:gap-3 items-center">
-          {/* Smaller gems badge */}
-          <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 sm:px-2 sm:py-1 md:px-4 md:py-2 rounded-full flex items-center shadow-sm sm:shadow text-xs sm:text-sm md:text-base">
-            <span className="mr-0.5 sm:mr-1 md:mr-2 text-sm sm:text-base md:text-lg">💎</span>
-            <span className="font-semibold">{user?.gems || 0}</span>
-          </div>
-          
-          {/* Smaller XP badge */}
-          <div className="bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300 px-1.5 py-0.5 sm:px-2 sm:py-1 md:px-4 md:py-2 rounded-full flex items-center shadow-sm sm:shadow text-xs sm:text-sm md:text-base">
-            <span className="mr-0.5 sm:mr-1 md:mr-2 text-sm sm:text-base md:text-lg">🏅</span>
-            <span className="font-semibold">{user?.xp || 0} XP</span>
+        {/* Enhanced user stats section with glassmorphism */}
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6 md:mb-8">
+          {/* Gradient heading */}
+          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold gradient-text">
+            Learning Areas
+          </h1>
+
+          {/* Enhanced user stats badges with glassmorphism */}
+          <div className="flex gap-2 sm:gap-3 md:gap-4 items-center">
+            {/* Gems badge with glow effect */}
+            <div className="glass-card px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-full flex items-center gap-1.5 sm:gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+              <span className="text-lg sm:text-xl md:text-2xl group-hover:scale-110 transition-transform duration-300">💎</span>
+              <span className="font-bold text-sm sm:text-base md:text-lg bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
+                {user?.gems || 0}
+              </span>
+            </div>
+
+            {/* XP badge with glow effect */}
+            <div className="glass-card px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-full flex items-center gap-1.5 sm:gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
+              <span className="text-lg sm:text-xl md:text-2xl group-hover:scale-110 transition-transform duration-300">🏅</span>
+              <span className="font-bold text-sm sm:text-base md:text-lg bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-400 dark:to-orange-400 bg-clip-text text-transparent">
+                {user?.xp || 0} XP
+              </span>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="lg:col-span-1">
-        <EducationalNews />
-      </div>
-      
-      {/* Map through course batches with tighter spacing on mobile */}
-      {courseBatches.map((batch) => {
-        const batchProgress = userProgress.find(p => p.courseBatchId === batch.courseBatchId);
-        
-        const orderedCoursesToShow = batch.courseList
-          .map(courseIdFromList => courses[courseIdFromList])
-          .filter(course => course !== undefined);
+        <div className="lg:col-span-1 mb-4 sm:mb-6">
+          <EducationalNews />
+        </div>
 
-        return (
-          // More compact container on mobile
-          <div key={batch.courseBatchId} className="mb-4 sm:mb-6 md:mb-10 bg-white dark:bg-gray-800 shadow-md md:shadow-lg rounded-lg md:rounded-xl p-2 sm:p-3 md:p-6 transition-colors duration-300">
-            {/* More compact batch header */}
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 sm:gap-2 mb-2 sm:mb-3 md:mb-5 pb-1 sm:pb-2 md:pb-3 border-b border-gray-200 dark:border-gray-700">
-              <div className="flex items-center">
-                {/* Smaller heading text */}
-                <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold text-gray-700 dark:text-white">
-                  Stage {batch.stage}
-                </h2>
-                
-                {/* Smaller lock badge */}
-                {!batch.isUnlocked && (
-                  <span className="ml-1.5 sm:ml-2 md:ml-3 px-1.5 py-0.5 sm:px-2 sm:py-0.5 md:px-3 md:py-1 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-[10px] sm:text-xs md:text-sm font-medium">
-                    🔒 Locked
-                  </span>
-                )}
-                
-                {/* Smaller unlock badge */}
-                {batch.isUnlocked && (
-                  <span className="ml-1.5 sm:ml-2 md:ml-3 px-1.5 py-0.5 sm:px-2 sm:py-0.5 md:px-3 md:py-1 bg-green-100 dark:bg-green-800/30 text-green-700 dark:text-green-300 rounded-full text-[10px] sm:text-xs md:text-sm font-medium">
-                    🔓 Unlocked
-                  </span>
+        {/* Map through course batches with enhanced styling */}
+        {courseBatches.map((batch, batchIndex) => {
+          const batchProgress = userProgress.find(p => p.courseBatchId === batch.courseBatchId);
+
+          const orderedCoursesToShow = batch.courseList
+            .map(courseIdFromList => courses[courseIdFromList])
+            .filter(course => course !== undefined);
+
+          return (
+            // Enhanced batch container with glassmorphism
+            <div
+              key={batch.courseBatchId}
+              className="mb-6 sm:mb-8 md:mb-12 glass-card rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-6 lg:p-8 shadow-xl hover:shadow-2xl transition-all duration-500 fade-in-stagger border-2 border-white/20 dark:border-white/10"
+              style={{ animationDelay: `${batchIndex * 100}ms` }}
+            >
+              {/* Enhanced batch header */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-6 pb-2 sm:pb-3 md:pb-4 border-b-2 border-gradient-to-r from-purple-500/20 to-blue-500/20">
+                <div className="flex items-center gap-2 sm:gap-3">
+                  {/* Gradient stage heading */}
+                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold gradient-text">
+                    Stage {batch.stage}
+                  </h2>
+
+                  {/* Enhanced lock/unlock badges */}
+                  {!batch.isUnlocked && (
+                    <span className="px-2 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-gray-400 to-gray-500 dark:from-gray-600 dark:to-gray-700 text-white rounded-full text-xs sm:text-sm font-semibold shadow-md flex items-center gap-1">
+                      <span className="text-sm sm:text-base">🔒</span>
+                      Locked
+                    </span>
+                  )}
+
+                  {batch.isUnlocked && (
+                    <span className="px-2 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-green-400 to-emerald-500 dark:from-green-500 dark:to-emerald-600 text-white rounded-full text-xs sm:text-sm font-semibold shadow-md flex items-center gap-1 shimmer">
+                      <span className="text-sm sm:text-base">🔓</span>
+                      Unlocked
+                    </span>
+                  )}
+                </div>
+
+                {/* Enhanced progress bar with gradient */}
+                {batchProgress && batch.isUnlocked && (
+                  <div className="flex items-center gap-2 sm:gap-3">
+                    <div className="w-24 sm:w-32 md:w-40 bg-gray-200/50 dark:bg-gray-700/50 rounded-full h-2 sm:h-2.5 md:h-3 backdrop-blur-sm border border-white/20">
+                      <div
+                        className="bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 h-full rounded-full transition-all duration-700 ease-out shadow-lg"
+                        style={{
+                          width: `${batch.coursesLength > 0 ? (batchProgress.completedCoursesCount / batch.coursesLength) * 100 : 0}%`
+                        }}
+                      ></div>
+                    </div>
+                    <span className="text-xs sm:text-sm md:text-base font-bold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
+                      {batchProgress.completedCoursesCount}/{batch.coursesLength}
+                    </span>
+                  </div>
                 )}
               </div>
-              
-              {/* Smaller progress bar */}
-              {batchProgress && batch.isUnlocked && (
-                <div className="flex items-center mt-0.5 sm:mt-0">
-                  <div className="w-20 sm:w-24 md:w-32 bg-gray-200 dark:bg-gray-700 rounded-full h-1 sm:h-1.5 md:h-3 mr-1.5 sm:mr-2 md:mr-3">
-                    <div 
-                      className="bg-[#374DB0] dark:bg-[#5a6fd1] h-1 sm:h-1.5 md:h-3 rounded-full transition-all duration-500 ease-out"
-                      style={{ 
-                        // Use batch.coursesLength as the source of truth for total courses
-                        width: `${batch.coursesLength > 0 ? (batchProgress.completedCoursesCount / batch.coursesLength) * 100 : 0}%` 
-                      }}
-                    ></div>
-                  </div>
-                  <span className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-gray-300 font-medium">
-                    {/* Also update the displayed count to match */}
-                    {batchProgress.completedCoursesCount}/{batch.coursesLength}
-                  </span>
+
+              {/* Locked message with enhanced styling */}
+              {!batch.isUnlocked && (
+                <div className="glass-card rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6 text-center border border-gray-300/20 dark:border-gray-600/20">
+                  <p className="text-sm sm:text-base md:text-lg text-gray-700 dark:text-gray-300 font-medium">
+                    🎯 Complete previous stages to unlock this learning area
+                  </p>
+                </div>
+              )}
+
+              {/* Enhanced course grid */}
+              {batch.isUnlocked && (
+                <div className="grid grid-cols-3 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-2 xs:gap-2.5 sm:gap-4 md:gap-6">
+                  {orderedCoursesToShow.map((course, courseIndex) => {
+                    const courseSpecificProgress = batchProgress?.courses?.find(c => c.courseId === course.courseId);
+                    const isCompleted = courseSpecificProgress?.status === "completed";
+                    const isInProgress = courseSpecificProgress?.status === "in_progress" && !isCompleted;
+
+                    return (
+                      <div
+                        key={course.courseId}
+                        className="flex flex-col items-center text-center fade-in-stagger"
+                        style={{ animationDelay: `${(batchIndex * 100) + (courseIndex * 50)}ms` }}
+                      >
+                        {/* Enhanced course button with glassmorphism */}
+                        <NavLink
+                          to={`/courses/${course.courseId}`}
+                          className={`${ButtonStyle} relative shimmer`}
+                        >
+                          {/* Gradient background overlay on hover */}
+                          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-blue-500/0 group-hover:from-purple-500/20 group-hover:to-blue-500/20 rounded-2xl md:rounded-3xl transition-all duration-300"></div>
+
+                          {/* Enhanced circle progress indicator with gradient */}
+                          <div className="absolute inset-0 w-full h-full">
+                            <svg className="w-full h-full" viewBox="0 0 100 100">
+                              {(isInProgress || isCompleted) && (
+                                <>
+                                  {/* Background circle */}
+                                  <circle
+                                    cx="50"
+                                    cy="50"
+                                    r="46"
+                                    fill="none"
+                                    stroke="#e5e7eb"
+                                    strokeWidth="3"
+                                    className="dark:opacity-20"
+                                  />
+                                  {/* Gradient progress circle */}
+                                  <defs>
+                                    <linearGradient id={`gradient-${course.courseId}`} x1="0%" y1="0%" x2="100%" y2="100%">
+                                      <stop offset="0%" stopColor={isCompleted ? "#10b981" : "#8b5cf6"} />
+                                      <stop offset="100%" stopColor={isCompleted ? "#059669" : "#3b82f6"} />
+                                    </linearGradient>
+                                  </defs>
+                                  <circle
+                                    cx="50"
+                                    cy="50"
+                                    r="46"
+                                    fill="none"
+                                    stroke={`url(#gradient-${course.courseId})`}
+                                    strokeWidth="3"
+                                    strokeDasharray="289.5"
+                                    strokeDashoffset={
+                                      isCompleted
+                                        ? "0"
+                                        : courseSpecificProgress?.completionPercentage
+                                          ? `${289.5 * (1 - courseSpecificProgress.completionPercentage / 100)}`
+                                          : "144.75"
+                                    }
+                                    transform="rotate(-90 50 50)"
+                                    strokeLinecap="round"
+                                    className="transition-all duration-700 ease-out drop-shadow-lg"
+                                  />
+                                </>
+                              )}
+                            </svg>
+                          </div>
+
+
+                          {/* Course icon with enhanced styling */}
+                          {typeof getIconForCourse(course.title).icon === 'string' ? (
+                            <span
+                              role="img"
+                              aria-label={`${course.title} icon`}
+                              className={`
+                                ${getIconForCourse(course.title).size?.xs || 'text-xl'} 
+                                sm:${getIconForCourse(course.title).size?.sm || 'text-2xl'} 
+                                md:${getIconForCourse(course.title).size?.md || 'text-3xl'} 
+                                lg:${getIconForCourse(course.title).size?.lg || 'text-4xl'} 
+                                z-10 relative
+                                group-hover:scale-110 transition-transform duration-300
+                                drop-shadow-lg
+                              `}
+                            >
+                              {getIconForCourse(course.title).icon}
+                            </span>
+                          ) : (
+                            <img
+                              src={getIconForCourse(course.title).icon}
+                              alt={`${course.title} icon`}
+                              className="w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-14 lg:h-14 z-10 relative group-hover:scale-110 transition-transform duration-300 drop-shadow-lg"
+                            />
+                          )}
+
+                          {/* Enhanced completion checkmark badge */}
+                          {isCompleted && (
+                            <span className="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 md:-top-2 md:-right-2 bg-gradient-to-br from-green-400 to-emerald-500 text-white text-xs sm:text-sm rounded-full p-1 sm:p-1.5 leading-none flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 z-20 shadow-lg animate-bounce">
+                              ✓
+                            </span>
+                          )}
+                        </NavLink>
+
+                        {/* Enhanced course title */}
+                        <p className="mt-1.5 sm:mt-2 md:mt-3 font-semibold text-xs xs:text-sm sm:text-base md:text-lg text-gray-800 dark:text-gray-100 line-clamp-2 w-full">
+                          {course.title}
+                        </p>
+
+                        {/* Enhanced in progress badge */}
+                        {isInProgress && (
+                          <span className="mt-1 inline-block px-2 py-0.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full text-[9px] xs:text-[10px] sm:text-xs font-semibold shadow-md">
+                            In Progress
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+
+              {/* Enhanced empty message */}
+              {batch.isUnlocked && orderedCoursesToShow.length === 0 && (
+                <div className="glass-card rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6 text-center border border-yellow-300/20 dark:border-yellow-600/20">
+                  <p className="text-sm sm:text-base md:text-lg text-yellow-700 dark:text-yellow-400 font-medium">
+                    📚 No courses available in this learning area yet
+                  </p>
                 </div>
               )}
             </div>
-            
-            {/* Smaller locked message */}
-            {!batch.isUnlocked && (
-              <div className="bg-gray-50 dark:bg-gray-800/50 rounded-md md:rounded-lg p-2 sm:p-3 md:p-5 text-center">
-                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-gray-600 dark:text-gray-400">
-                  Complete previous stages to unlock this learning area.
-                </p>
-              </div>
-            )}
-            
-            {/* Tighter grid layout for courses */}
-            {batch.isUnlocked && (
-              <div className="grid grid-cols-3 xs:grid-cols-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-1 xs:gap-1.5 sm:gap-3 md:gap-6">
-                {orderedCoursesToShow.map((course) => {
-                  const courseSpecificProgress = batchProgress?.courses?.find(c => c.courseId === course.courseId);
-                  const isCompleted = courseSpecificProgress?.status === "completed";
-                  const isInProgress = courseSpecificProgress?.status === "in_progress" && !isCompleted;
-                  
-                  return (
-                    <div key={course.courseId} className="flex flex-col items-center text-center">
-                      {/* Smaller course button */}
-                      <NavLink
-                        to={`/courses/${course.courseId}`}
-                        className={`${ButtonStyle} relative`}
-                      >
-                        {/* Circle progress indicator */}
-                        <div className="absolute inset-0 w-full h-full">
-                          <svg className="w-full h-full" viewBox="0 0 100 100">
-                            {(isInProgress || isCompleted) && (
-                              <>
-                                {/* Background circle */}
-                                <circle
-                                  cx="50"
-                                  cy="50"
-                                  r="46"
-                                  fill="none"
-                                  stroke="#e5e7eb"
-                                  strokeWidth="4"
-                                  className="dark:opacity-20"
-                                />
-                                {/* Progress circle */}
-                                <circle
-                                  cx="50"
-                                  cy="50"
-                                  r="46"
-                                  fill="none"
-                                  stroke={isCompleted ? "#10b981" : "#3b82f6"}
-                                  strokeWidth="4"
-                                  strokeDasharray="289.5"
-                                  strokeDashoffset={
-                                    isCompleted 
-                                      ? "0" 
-                                      : courseSpecificProgress?.completionPercentage
-                                        ? `${289.5 * (1 - courseSpecificProgress.completionPercentage / 100)}`
-                                        : "144.75" // Default to 50% if no percentage available
-                                  }
-                                  transform="rotate(-90 50 50)"
-                                  strokeLinecap="round"
-                                  className="transition-all duration-700 ease-out"
-                                />
-                              </>
-                            )}
-                          </svg>
-                        </div>
+          );
+        })}
 
-
-                        {/* Course icon - keep the existing code */}
-                        {typeof getIconForCourse(course.title).icon === 'string' ? (
-                          <span 
-                            role="img" 
-                            aria-label={`${course.title} icon`}
-                            className={`
-                              ${getIconForCourse(course.title).size?.xs || 'text-xl'} 
-                              sm:${getIconForCourse(course.title).size?.sm || 'text-2xl'} 
-                              md:${getIconForCourse(course.title).size?.md || 'text-3xl'} 
-                              lg:${getIconForCourse(course.title).size?.lg || 'text-4xl'} 
-                              dark:text-white
-                              z-10 relative
-                            `}
-                          >
-                            {getIconForCourse(course.title).icon}
-                          </span>
-                        ) : (
-                          <img 
-                            src={getIconForCourse(course.title).icon} 
-                            alt={`${course.title} icon`}
-                            className="w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-14 lg:h-14 z-10 relative"
-                          />
-                        )}
-                        
-                        {/* Keep the completion checkmark badge */}
-                        {isCompleted && (
-                          <span className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 md:-top-2 md:-right-2 bg-green-500 text-white text-[8px] sm:text-xs rounded-full p-0.5 sm:p-1 leading-none flex items-center justify-center w-3 h-3 sm:w-auto sm:h-auto z-20">
-                            ✓
-                          </span>
-                        )}
-                      </NavLink>
-                      
-                      {/* Smaller course title */}
-                      <p className="mt-1 sm:mt-2 md:mt-3 font-medium text-[10px] xs:text-xs sm:text-sm md:text-base text-gray-700 dark:text-gray-200 line-clamp-1 w-full">
-                        {course.title}
-                      </p>
-                      
-                      {/* Smaller in progress badge */}
-                      {isInProgress && (
-                        <span className="mt-0.5 sm:mt-1 inline-block px-1 py-0.5 bg-blue-100 dark:bg-blue-800/30 text-blue-700 dark:text-blue-300 rounded-full text-[8px] xs:text-[10px] sm:text-xs font-medium">
-                          In Progress
-                        </span>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            
-            {/* Smaller empty message */}
-            {batch.isUnlocked && orderedCoursesToShow.length === 0 && (
-              <div className="bg-yellow-50 dark:bg-yellow-800/20 rounded-md md:rounded-lg p-2 sm:p-3 md:p-5 text-center">
-                <p className="text-xs sm:text-sm md:text-base lg:text-lg text-yellow-700 dark:text-yellow-400">
-                  No courses available in this learning area yet.
-                </p>
-              </div>
-            )}
+        {/* Enhanced empty state message */}
+        {courseBatches.length === 0 && !loading && (
+          <div className="glass-card rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-12 text-center border-2 border-blue-300/20 dark:border-blue-600/20">
+            <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold gradient-text">
+              🎓 No learning areas available yet. Check back soon!
+            </p>
           </div>
-        );
-      })}
-      
-      {/* Empty state message */}
-      {courseBatches.length === 0 && !loading && (
-        <div className="bg-blue-50 dark:bg-blue-800/20 rounded-md md:rounded-lg p-3 sm:p-4 md:p-6 lg:p-10 text-center">
-          <p className="text-xs sm:text-sm md:text-lg lg:text-xl text-blue-700 dark:text-blue-300">
-            No learning areas available yet. Check back soon!
-          </p>
-        </div>
-      )}
+        )}
 
+      </div>
     </div>
   );
 };

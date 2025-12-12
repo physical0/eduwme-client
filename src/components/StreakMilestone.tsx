@@ -8,17 +8,17 @@ interface StreakMilestoneProps {
 
 const StreakMilestone: React.FC<StreakMilestoneProps> = ({ streak, onClose }) => {
   const [isVisible, setIsVisible] = useState(true);
-  
+
   useEffect(() => {
     // Auto-close after 5 seconds
     const timer = setTimeout(() => {
       setIsVisible(false);
       setTimeout(onClose, 500); // Allow animation to complete before removing
     }, 5000);
-    
+
     return () => clearTimeout(timer);
   }, [onClose]);
-  
+
   return (
     <AnimatePresence>
       {isVisible && (
@@ -39,7 +39,7 @@ const StreakMilestone: React.FC<StreakMilestoneProps> = ({ streak, onClose }) =>
                   You're on fire! Keep coming back daily.
                 </p>
               </div>
-              <button 
+              <button
                 onClick={() => {
                   setIsVisible(false);
                   setTimeout(onClose, 500);

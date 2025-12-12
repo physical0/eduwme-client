@@ -6,9 +6,9 @@ import "./styles/index.css";
 import App from "./App.tsx";
 
 // AuthContext import
-import { AuthProvider } from "./AuthContext.tsx";
+import { AuthProvider } from "./contexts/AuthContext.tsx";
 // Theme Provider import
-import { ThemeProvider } from "./ThemeContext.tsx";
+import { ThemeProvider } from "./contexts/ThemeContext.tsx";
 
 // Layout Import
 import RootLayout from "./rootlayout.tsx";
@@ -27,8 +27,8 @@ import ShopPage from "./pages/Shop.tsx";
 // Auth Pages Import
 import Register from "./pages/auth/register.tsx";
 import Login from "./pages/auth/login.tsx";
-import { AuthGuard } from "./AuthGuard.tsx";
-import { RequireAuth } from "./RequireAuth.tsx";
+import { AuthGuard } from "./contexts/AuthGuard.tsx";
+import { RequireAuth } from "./contexts/RequireAuth.tsx";
 import AutoExercise from "./pages/AutoExercise.tsx";
 
 
@@ -43,7 +43,7 @@ createRoot(document.getElementById("root")!).render(
               {/* Tanpa layout, standalone */}
               <Route path="/" element={<App />} />
 
-                {/* Protected routes - Require authentication */}
+              {/* Protected routes - Require authentication */}
               <Route element={
                 <RequireAuth>
                   <MainLayout />
@@ -56,12 +56,11 @@ createRoot(document.getElementById("root")!).render(
                 <Route path="/profile/:userId" element={<ProfilePage />} />
                 <Route path="/courses/:courseId" element={<Courses />} />
                 <Route path="/exercise/:exerciseId" element={<ExercisePage />} />
-                <Route path="/auto-exercise/:courseId" element={<AutoExercise />} />
-=                <Route path="/settings" element={<Settings />} />
+                <Route path="/auto-exercise/:courseId" element={<AutoExercise />} />               <Route path="/settings" element={<Settings />} />
               </Route>
 
               {/* Dengan layout auth */}
-                <Route element={<AuthGuard><AuthLayout /></AuthGuard>}>
+              <Route element={<AuthGuard><AuthLayout /></AuthGuard>}>
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
               </Route>

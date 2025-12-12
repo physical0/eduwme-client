@@ -1,6 +1,6 @@
-import { useTheme } from "../ThemeContext";
+import { useTheme } from "../contexts/ThemeContext";
 import { useNavigate } from "react-router";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 
 const Settings = () => {
   const { theme, toggleTheme } = useTheme();
@@ -15,7 +15,7 @@ const Settings = () => {
       console.error("Logout error:", error);
     }
   };
-  
+
   return (
     // Container with width constraints and proper spacing for mobile navigation
     <div className="max-w-full sm:max-w-xl md:max-w-2xl mx-auto px-2 sm:px-3 md:px-4 py-3 sm:py-4 md:py-6 pb-20 sm:pb-24 md:pb-16 transition-colors duration-300 dark:bg-gray-900">
@@ -54,13 +54,13 @@ const Settings = () => {
               </p>
             </div>
           </div>
-          
+
           {/* Toggle Switch - smaller on mobile */}
           <label className="relative inline-flex items-center cursor-pointer">
-            <input 
-              type="checkbox" 
-              value="" 
-              className="sr-only peer" 
+            <input
+              type="checkbox"
+              value=""
+              className="sr-only peer"
               checked={theme === 'dark'}
               onChange={toggleTheme}
             />
@@ -94,7 +94,7 @@ const Settings = () => {
         <h2 className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 dark:text-white mb-1.5 sm:mb-2 md:mb-4 pb-1.5 sm:pb-2 border-b border-gray-200 dark:border-gray-700">
           Session
         </h2>
-        
+
         <button
           onClick={handleLogout}
           className="w-full flex items-center justify-between py-1.5 sm:py-2 md:py-3 px-2 sm:px-3 md:px-4
@@ -107,17 +107,17 @@ const Settings = () => {
         >
           <div className="flex items-center">
             <div className="mr-2 sm:mr-3 md:mr-4 p-1 sm:p-1.5 md:p-2 rounded-full bg-red-100 dark:bg-red-800/30">
-              <svg 
-                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-red-500 dark:text-red-400" 
-                fill="none" 
-                stroke="currentColor" 
+              <svg
+                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-red-500 dark:text-red-400"
+                fill="none"
+                stroke="currentColor"
                 viewBox="0 0 24 24"
               >
-                <path 
-                  strokeLinecap="round" 
-                  strokeLinejoin="round" 
-                  strokeWidth={2} 
-                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" 
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
                 />
               </svg>
             </div>
@@ -130,18 +130,18 @@ const Settings = () => {
               </p>
             </div>
           </div>
-          
-          <svg 
-            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-red-400 dark:text-red-500" 
-            fill="none" 
-            stroke="currentColor" 
+
+          <svg
+            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 text-red-400 dark:text-red-500"
+            fill="none"
+            stroke="currentColor"
             viewBox="0 0 24 24"
           >
-            <path 
-              strokeLinecap="round" 
-              strokeLinejoin="round" 
-              strokeWidth={2} 
-              d="M9 5l7 7-7 7" 
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M9 5l7 7-7 7"
             />
           </svg>
         </button>

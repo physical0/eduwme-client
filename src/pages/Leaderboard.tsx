@@ -1,6 +1,6 @@
 import LoadingPage from "@src/components/loading";
 import { useState, useEffect } from "react";
-import {useAuth} from "@src/AuthContext";
+import { useAuth } from "@src/contexts/AuthContext";
 
 // Interface based on your User model schema
 interface LeaderboardUser {
@@ -39,7 +39,7 @@ const LeaderboardPage = () => {
       try {
         const response = await fetch(`${API_BASE_URL}/users/leaderboard`, {
           method: "GET",
-          headers: await authHeader(), 
+          headers: await authHeader(),
           credentials: "include",
         });
 
@@ -48,7 +48,7 @@ const LeaderboardPage = () => {
         }
 
         const data = await response.json();
-        
+
         // Sort users by XP and add rank property
         const rankedUsers = data.leaderboard
           .sort((a: LeaderboardUser, b: LeaderboardUser) => b.xp - a.xp)
@@ -56,16 +56,16 @@ const LeaderboardPage = () => {
             ...user,
             rank: index + 1
           }));
-        
+
         setUsers(rankedUsers);
-        
+
         // Get current user
         try {
           const meResponse = await fetch(`${API_BASE_URL}/users/getMe`, {
             credentials: "include",
-            headers: await authHeader(), 
+            headers: await authHeader(),
           });
-          
+
           if (meResponse.ok) {
             const meData = await meResponse.json();
             setCurrentUser(meData);
@@ -131,13 +131,13 @@ const LeaderboardPage = () => {
     );
   }
 
-   return (
+  return (
     <div className="max-w-full md:max-w-4xl lg:max-w-5xl mx-auto px-3 sm:px-4 py-4 md:py-8 pb-24 md:pb-16">
       {/* Heading with dark mode outline */}
       <h1 className="text-xl sm:text-2xl md:text-3xl font-bold text-center mb-3 md:mb-4 text-gray-800 dark:text-gray-100 dark:text-outline">Leaderboard</h1>
       {/* Subheading with dark mode outline */}
       <p className="text-gray-600 dark:text-gray-300 dark:text-outline text-sm md:text-base text-center mb-4 md:mb-6">See how you stack up against other learners!</p>
-      
+
       {/* Top 3 users podium */}
       {users.length > 0 && (
         <div className="grid grid-cols-3 gap-1 sm:gap-4 mb-6 md:mb-8 max-w-md sm:max-w-xl md:max-w-2xl mx-auto">
@@ -167,7 +167,7 @@ const LeaderboardPage = () => {
               </span>
             </div>
           </div>
-          
+
           {/* Gold - 1st place (center) */}
           <div className="col-span-1 flex flex-col items-center bg-yellow-100 dark:bg-yellow-900/40 rounded-xl sm:rounded-2xl p-1 sm:p-2 md:p-4 border-2 border-yellow-300 dark:border-yellow-600 shadow-md transform scale-105 sm:scale-110 -mt-2 sm:-mt-4 z-10">
             <div className="relative mb-1 sm:mb-2">
@@ -194,7 +194,7 @@ const LeaderboardPage = () => {
               </span>
             </div>
           </div>
-          
+
           {/* Bronze - 3rd place (right) */}
           <div className="col-span-1 flex flex-col items-center bg-amber-50 dark:bg-amber-900/30 rounded-xl sm:rounded-2xl p-1 sm:p-2 md:p-4 border border-amber-300 dark:border-amber-700 shadow-md">
             <div className="relative mb-1 sm:mb-2">
@@ -223,72 +223,72 @@ const LeaderboardPage = () => {
           </div>
         </div>
       )}
-      
+
       {/* Full leaderboard table */}
-        <div className="bg-white/60 dark:bg-gray-800/60 rounded-xl sm:rounded-2xl shadow-md overflow-hidden border border-[#374DB0]/20 dark:border-[#374DB0]/40">
-          {/* Table header - Changed to purple text in dark mode */}
-          <div className="bg-[#374DB0] dark:bg-[#2d3d8c] px-3 sm:px-4 py-2 sm:py-3 text-white grid grid-cols-12 gap-1">
-            <div className="col-span-2 sm:col-span-1 text-[10px] sm:text-xs font-medium uppercase dark:text-purple-600">Rank</div>
-            <div className="col-span-6 sm:col-span-7 md:col-span-8 text-[10px] sm:text-xs font-medium uppercase dark:text-purple-600">User</div>
-            <div className="col-span-4 sm:col-span-4 md:col-span-3 text-right text-[10px] sm:text-xs font-medium uppercase dark:text-purple-600">XP</div>
-          </div>
-          
-          {/* Table rows */}
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {users.map((user, index) => (
-              <div 
-                key={user.username} 
-                className={`px-3 sm:px-4 py-2 sm:py-3 md:py-4 grid grid-cols-12 gap-1 items-center ${getRankBgColor(index + 1)} ${currentUser?.username === user.username ? 'border-l-4 border-[#374DB0] dark:border-purple-500' : ''} transition-colors hover:bg-[#374DB0]/5 dark:hover:bg-purple-900/10`}
-              >
-                {/* Rank column - Purple text in dark mode */}
-                <div className="col-span-2 sm:col-span-1">
-                  <div className={`text-[10px] sm:text-xs md:text-sm font-bold ${getRankColor(index + 1)} dark:text-purple-600`}>
-                    #{index + 1}
-                  </div>
-                </div>
-                
-                {/* User column */}
-                <div className="col-span-6 sm:col-span-7 md:col-span-8">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full flex items-center justify-center bg-[#374DB0]/10 dark:bg-purple-900/30 text-[#374DB0] dark:text-purple-800 font-bold">
-                      {user.profilePicture ? (
-                        <img src={user.profilePicture} alt={user.username} className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full" />
-                      ) : (
-                        getInitials(user.username)
-                      )}
-                    </div>
-                    <div className="ml-1 sm:ml-2 md:ml-4">
-                      {/* Username - Purple text in dark mode */}
-                      <div className="text-[10px] sm:text-xs md:text-sm font-medium text-gray-900 dark:text-purple-200 truncate max-w-[80px] sm:max-w-[120px] md:max-w-full">
-                        {user.nickname || user.username}
-                      </div>
-                      <div className="hidden sm:flex items-center">
-                        {getStreakDays(user) && (
-                          <div className="text-[8px] sm:text-[10px] text-yellow-600 dark:text-yellow-300 mr-2">🔥 {getStreakDays(user)}</div>
-                        )}
-                        {/* Level badge - Purple in dark mode */}
-                        <span className="px-1 sm:px-1.5 py-0.5 text-[8px] sm:text-[10px] rounded-full bg-[#374DB0]/10 dark:bg-purple-900/30 text-[#374DB0] dark:text-purple-800">
-                          Lvl {user.level || 1}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* XP column - Purple text in dark mode */}
-                <div className="col-span-4 sm:col-span-4 md:col-span-3 text-right">
-                  <div className="text-[10px] sm:text-xs md:text-sm text-gray-900 dark:text-purple-200 font-medium">{user.xp} XP</div>
-                </div>
-              </div>
-            ))}
-          </div>
+      <div className="bg-white/60 dark:bg-gray-800/60 rounded-xl sm:rounded-2xl shadow-md overflow-hidden border border-[#374DB0]/20 dark:border-[#374DB0]/40">
+        {/* Table header - Changed to purple text in dark mode */}
+        <div className="bg-[#374DB0] dark:bg-[#2d3d8c] px-3 sm:px-4 py-2 sm:py-3 text-white grid grid-cols-12 gap-1">
+          <div className="col-span-2 sm:col-span-1 text-[10px] sm:text-xs font-medium uppercase dark:text-purple-600">Rank</div>
+          <div className="col-span-6 sm:col-span-7 md:col-span-8 text-[10px] sm:text-xs font-medium uppercase dark:text-purple-600">User</div>
+          <div className="col-span-4 sm:col-span-4 md:col-span-3 text-right text-[10px] sm:text-xs font-medium uppercase dark:text-purple-600">XP</div>
         </div>
 
-        {users.length === 0 && (
-          <div className="text-center py-8 sm:py-10 bg-white/60 dark:bg-gray-800/60 rounded-xl sm:rounded-2xl shadow-md border border-[#374DB0]/20 dark:border-[#374DB0]/40">
-            <p className="text-gray-500 dark:text-purple-200">No users on the leaderboard yet.</p>
-          </div>
-        )}
+        {/* Table rows */}
+        <div className="divide-y divide-gray-200 dark:divide-gray-700">
+          {users.map((user, index) => (
+            <div
+              key={user.username}
+              className={`px-3 sm:px-4 py-2 sm:py-3 md:py-4 grid grid-cols-12 gap-1 items-center ${getRankBgColor(index + 1)} ${currentUser?.username === user.username ? 'border-l-4 border-[#374DB0] dark:border-purple-500' : ''} transition-colors hover:bg-[#374DB0]/5 dark:hover:bg-purple-900/10`}
+            >
+              {/* Rank column - Purple text in dark mode */}
+              <div className="col-span-2 sm:col-span-1">
+                <div className={`text-[10px] sm:text-xs md:text-sm font-bold ${getRankColor(index + 1)} dark:text-purple-600`}>
+                  #{index + 1}
+                </div>
+              </div>
+
+              {/* User column */}
+              <div className="col-span-6 sm:col-span-7 md:col-span-8">
+                <div className="flex items-center">
+                  <div className="flex-shrink-0 h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full flex items-center justify-center bg-[#374DB0]/10 dark:bg-purple-900/30 text-[#374DB0] dark:text-purple-800 font-bold">
+                    {user.profilePicture ? (
+                      <img src={user.profilePicture} alt={user.username} className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full" />
+                    ) : (
+                      getInitials(user.username)
+                    )}
+                  </div>
+                  <div className="ml-1 sm:ml-2 md:ml-4">
+                    {/* Username - Purple text in dark mode */}
+                    <div className="text-[10px] sm:text-xs md:text-sm font-medium text-gray-900 dark:text-purple-200 truncate max-w-[80px] sm:max-w-[120px] md:max-w-full">
+                      {user.nickname || user.username}
+                    </div>
+                    <div className="hidden sm:flex items-center">
+                      {getStreakDays(user) && (
+                        <div className="text-[8px] sm:text-[10px] text-yellow-600 dark:text-yellow-300 mr-2">🔥 {getStreakDays(user)}</div>
+                      )}
+                      {/* Level badge - Purple in dark mode */}
+                      <span className="px-1 sm:px-1.5 py-0.5 text-[8px] sm:text-[10px] rounded-full bg-[#374DB0]/10 dark:bg-purple-900/30 text-[#374DB0] dark:text-purple-800">
+                        Lvl {user.level || 1}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* XP column - Purple text in dark mode */}
+              <div className="col-span-4 sm:col-span-4 md:col-span-3 text-right">
+                <div className="text-[10px] sm:text-xs md:text-sm text-gray-900 dark:text-purple-200 font-medium">{user.xp} XP</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {users.length === 0 && (
+        <div className="text-center py-8 sm:py-10 bg-white/60 dark:bg-gray-800/60 rounded-xl sm:rounded-2xl shadow-md border border-[#374DB0]/20 dark:border-[#374DB0]/40">
+          <p className="text-gray-500 dark:text-purple-200">No users on the leaderboard yet.</p>
+        </div>
+      )}
     </div>
   );
 };

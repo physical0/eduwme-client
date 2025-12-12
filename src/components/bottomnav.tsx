@@ -5,7 +5,7 @@ import ProfileIcon from "@src/assets/profile.svg";
 import SettingsIcon from "@src/assets/settings.svg";
 import ShopIcon from "@src/assets/store.svg";
 
-import { useAuth } from "@src/AuthContext.tsx";
+import { useAuth } from "@src/contexts/AuthContext.tsx";
 import { useState } from "react";
 
 const BottomNavBar = () => {
@@ -14,7 +14,7 @@ const BottomNavBar = () => {
   const location = useLocation();
 
   const profileLink = `/profile/${user?._id}`;
-  
+
   // Check if current route is a course or exercise page
   const isCoursePage = location.pathname.includes('/courses/');
   const isExercisePage = location.pathname.includes('/exercise/');
@@ -32,11 +32,11 @@ const BottomNavBar = () => {
                 Your current streak: <span className="font-bold">{user?.streak || 0} {user?.streak === 1 ? "day" : "days"}</span>
               </p>
               <p className="text-gray-600 dark:text-gray-400 text-xs text-center">
-                {user?.lastLoginDate ? 
-                  `Last login: ${new Date(user.lastLoginDate).toLocaleDateString()}` : 
+                {user?.lastLoginDate ?
+                  `Last login: ${new Date(user.lastLoginDate).toLocaleDateString()}` :
                   'Start your streak by completing lessons daily!'}
               </p>
-              <button 
+              <button
                 className="absolute top-1 right-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
                 onClick={() => setShowStreakInfo(false)}
               >
@@ -66,7 +66,7 @@ const BottomNavBar = () => {
 
   // Default return (show on all devices) for non-course/exercise pages
   return (
-   <nav className="fixed bottom-0 w-full z-10">
+    <nav className="fixed bottom-0 w-full z-10">
       <div className="px-4 py-2">
         {/* Streak info popup */}
         {showStreakInfo && (
@@ -75,11 +75,11 @@ const BottomNavBar = () => {
               Your current streak: <span className="font-bold">{user?.streak || 0} {user?.streak === 1 ? "day" : "days"}</span>
             </p>
             <p className="text-gray-600 dark:text-gray-400 text-xs text-center">
-              {user?.lastLoginDate ? 
-                `Last login: ${new Date(user.lastLoginDate).toLocaleDateString()}` : 
+              {user?.lastLoginDate ?
+                `Last login: ${new Date(user.lastLoginDate).toLocaleDateString()}` :
                 'Start your streak by completing lessons daily!'}
             </p>
-            <button 
+            <button
               className="absolute top-1 right-1 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
               onClick={() => setShowStreakInfo(false)}
             >
@@ -119,14 +119,14 @@ const BottomNavBar = () => {
             </NavLink>
           </li>
           <li>
-           <NavLink
-            to="/shop"
-            className={({ isActive }) =>
-              isActive ? "scale-110" : "opacity-70 hover:opacity-100 transition-transform"
-            }
-          >
-            <img src={ShopIcon} className="w-9 h-9" alt="Shop" />
-          </NavLink>
+            <NavLink
+              to="/shop"
+              className={({ isActive }) =>
+                isActive ? "scale-110" : "opacity-70 hover:opacity-100 transition-transform"
+              }
+            >
+              <img src={ShopIcon} className="w-9 h-9" alt="Shop" />
+            </NavLink>
           </li>
           <li>
             <NavLink
@@ -140,7 +140,7 @@ const BottomNavBar = () => {
           </li>
           {/* Add streak button */}
           <li>
-            <button 
+            <button
               onClick={() => setShowStreakInfo(!showStreakInfo)}
               className="relative flex items-center justify-center w-8 h-8"
             >

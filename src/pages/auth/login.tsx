@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { useAuth } from "../../AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -21,20 +21,19 @@ const Login = () => {
   // Responsive form container
   const formContainerClass =
     "flex flex-col items-center justify-center w-full p-5 gap-4 md:gap-5";
-    
+
   // Responsive input with larger width on laptop
   const inputBaseClass =
     "appearance-none bg-[#A7B5E7] w-full max-w-sm px-3 py-2 md:py-3 rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm md:text-base placeholder-[#E0E7FF]";
-    
+
   const inputErrorBorderClass = "border border-red-300";
   const inputNormalBorderClass = "border border-[#7895FC]";
-  
+
   // Responsive button with better sizing for laptop
-  const submitButtonClass = `w-full max-w-[160px] md:max-w-[180px] flex justify-center py-2 px-4 md:py-2.5 md:px-5 rounded-full text-sm md:text-base font-medium text-white ${
-    isSubmitting
+  const submitButtonClass = `w-full max-w-[160px] md:max-w-[180px] flex justify-center py-2 px-4 md:py-2.5 md:px-5 rounded-full text-sm md:text-base font-medium text-white ${isSubmitting
       ? "bg-[#303442] cursor-not-allowed"
       : "bg-[#303442] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#303442]"
-  }`;
+    }`;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -111,9 +110,8 @@ const Login = () => {
           placeholder="Username"
           value={formData.username}
           onChange={handleChange}
-          className={`${inputBaseClass} ${
-            errors.username ? inputErrorBorderClass : inputNormalBorderClass
-          }`}
+          className={`${inputBaseClass} ${errors.username ? inputErrorBorderClass : inputNormalBorderClass
+            }`}
         />
         {errors.username && (
           <p className="mt-1 text-sm text-red-600">{errors.username}</p>
@@ -133,9 +131,8 @@ const Login = () => {
           placeholder="Password"
           value={formData.password}
           onChange={handleChange}
-          className={`${inputBaseClass} ${
-            errors.password ? inputErrorBorderClass : inputNormalBorderClass
-          }`}
+          className={`${inputBaseClass} ${errors.password ? inputErrorBorderClass : inputNormalBorderClass
+            }`}
         />
         {errors.password && (
           <p className="mt-1 text-sm text-red-600">{errors.password}</p>
@@ -163,7 +160,7 @@ const Login = () => {
             Register
           </span>
         </div>
-      </Link> 
+      </Link>
     </form>
   );
 };

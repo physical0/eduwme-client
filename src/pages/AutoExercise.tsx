@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useParams, useNavigate } from "react-router";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import ExerciseAnimation from "@src/components/ExerciseAnimation";
 import LoadingPage from "@src/components/loading";
 
@@ -65,7 +65,7 @@ const AutoExercise = () => {
   const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+
   // State
   const [allExercises, setAllExercises] = useState<ExerciseData[]>([]);
   const [completedExercises, setCompletedExercises] = useState<Set<string>>(new Set());
@@ -84,32 +84,32 @@ const AutoExercise = () => {
   const { getAuthHeader } = useAuth();
 
   const MAX_TIME: number = 50;
-  
+
   // Timer configuration - dynamic based on difficulty
   const timeLimit = useMemo(() => {
     // Base time: 60 seconds for level 1, decreasing by 10 seconds per level
     // Min time: 20 seconds for hardest exercises
     return Math.max(MAX_TIME - ((currentExercise?.difficultyLevel || 1) - 1) * 10, 20);
   }, [currentExercise?.difficultyLevel]);
-  
+
   const timerRef = useRef<number | null>(null);
-  
+
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   // Fetch all exercises for the course
   const fetchCourseExercises = useCallback(async () => {
     if (!courseId) return;
-    
+
     try {
       setLoading(true);
-      
+
       // Step 1: Fetch course details to get exerciseBatchList
       const courseResponse = await fetch(
         `${API_BASE_URL}/courses/getCoursesById/${courseId}`,
-        { 
+        {
           credentials: "include",
           headers: await getAuthHeader()
-         }
+        }
       );
 
       if (!courseResponse.ok) {
@@ -118,16 +118,16 @@ const AutoExercise = () => {
 
       const courseData = await courseResponse.json();
       const course = courseData.course;
-      
+
       // Step 2: Fetch exercises from the batch list
       const exercisePromises = course.exerciseBatchList.map(
         async (exerciseId: string) => {
           const exerciseResponse = await fetch(
             `${API_BASE_URL}/exercises/getExercise/${exerciseId}`,
-            { 
-              credentials: "include", 
+            {
+              credentials: "include",
               headers: await getAuthHeader()
-             }
+            }
           );
 
           if (!exerciseResponse.ok) {
@@ -143,22 +143,22 @@ const AutoExercise = () => {
       const fetchedExercises = (await Promise.all(exercisePromises)).filter(
         (exercise): exercise is ExerciseData => exercise !== null
       );
-      
+
       setAllExercises(fetchedExercises);
-      
+
       // Step 3: Get user progress to identify completed exercises
       if (user) {
         const userResponse = await fetch(`${API_BASE_URL}/users/getme`, {
           credentials: "include",
           headers: await getAuthHeader()
         });
-        
+
         if (userResponse.ok) {
           const userData = await userResponse.json();
           const batchProgress = userData.courseBatchesProgress?.find(
             (batch: BatchProgress) => batch.courseBatchId === course.courseBatchId
           );
-          
+
           const currentCourseProgress = batchProgress?.courses?.find(
             (c: CourseProgressItem) => c.courseId === courseId
           );
@@ -170,13 +170,13 @@ const AutoExercise = () => {
                 .map((ex: ExerciseProgress) => ex.exerciseId as string)
             );
             setCompletedExercises(completedExerciseIds);
-            
+
             // Update progress
             setProgress(completedExerciseIds.size / fetchedExercises.length);
           }
         }
       }
-      
+
       setError(null);
       setLoading(false);
     } catch (err) {
@@ -191,18 +191,18 @@ const AutoExercise = () => {
     const remainingExercises = allExercises.filter(
       exercise => !completedExercises.has(exercise.exerciseId)
     );
-    
+
     if (remainingExercises.length === 0) {
       // All exercises completed
       setAllCompleted(true);
       setCurrentExercise(null);
       return;
     }
-    
+
     // Select a random exercise from remaining ones
     const randomIndex = Math.floor(Math.random() * remainingExercises.length);
     const selectedExercise = remainingExercises[randomIndex];
-    
+
     // Reset exercise-specific state
     setCurrentExercise(selectedExercise);
     setSelectedOption(null);
@@ -217,7 +217,7 @@ const AutoExercise = () => {
   // Initial fetch and setup
   useEffect(() => {
     fetchCourseExercises();
-    
+
     return () => {
       // Clean up timer when component unmounts
       if (timerRef.current) clearInterval(timerRef.current);
@@ -246,13 +246,13 @@ const AutoExercise = () => {
   // Timer logic
   useEffect(() => {
     if (loading || !isTimerRunning || !currentExercise) return;
-    
+
     timerRef.current = window.setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 1) {
           clearInterval(timerRef.current!);
           setIsTimerRunning(false);
-          
+
           // Time's up logic
           if (!result) {
             setResult({
@@ -266,7 +266,7 @@ const AutoExercise = () => {
         return prevTime - 1;
       });
     }, 1000);
-    
+
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
@@ -275,26 +275,26 @@ const AutoExercise = () => {
   // Submit answer
   const handleSubmitAnswer = useCallback(() => {
     if (!currentExercise || !isTimerRunning) return;
-    
+
     // For multiple-choice, we need selectedOption. For fill-in, we need textAnswer
     if (currentExercise.type === 'multiple-choice' && !selectedOption) return;
     if (currentExercise.type === 'fill-in' && !textAnswer.trim()) return;
-    
+
     // Stop the timer immediately to prevent multiple submissions
     setIsTimerRunning(false);
     if (timerRef.current) clearInterval(timerRef.current);
-    
+
     const submitFn = async () => {
       const isCorrect = currentExercise.type === 'multiple-choice'
         ? selectedOption === currentExercise.answer
         : textAnswer.trim().toLowerCase() === currentExercise.answer.toLowerCase(); // Case insensitive comparison
-      
+
 
       if (isCorrect) {
         // Correct answer within time limit
         try {
           if (!user) throw new Error("User not authenticated");
-          
+
           const response = await fetch(
             `${API_BASE_URL}/courses/complete/${user._id}/${currentExercise.courseBatchId}/${currentExercise.courseId}/${currentExercise.exerciseId}`,
             {
@@ -306,7 +306,7 @@ const AutoExercise = () => {
               }
             }
           );
-          
+
           if (response.status === 429) {
             setResult({
               correct: true,
@@ -315,31 +315,31 @@ const AutoExercise = () => {
             setShowResult(true);
             return;
           }
-          
+
           if (!response.ok) {
             throw new Error(`Failed to record completion: ${response.status}`);
           }
-          
+
           const completionResult = await response.json();
           setCompletionData(completionResult);
-          
+
           // Add to completed exercises
           setCompletedExercises(prev => {
             const updated = new Set(prev);
             updated.add(currentExercise.exerciseId);
             return updated;
           });
-          
+
           // Update progress
           setProgress(() => {
             const newProgress = (completedExercises.size + 1) / allExercises.length;
             return Math.min(newProgress, 1);
           });
-          
+
           setResult({
             correct: true,
-            message: `Correct! ${completionResult.alreadyCompleted 
-              ? "You've already completed this exercise before." 
+            message: `Correct! ${completionResult.alreadyCompleted
+              ? "You've already completed this exercise before."
               : `You earned ${completionResult.awardedXp} XP!`}`
           });
         } catch (err) {
@@ -356,13 +356,13 @@ const AutoExercise = () => {
           message: "Incorrect answer. Let's try another exercise!"
         });
       }
-      
+
       setShowResult(true);
     };
-    
+
     // Execute immediately
     submitFn();
-    
+
   }, [currentExercise, selectedOption, textAnswer, isTimerRunning, user, API_BASE_URL, allExercises.length, completedExercises]);
 
   // Auto-move to next exercise after showing result
@@ -371,7 +371,7 @@ const AutoExercise = () => {
       const nextExerciseTimer = setTimeout(() => {
         selectNextExercise();
       }, 2000); // Go to next exercise after 2 seconds
-      
+
       return () => clearTimeout(nextExerciseTimer);
     }
   }, [showResult, selectNextExercise]);
@@ -482,21 +482,21 @@ const AutoExercise = () => {
               font-medium text-xs md:text-base"
             aria-label="Return to course page"
           >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              viewBox="0 0 20 20" 
-              fill="currentColor" 
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
               className="w-4 h-4 md:w-5 md:h-5 transform group-hover:-translate-x-1 transition-transform duration-200"
             >
-              <path 
-                fillRule="evenodd" 
-                d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" 
-                clipRule="evenodd" 
+              <path
+                fillRule="evenodd"
+                d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
+                clipRule="evenodd"
               />
             </svg>
             Back to Course
           </button>
-          
+
           {/* Progress indicator */}
           <div className="flex flex-col items-end">
             <div className="flex items-center gap-2">
@@ -511,14 +511,14 @@ const AutoExercise = () => {
               </div>
             </div>
             <div className="w-32 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-1">
-              <div 
+              <div
                 className="h-full bg-blue-500 dark:bg-blue-600 rounded-full"
                 style={{ width: `${progress * 100}%` }}
               ></div>
             </div>
           </div>
         </div>
-        
+
         {/* Main content with reduced spacing */}
         <div className="text-center">
           <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 dark:text-white">
@@ -528,24 +528,24 @@ const AutoExercise = () => {
             {currentExercise.type} • Difficulty: {currentExercise.difficultyLevel}
           </p>
         </div>
-        
+
         <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-1.5 sm:p-3 transition-colors">
           <p className="text-xs sm:text-sm md:text-base text-gray-800 dark:text-white">
             {currentExercise.question}
           </p>
         </div>
-        
+
         <div className="bg-gray-100 dark:bg-gray-800/50 border border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-1.5 sm:p-3 min-h-[6rem] sm:min-h-[8rem] md:min-h-[10rem] flex flex-col items-center justify-center overflow-auto">
           {currentExercise.animType ? (
-            <ExerciseAnimation 
-              animType={currentExercise.animType} 
-              question={currentExercise.question} 
+            <ExerciseAnimation
+              animType={currentExercise.animType}
+              question={currentExercise.question}
             />
           ) : (
             <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">No animation for this exercise</p>
           )}
         </div>
-          
+
         <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
           {currentExercise.type === 'multiple-choice' ? (
             currentExercise.options.map((option, index) => (
@@ -556,8 +556,8 @@ const AutoExercise = () => {
                 className={`
                   p-2 sm:p-2.5 rounded-lg border text-left transition-all duration-150 text-xs sm:text-sm
                   flex items-center min-h-[2.75rem] sm:min-h-[3rem]
-                  ${selectedOption === option 
-                    ? 'bg-blue-500 text-white border-blue-600 dark:bg-blue-600 dark:border-blue-700' 
+                  ${selectedOption === option
+                    ? 'bg-blue-500 text-white border-blue-600 dark:bg-blue-600 dark:border-blue-700'
                     : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500'}
                   ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer'}
                 `}
@@ -584,22 +584,22 @@ const AutoExercise = () => {
             </div>
           )}
         </div>
-        
+
         {/* Submit button right after options with fixed spacing */}
         {!showResult ? (
-           <button
+          <button
             onClick={handleSubmitAnswer}
             disabled={
-              (currentExercise.type === 'multiple-choice' && !selectedOption) || 
-              (currentExercise.type === 'fill-in' && !textAnswer.trim()) || 
-              !isTimerRunning || 
+              (currentExercise.type === 'multiple-choice' && !selectedOption) ||
+              (currentExercise.type === 'fill-in' && !textAnswer.trim()) ||
+              !isTimerRunning ||
               showResult
             }
             className={`
               w-full py-1.5 sm:py-2 text-xs sm:text-sm md:text-base font-medium rounded-lg transition-colors mt-1.5 sm:mt-2
-              ${((currentExercise.type === 'multiple-choice' && !selectedOption) || 
-                (currentExercise.type === 'fill-in' && !textAnswer.trim()) || 
-                !isTimerRunning || 
+              ${((currentExercise.type === 'multiple-choice' && !selectedOption) ||
+                (currentExercise.type === 'fill-in' && !textAnswer.trim()) ||
+                !isTimerRunning ||
                 showResult)
                 ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white dark:text-gray-300'
                 : 'bg-green-500 dark:bg-green-600 text-white hover:bg-green-600 dark:hover:bg-green-700'}
@@ -608,16 +608,15 @@ const AutoExercise = () => {
             Submit Answer
           </button>
         ) : (
-          <div className={`p-1.5 sm:p-2.5 text-center rounded-lg mt-1.5 sm:mt-2 ${
-            result?.correct 
-              ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' 
+          <div className={`p-1.5 sm:p-2.5 text-center rounded-lg mt-1.5 sm:mt-2 ${result?.correct
+              ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
               : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
-          }`}>
+            }`}>
             <p className="font-bold text-xs sm:text-sm">
               {result?.correct ? '✓ Correct!' : '✗ Incorrect!'}
             </p>
             <p className="text-[10px] sm:text-xs">{result?.message}</p>
-            
+
             {/* XP and rewards - even more compact */}
             {completionData && !completionData.alreadyCompleted && (
               <div className="mt-0.5 sm:mt-1 font-semibold text-[10px] sm:text-xs flex flex-wrap justify-center gap-1 sm:gap-2">
@@ -627,13 +626,13 @@ const AutoExercise = () => {
                 <span>Level: {completionData.level}</span>
               </div>
             )}
-            
+
             <p className="text-[10px] mt-0.5 sm:mt-1 text-gray-600 dark:text-gray-400">
               Loading next exercise...
             </p>
           </div>
         )}
-        
+
         {/* Optional spacer div to push content up from bottom */}
         <div className="flex-grow"></div>
       </div>

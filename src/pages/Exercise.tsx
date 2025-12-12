@@ -1,13 +1,13 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useParams, useNavigate } from "react-router";
-import { useAuth } from "../AuthContext";
+import { useAuth } from "../contexts/AuthContext";
 import ExerciseAnimation from "@src/components/ExerciseAnimation";
 import LoadingPage from "@src/components/loading";
 
 // Debounce utility function - define it before using it
 const debounce = <T extends (...args: unknown[]) => unknown>(fn: T, ms = 300) => {
   let timeoutId: ReturnType<typeof setTimeout>;
-  return function(this: unknown, ...args: Parameters<T>) {
+  return function (this: unknown, ...args: Parameters<T>) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => fn.apply(this, args), ms);
   };
@@ -49,7 +49,7 @@ const Exercise = () => {
   const { exerciseId } = useParams<{ exerciseId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  
+
   // State
   const [exercise, setExercise] = useState<ExerciseData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
@@ -62,20 +62,20 @@ const Exercise = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [retryCount, setRetryCount] = useState<number>(0);
   const [textAnswer, setTextAnswer] = useState<string>("");
-  const {getAuthHeader} = useAuth();
+  const { getAuthHeader } = useAuth();
 
 
   const MAX_TIME: number = 50;
-  
+
   // Timer configuration - dynamic based on difficulty
   const timeLimit = useMemo(() => {
     // Base time: 60 seconds for level 1, decreasing by 10 seconds per level
     // Min time: 20 seconds for hardest exercises
     return Math.max(MAX_TIME - ((exercise?.difficultyLevel || 1) - 1) * 10, 20);
   }, [exercise?.difficultyLevel]);
-  
+
   const timerRef = useRef<number | null>(null);
-  
+
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
   // Debounced option selection
@@ -86,30 +86,30 @@ const Exercise = () => {
   }, [isTimerRunning, result]);
 
   const handleTextChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-  if (!isTimerRunning || result) return;
+    if (!isTimerRunning || result) return;
     setTextAnswer(e.target.value);
   }, [isTimerRunning, result]);
 
   // Fetch exercise data with rate limit handling
   const fetchExercise = useCallback(async () => {
     if (!exerciseId) return;
-    
+
     try {
       setLoading(true);
       const response = await fetch(`${API_BASE_URL}/exercises/getExercise/${exerciseId}`, {
         credentials: "include",
         headers: await getAuthHeader()
       });
-      
+
       if (response.status === 429) {
         setError("Too many requests. Please wait a moment before trying again.");
         return;
       }
-      
+
       if (!response.ok) {
         throw new Error(`Failed to fetch exercise: ${response.status}`);
       }
-      
+
       const data = await response.json();
       setExercise(data.exercise);
       // Use the dynamic timeLimit instead of the constant
@@ -134,13 +134,13 @@ const Exercise = () => {
   // Start timer
   useEffect(() => {
     if (loading || !isTimerRunning) return;
-    
+
     timerRef.current = window.setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 1) {
           clearInterval(timerRef.current!);
           setIsTimerRunning(false);
-          
+
           // Time's up logic
           if (!result) {
             setResult({
@@ -154,7 +154,7 @@ const Exercise = () => {
         return prevTime - 1;
       });
     }, 1000);
-    
+
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
@@ -168,7 +168,7 @@ const Exercise = () => {
     } else {
       fetchExercise();
     }
-    
+
     return () => {
       // Clean up timer when component unmounts
       if (timerRef.current) clearInterval(timerRef.current);
@@ -179,37 +179,37 @@ const Exercise = () => {
   // Debounced submit function
   const debouncedSubmit = useCallback(() => {
     if (!exercise || !isTimerRunning) return;
-    
+
     // For multiple-choice, we need selectedOption. For fill-in, we need textAnswer
     if (exercise.type === 'multiple-choice' && !selectedOption) return;
     if (exercise.type === 'fill-in' && !textAnswer.trim()) return;
-    
+
     // Stop the timer immediately to prevent multiple submissions
     setIsTimerRunning(false);
     if (timerRef.current) clearInterval(timerRef.current);
-    
+
     const submitFn = async () => {
       const isCorrect = exercise.type === 'multiple-choice'
         ? selectedOption === exercise.answer
         : textAnswer.trim().toLowerCase() === exercise.answer.toLowerCase(); // Case insensitive comparison
-      
+
       if (isCorrect) {
         // Correct answer within time limit
         try {
           if (!user) throw new Error("User not authenticated");
-          
+
           const response = await fetch(
             `${API_BASE_URL}/courses/complete/${user._id}/${exercise.courseBatchId}/${exercise.courseId}/${exercise.exerciseId}`,
             {
               method: "POST",
               credentials: "include",
               headers: {
-              "Content-Type": "application/json",
-              ...(await getAuthHeader())
-            }
+                "Content-Type": "application/json",
+                ...(await getAuthHeader())
+              }
             }
           );
-          
+
           if (response.status === 429) {
             setResult({
               correct: true,
@@ -218,18 +218,18 @@ const Exercise = () => {
             setShowResult(true);
             return;
           }
-          
+
           if (!response.ok) {
             throw new Error(`Failed to record completion: ${response.status}`);
           }
-          
+
           const completionResult = await response.json();
           setCompletionData(completionResult);
-          
+
           setResult({
             correct: true,
-            message: `Correct! ${completionResult.alreadyCompleted 
-              ? "You've already completed this exercise before." 
+            message: `Correct! ${completionResult.alreadyCompleted
+              ? "You've already completed this exercise before."
               : `You earned ${completionResult.awardedXp} XP!`}`
           });
         } catch (err) {
@@ -246,13 +246,13 @@ const Exercise = () => {
           message: "Incorrect answer. Try again next time!"
         });
       }
-      
+
       setShowResult(true);
     };
-    
+
     // Execute immediately without using debounce
     submitFn();
-    
+
   }, [exercise, selectedOption, textAnswer, isTimerRunning, user, API_BASE_URL]);
 
   // Submit answer handler
@@ -281,59 +281,59 @@ const Exercise = () => {
       const returnTimer = setTimeout(() => {
         handleReturn();
       }, 3000); // Return after 3 seconds of showing result
-      
+
       return () => clearTimeout(returnTimer);
     }
   }, [showResult, handleReturn]);
 
-    // Loading state with responsive sizing and dark mode
+  // Loading state with responsive sizing and dark mode
   if (loading) {
     return <LoadingPage message="Loading exercise..." fullScreen={false} />;
   }
 
-    // Error state with more compact styling
-    if (error) {
-      return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] px-3">
-          <p className="text-sm md:text-base text-red-600 dark:text-red-400 mb-2 md:mb-3 text-center">
-            Error: {error}
-          </p>
-          
-          {error.includes("Too many requests") && (
-            <button
-              onClick={handleRetry}
-              className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg mb-2 md:mb-3 text-xs md:text-sm transition-colors"
-            >
-              Retry in a moment
-            </button>
-          )}
-          
-          <button
-            onClick={() => navigate(-1)}
-            className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm transition-colors"
-          >
-            Go Back
-          </button>
-        </div>
-      );
-    }
+  // Error state with more compact styling
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-3">
+        <p className="text-sm md:text-base text-red-600 dark:text-red-400 mb-2 md:mb-3 text-center">
+          Error: {error}
+        </p>
 
-    // Exercise not found state with more compact styling
-    if (!exercise) {
-      return (
-        <div className="flex flex-col items-center justify-center min-h-[60vh] px-3">
-          <p className="text-sm md:text-base text-yellow-600 dark:text-yellow-400 mb-2 md:mb-3 text-center">
-            Exercise not found
-          </p>
+        {error.includes("Too many requests") && (
           <button
-            onClick={() => navigate("/")}
-            className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm transition-colors"
+            onClick={handleRetry}
+            className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg mb-2 md:mb-3 text-xs md:text-sm transition-colors"
           >
-            Return to Home
+            Retry in a moment
           </button>
-        </div>
-      );
-    }
+        )}
+
+        <button
+          onClick={() => navigate(-1)}
+          className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm transition-colors"
+        >
+          Go Back
+        </button>
+      </div>
+    );
+  }
+
+  // Exercise not found state with more compact styling
+  if (!exercise) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-3">
+        <p className="text-sm md:text-base text-yellow-600 dark:text-yellow-400 mb-2 md:mb-3 text-center">
+          Exercise not found
+        </p>
+        <button
+          onClick={() => navigate("/")}
+          className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm transition-colors"
+        >
+          Return to Home
+        </button>
+      </div>
+    );
+  }
 
   return (
     // Main container with centered content
@@ -342,40 +342,40 @@ const Exercise = () => {
       <div className="flex flex-col gap-1 sm:gap-2 min-h-[calc(100vh-100px)]">
         {/* Header with smaller buttons */}
         <div className="flex justify-between items-center">
-         <button
-          onClick={() => navigate(`/courses/${exercise.courseId}`)}
-          className="group flex items-center gap-1 px-2 py-1 md:px-4 md:py-2 rounded-lg
+          <button
+            onClick={() => navigate(`/courses/${exercise.courseId}`)}
+            className="group flex items-center gap-1 px-2 py-1 md:px-4 md:py-2 rounded-lg
             bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/30
             border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600
             shadow-sm hover:shadow transition-all duration-200
             text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300
             font-medium text-xs md:text-base"
-          aria-label="Return to course page"
-        >
-          <svg 
-            xmlns="http://www.w3.org/2000/svg" 
-            viewBox="0 0 20 20" 
-            fill="currentColor" 
-            className="w-4 h-4 md:w-5 md:h-5 transform group-hover:-translate-x-1 transition-transform duration-200"
+            aria-label="Return to course page"
           >
-            <path 
-              fillRule="evenodd" 
-              d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z" 
-              clipRule="evenodd" 
-            />
-          </svg>
-          Back to Course
-        </button>
-          
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              className="w-4 h-4 md:w-5 md:h-5 transform group-hover:-translate-x-1 transition-transform duration-200"
+            >
+              <path
+                fillRule="evenodd"
+                d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
+                clipRule="evenodd"
+              />
+            </svg>
+            Back to Course
+          </button>
+
           {/* Timer with responsive colors and animation */}
           <div className={`py-0.5 sm:py-1 px-2 sm:px-4 rounded-full font-medium sm:font-bold text-white text-xs sm:text-sm md:text-base
-            ${timeLeft > 5 ? 'bg-green-500 dark:bg-green-600' : 
-              timeLeft > 2 ? 'bg-yellow-500 dark:bg-yellow-600' : 
-              'bg-red-500 dark:bg-red-600 animate-pulse'}`}>
+            ${timeLeft > 5 ? 'bg-green-500 dark:bg-green-600' :
+              timeLeft > 2 ? 'bg-yellow-500 dark:bg-yellow-600' :
+                'bg-red-500 dark:bg-red-600 animate-pulse'}`}>
             {timeLeft}s
           </div>
         </div>
-        
+
         {/* Main content with reduced spacing */}
         <div className="text-center">
           <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 dark:text-white">
@@ -385,24 +385,24 @@ const Exercise = () => {
             {exercise.type} • Difficulty: {exercise.difficultyLevel}
           </p>
         </div>
-        
+
         <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-1.5 sm:p-3 transition-colors">
           <p className="text-xs sm:text-sm md:text-base text-gray-800 dark:text-white">
             {exercise.question}
           </p>
         </div>
-        
-         <div className="bg-gray-100 dark:bg-gray-800/50 border border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-1.5 sm:p-3 min-h-[6rem] sm:min-h-[8rem] md:min-h-[10rem] flex flex-col items-center justify-center overflow-auto">
-        {exercise.animType ? (
-          <ExerciseAnimation 
-            animType={exercise.animType} 
-            question={exercise.question} 
-          />
-        ) : (
-          <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">No animation for this exercise</p>
-        )}
+
+        <div className="bg-gray-100 dark:bg-gray-800/50 border border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-1.5 sm:p-3 min-h-[6rem] sm:min-h-[8rem] md:min-h-[10rem] flex flex-col items-center justify-center overflow-auto">
+          {exercise.animType ? (
+            <ExerciseAnimation
+              animType={exercise.animType}
+              question={exercise.question}
+            />
+          ) : (
+            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">No animation for this exercise</p>
+          )}
         </div>
-          
+
         <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
           {exercise.type === 'multiple-choice' ? (
             exercise.options.map((option, index) => (
@@ -413,8 +413,8 @@ const Exercise = () => {
                 className={`
                   p-2 sm:p-2.5 rounded-lg border text-left transition-all duration-150 text-xs sm:text-sm
                   flex items-center min-h-[2.75rem] sm:min-h-[3rem]
-                  ${selectedOption === option 
-                    ? 'bg-blue-500 text-white border-blue-600 dark:bg-blue-600 dark:border-blue-700' 
+                  ${selectedOption === option
+                    ? 'bg-blue-500 text-white border-blue-600 dark:bg-blue-600 dark:border-blue-700'
                     : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 dark:text-blue-200'}
                   ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer'}
                 `}
@@ -441,22 +441,22 @@ const Exercise = () => {
             </div>
           )}
         </div>
-        
+
         {/* Submit button right after options with fixed spacing */}
         {!showResult ? (
-           <button
+          <button
             onClick={handleSubmitAnswer}
             disabled={
-              (exercise.type === 'multiple-choice' && !selectedOption) || 
-              (exercise.type === 'fill-in' && !textAnswer.trim()) || 
-              !isTimerRunning || 
+              (exercise.type === 'multiple-choice' && !selectedOption) ||
+              (exercise.type === 'fill-in' && !textAnswer.trim()) ||
+              !isTimerRunning ||
               showResult
             }
             className={`
               w-full py-1.5 sm:py-2 text-xs sm:text-sm md:text-base font-medium rounded-lg transition-colors mt-1.5 sm:mt-2
-              ${((exercise.type === 'multiple-choice' && !selectedOption) || 
-                (exercise.type === 'fill-in' && !textAnswer.trim()) || 
-                !isTimerRunning || 
+              ${((exercise.type === 'multiple-choice' && !selectedOption) ||
+                (exercise.type === 'fill-in' && !textAnswer.trim()) ||
+                !isTimerRunning ||
                 showResult)
                 ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white dark:text-gray-300'
                 : 'bg-green-500 dark:bg-green-600 text-white hover:bg-green-600 dark:hover:bg-green-700'}
@@ -465,16 +465,15 @@ const Exercise = () => {
             Submit Answer
           </button>
         ) : (
-          <div className={`p-1.5 sm:p-2.5 text-center rounded-lg mt-1.5 sm:mt-2 ${
-            result?.correct 
-              ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300' 
+          <div className={`p-1.5 sm:p-2.5 text-center rounded-lg mt-1.5 sm:mt-2 ${result?.correct
+              ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
               : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
-          }`}>
+            }`}>
             <p className="font-bold text-xs sm:text-sm">
               {result?.correct ? '✓ Correct!' : '✗ Incorrect!'}
             </p>
             <p className="text-[10px] sm:text-xs">{result?.message}</p>
-            
+
             {/* XP and rewards - even more compact */}
             {completionData && !completionData.alreadyCompleted && (
               <div className="mt-0.5 sm:mt-1 font-semibold text-[10px] sm:text-xs flex flex-wrap justify-center gap-1 sm:gap-2">
@@ -484,18 +483,18 @@ const Exercise = () => {
                 <span>Level: {completionData.level}</span>
               </div>
             )}
-            
+
             <p className="text-[10px] mt-0.5 sm:mt-1 text-gray-600 dark:text-gray-400">
               Returning to course page...
             </p>
           </div>
         )}
-        
+
         {/* Optional spacer div to push content up from bottom */}
         <div className="flex-grow"></div>
       </div>
     </div>
-    );
+  );
 };
 
 export default Exercise;
