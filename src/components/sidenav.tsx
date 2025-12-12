@@ -45,13 +45,13 @@ const SideNavBar = () => {
               <NavLink to="/home">
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center w-14 md:w-16 py-2.5 md:py-3 px-2 rounded-2xl transition-all duration-300 group ${isActive
-                      ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
-                      : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
+                    ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
+                    : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={HomeIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg" : "group-hover:drop-shadow-md"
+                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "group-hover:drop-shadow-md"
                           }`}
                         alt="Home"
                       />
@@ -72,13 +72,13 @@ const SideNavBar = () => {
               <NavLink to="/leaderboard">
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center w-14 md:w-16 py-2.5 md:py-3 px-2 rounded-2xl transition-all duration-300 group ${isActive
-                      ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
-                      : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
+                    ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
+                    : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={TrophyIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg" : "group-hover:drop-shadow-md"
+                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "group-hover:drop-shadow-md"
                           }`}
                         alt="Leaderboard"
                       />
@@ -99,13 +99,13 @@ const SideNavBar = () => {
               <NavLink to={profileLink}>
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center w-14 md:w-16 py-2.5 md:py-3 px-2 rounded-2xl transition-all duration-300 group ${isActive
-                      ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
-                      : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
+                    ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
+                    : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={ProfileIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg" : "group-hover:drop-shadow-md"
+                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "group-hover:drop-shadow-md"
                           }`}
                         alt="Profile"
                       />
@@ -126,13 +126,13 @@ const SideNavBar = () => {
               <NavLink to="/shop">
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center w-14 md:w-16 py-2.5 md:py-3 px-2 rounded-2xl transition-all duration-300 group ${isActive
-                      ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
-                      : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
+                    ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
+                    : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={ShopIcon}
-                        className={`w-9 md:w-10 lg:w-11 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg" : "group-hover:drop-shadow-md"
+                        className={`w-9 md:w-10 lg:w-11 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "group-hover:drop-shadow-md"
                           }`}
                         alt="Shop"
                       />
@@ -153,13 +153,13 @@ const SideNavBar = () => {
               <NavLink to="/settings">
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center w-14 md:w-16 py-2.5 md:py-3 px-2 rounded-2xl transition-all duration-300 group ${isActive
-                      ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
-                      : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
+                    ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
+                    : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={SettingsIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg" : "group-hover:drop-shadow-md"
+                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "group-hover:drop-shadow-md"
                           }`}
                         alt="Settings"
                       />
