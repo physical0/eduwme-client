@@ -7,7 +7,7 @@ interface LoadingPageProps {
 
 const LoadingPage = ({ message = "Loading...", fullScreen = true }: LoadingPageProps) => {
   return (
-    <div className={`flex flex-col items-center justify-center ${fullScreen ? 'min-h-screen pt-24 md:pt-20' : 'py-8'}`}>
+    <div className={`flex flex-col items-center justify-center ${fullScreen ? 'min-h-screen pt-36 md:pt-36' : 'py-8'}`}>
       <div className="relative">
         <img
           src={MainLogo}
