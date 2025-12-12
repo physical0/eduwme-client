@@ -18,19 +18,19 @@ const SideNavBar = () => {
       {/* Burger Menu Button - Fixed position */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="fixed top-4 left-4 z-[60] flex flex-col gap-1.5 p-2.5 rounded-xl glass-card hover:bg-white/20 dark:hover:bg-white/10 transition-all duration-300 group shadow-lg"
+        className="fixed top-4 left-4 z-[60] flex flex-col gap-1.5 p-2.5 rounded-xl glass-card hover:bg-white/20 dark:hover:bg-white/10 transition-all duration-300 group shadow-lg w-16 h-12 md:w-20 md:h-14 justify-center items-center"
         aria-label="Toggle navigation"
       >
         <div
-          className={`w-6 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? 'rotate-45 translate-y-2.5' : ''
+          className={`w-8 md:w-10 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? 'rotate-45 translate-y-2.5' : ''
             }`}
         ></div>
         <div
-          className={`w-6 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? 'opacity-0' : ''
+          className={`w-8 md:w-10 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? 'opacity-0' : ''
             }`}
         ></div>
         <div
-          className={`w-6 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? '-rotate-45 -translate-y-2.5' : ''
+          className={`w-8 md:w-10 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? '-rotate-45 -translate-y-2.5' : ''
             }`}
         ></div>
       </button>
