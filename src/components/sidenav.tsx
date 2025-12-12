@@ -36,7 +36,7 @@ const SideNavBar = () => {
       </button>
 
       {/* Side Navigation */}
-      <nav className={`fixed left-0 top-0 h-full pt-20 pb-8 glass-card border-r-2 border-white/20 dark:border-white/10 shadow-2xl z-50 backdrop-blur-xl transition-all duration-300 ease-in-out ${isCollapsed ? '-translate-x-full' : 'translate-x-0'
+      <nav className={`fixed left-0 top-0 h-full pt-24 pb-8 glass-card border-r-2 border-white/20 dark:border-white/10 shadow-2xl z-50 backdrop-blur-xl transition-all duration-300 ease-in-out ${isCollapsed ? '-translate-x-full' : 'translate-x-0'
         } w-20 md:w-24 lg:w-28`}>
         <div className="h-full flex flex-col justify-start">
           <ul className="flex flex-col items-center gap-6 md:gap-8">
