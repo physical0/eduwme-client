@@ -16,7 +16,7 @@ const MainLayout = () => {
       </div>
 
       {/* Main content - with padding based on screen size */}
-      <main className="pt-20 pb-24 md:pt-16 md:pb-6 md:pl-24 px-4">
+      <main className="pt-24 pb-24 md:pt-20 md:pb-6 md:pl-24 px-4">
         <Outlet />
       </main>
 
