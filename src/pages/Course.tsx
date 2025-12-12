@@ -230,8 +230,8 @@ const Course = () => {
 
         {/* Enhanced course header with glassmorphism */}
         <div className="glass-card rounded-2xl sm:rounded-3xl p-4 sm:p-5 md:p-6 lg:p-8 mb-4 sm:mb-6 md:mb-8 shadow-xl border-2 border-white/20 dark:border-white/10">
-          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3 sm:gap-4 md:gap-6">
-            <div className="flex items-start gap-2 sm:gap-3 md:gap-4 flex-1">
+          <div className="flex flex-row justify-between items-start gap-2 sm:gap-3 md:gap-6">
+            <div className="flex items-start gap-2 sm:gap-3 md:gap-4 flex-1 min-w-0">
               {/* Enhanced course logo */}
               <div className="w-12 h-12 sm:w-14 sm:h-14 md:w-20 md:h-20 rounded-2xl flex items-center justify-center overflow-hidden glass-card p-1.5 sm:p-2 md:p-3 shadow-lg flex-shrink-0">
                 {course.logo ? (
@@ -275,40 +275,41 @@ const Course = () => {
                 )}
               </div>
 
-              <div className="flex-1">
+              <div className="flex-1 min-w-0">
                 {/* Gradient course title */}
-                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold gradient-text mb-1 sm:mb-2">
+                <h1 className="text-base sm:text-lg md:text-2xl lg:text-3xl font-bold gradient-text mb-1 sm:mb-2">
                   {course.title}
                 </h1>
-                <p className="text-xs sm:text-sm md:text-base text-gray-600 dark:text-gray-400 mb-2 sm:mb-3">
+                <p className="text-[10px] sm:text-xs md:text-sm text-gray-600 dark:text-gray-400 mb-1.5 sm:mb-2 md:mb-3">
                   Level {course.level} • {exercises.length} Exercises • {completedCount} completed
                 </p>
 
                 {/* Enhanced Auto Exercise button */}
                 <button
                   onClick={() => navigate(`/auto-exercise/${courseId}`)}
-                  className="group px-3 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-sm md:text-base font-semibold rounded-xl
+                  className="group px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 text-[10px] sm:text-xs md:text-sm font-semibold rounded-lg sm:rounded-xl
                       bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-600 
                       hover:from-purple-600 hover:via-pink-600 hover:to-indigo-700
                       text-white shadow-lg hover:shadow-xl transition-all duration-300
                       transform hover:scale-105 shimmer"
                 >
-                  <div className="flex items-center gap-1.5 sm:gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 sm:h-5 sm:w-5 group-hover:rotate-12 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
+                  <div className="flex items-center gap-1 sm:gap-1.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 sm:h-4 sm:w-4 md:h-5 md:w-5 group-hover:rotate-12 transition-transform duration-300" viewBox="0 0 20 20" fill="currentColor">
                       <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM9.555 7.168A1 1 0 008 8v4a1 1 0 001.555.832l3-2a1 1 0 000-1.664l-3-2z" clipRule="evenodd" />
                     </svg>
-                    Auto Exercise Mode
+                    <span className="hidden xs:inline sm:inline">Auto Exercise Mode</span>
+                    <span className="xs:hidden sm:hidden">Auto</span>
                   </div>
                 </button>
               </div>
             </div>
 
-            {/* Enhanced progress indicator */}
-            <div className="glass-card p-3 sm:p-4 md:p-5 rounded-xl sm:rounded-2xl shadow-lg border border-white/20 dark:border-white/10 min-w-[120px] sm:min-w-[140px] md:min-w-[160px]">
-              <p className="text-xs sm:text-sm font-semibold text-gray-600 dark:text-gray-400 mb-2 text-center">
+            {/* Enhanced progress indicator - smaller on mobile */}
+            <div className="glass-card p-2 sm:p-3 md:p-4 rounded-xl sm:rounded-2xl shadow-lg border border-white/20 dark:border-white/10 flex-shrink-0">
+              <p className="text-[9px] sm:text-xs font-semibold text-gray-600 dark:text-gray-400 mb-1 sm:mb-2 text-center">
                 Progress
               </p>
-              <div className="relative w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 mx-auto">
+              <div className="relative w-14 h-14 sm:w-20 sm:h-20 md:w-24 md:h-24 mx-auto">
                 {/* Circular progress */}
                 <svg className="w-full h-full transform -rotate-90">
                   <circle
