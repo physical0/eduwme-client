@@ -294,7 +294,7 @@ const Shop = () => {
   }
 
   return (
-    <div className="max-w-full md:max-w-5xl lg:max-w-6xl mx-auto px-1 sm:px-3 py-1 sm:py-4 pb-16 sm:pb-16">
+    <div className="max-w-full md:max-w-5xl lg:max-w-6xl mx-auto px-1 sm:px-3 py-4 sm:py-4 md:py-6 lg:py-8 pb-16 sm:pb-16">
       {/* Header section - more compact on mobile */}
       <div className="flex justify-between items-center gap-1 mb-2 sm:mb-5">
         <h1 className="text-base sm:text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Shop</h1>
@@ -311,8 +311,8 @@ const Shop = () => {
         <button
           onClick={() => setActiveTab("shop")}
           className={`py-1 sm:py-2 px-2 sm:px-4 text-xs sm:text-sm font-medium border-b-2 ${activeTab === "shop"
-              ? "border-[#374DB0] dark:border-[#5a6fd1] text-[#374DB0] dark:text-[#5a6fd1]"
-              : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+            ? "border-[#374DB0] dark:border-[#5a6fd1] text-[#374DB0] dark:text-[#5a6fd1]"
+            : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             }`}
         >
           Shop
@@ -320,8 +320,8 @@ const Shop = () => {
         <button
           onClick={() => setActiveTab("inventory")}
           className={`py-1 sm:py-2 px-2 sm:px-4 text-xs sm:text-sm font-medium border-b-2 ${activeTab === "inventory"
-              ? "border-[#374DB0] dark:border-[#5a6fd1] text-[#374DB0] dark:text-[#5a6fd1]"
-              : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+            ? "border-[#374DB0] dark:border-[#5a6fd1] text-[#374DB0] dark:text-[#5a6fd1]"
+            : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             }`}
         >
           My Items
@@ -332,10 +332,10 @@ const Shop = () => {
       {purchaseStatus.status !== "idle" && (
         <div
           className={`mb-2 sm:mb-3 p-1.5 sm:p-3 rounded-lg text-xs ${purchaseStatus.status === "success"
-              ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300"
-              : purchaseStatus.status === "error"
-                ? "bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300"
-                : "bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
+            ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300"
+            : purchaseStatus.status === "error"
+              ? "bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300"
+              : "bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
             }`}
         >
           {purchaseStatus.message}
@@ -408,10 +408,10 @@ const Shop = () => {
                               onClick={() => !isOwned && handlePurchase(item.itemId)}
                               disabled={isOwned || (user?.gems || 0) < item.price || purchaseStatus.status === "loading"}
                               className={`px-1 py-0.5 sm:px-2 sm:py-1 text-[9px] sm:text-xs font-medium rounded-md ${isOwned
-                                  ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 cursor-default"
-                                  : (user?.gems || 0) < item.price
-                                    ? "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                                    : "bg-[#374DB0] dark:bg-[#5a6fd1] text-white hover:bg-[#293a8c] dark:hover:bg-[#4a5eb3] transition-colors"
+                                ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 cursor-default"
+                                : (user?.gems || 0) < item.price
+                                  ? "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
+                                  : "bg-[#374DB0] dark:bg-[#5a6fd1] text-white hover:bg-[#293a8c] dark:hover:bg-[#4a5eb3] transition-colors"
                                 }`}
                             >
                               {isOwned ? "Owned" : (user?.gems || 0) < item.price ? "Not enough" : "Buy"}
@@ -458,8 +458,8 @@ const Shop = () => {
                       <div
                         key={item.itemId}
                         className={`p-1 sm:p-2 rounded-md border ${item.isEquipped
-                            ? "border-green-400 bg-green-50 dark:border-green-600 dark:bg-green-900/20"
-                            : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
+                          ? "border-green-400 bg-green-50 dark:border-green-600 dark:bg-green-900/20"
+                          : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800"
                           }`}
                       >
                         {/* Item header with equip status */}
@@ -496,8 +496,8 @@ const Shop = () => {
                         <button
                           onClick={() => handleEquipToggle(item.itemId, item.isEquipped)}
                           className={`w-full px-1 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-xs font-medium rounded-md ${item.isEquipped
-                              ? "bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-700"
-                              : "bg-[#374DB0] dark:bg-[#5a6fd1] text-white hover:bg-[#293a8c] dark:hover:bg-[#4a5eb3]"
+                            ? "bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-700"
+                            : "bg-[#374DB0] dark:bg-[#5a6fd1] text-white hover:bg-[#293a8c] dark:hover:bg-[#4a5eb3]"
                             } transition-colors`}
                         >
                           {item.isEquipped ? "Unequip" : "Equip"}

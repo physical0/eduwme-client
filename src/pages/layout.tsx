@@ -18,7 +18,7 @@ const MainLayout = () => {
       </div>
 
       {/* Main content - with dynamic padding based on collapse state */}
-      <main className={`pt-24 pb-24 md:pt-20 md:pb-6 px-4 transition-all duration-300 ${isCollapsed ? 'md:pl-4' : 'md:pl-24 lg:pl-28 xl:pl-32'
+      <main className={`pt-20 pb-20 md:pt-16 md:pb-4 px-3 transition-all duration-300 ${isCollapsed ? 'md:pl-3' : 'md:pl-20 lg:pl-22 xl:pl-24'
         }`}>
         <Outlet />
       </main>

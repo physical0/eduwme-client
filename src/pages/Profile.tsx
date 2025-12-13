@@ -492,8 +492,8 @@ const ProfilePage = () => {
 
   return (
     // Reduced width and padding, more compact container
-    <div className="w-[90%] max-w-xs sm:max-w-lg md:max-w-xl mx-auto px-1.5 py-3 md:py-6 pb-16 md:pb-12 
-      shadow-sm md:shadow-lg rounded-lg mt-1 sm:mt-4 md:mt-6 dark:bg-gray-800/40">
+    <div className="w-[85%] max-w-[280px] sm:max-w-md md:max-w-lg mx-auto px-1.5 py-2 md:py-4 pb-14 md:pb-10 
+      shadow-sm md:shadow-lg rounded-lg mt-1 sm:mt-3 md:mt-4 dark:bg-gray-800/40">
       {/* Success message - smaller text and padding for mobile */}
       {updateSuccess && (
         <div className="mb-2 sm:mb-4 p-1.5 sm:p-3 bg-green-100 dark:bg-green-900/30 
@@ -511,8 +511,8 @@ const ProfilePage = () => {
       )}
 
       {/* Header section - more compact for mobile */}
-      <div className="flex justify-between items-center mb-2 sm:mb-6">
-        <h1 className="text-xl sm:text-3xl md:text-4xl font-bold text-gray-800 dark:text-white">
+      <div className="flex justify-between items-center mb-1.5 sm:mb-3 md:mb-4">
+        <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
           Profile
         </h1>
 
@@ -532,7 +532,7 @@ const ProfilePage = () => {
 
       <div className="relative">
         {/* Banner section - display user's equipped banner */}
-        <div className="w-full h-28 sm:h-36 md:h-44 rounded-t-lg overflow-hidden relative">
+        <div className="w-full h-20 sm:h-24 md:h-28 rounded-t-lg overflow-hidden relative">
           {isLoadingInventory ? (
             <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
           ) : bannerImage ? (
@@ -547,7 +547,7 @@ const ProfilePage = () => {
         </div>
 
         {/* Profile image section - with overlap on banner */}
-        <div className="flex flex-col items-center -mt-8 sm:-mt-10 md:-mt-12 relative z-10 mb-2 sm:mb-4 md:mb-6">
+        <div className="flex flex-col items-center -mt-6 sm:-mt-7 md:-mt-8 relative z-10 mb-1.5 sm:mb-2 md:mb-3">
           <input
             type="file"
             ref={fileInputRef}
@@ -558,14 +558,14 @@ const ProfilePage = () => {
 
           {/* Profile image with drop shadow for better visibility over banner */}
           <div
-            className={`relative w-16 h-16 sm:w-22 sm:h-22 md:w-26 md:h-26 mb-1.5 sm:mb-3 md:mb-4 
+            className={`relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 mb-1 sm:mb-1.5 md:mb-2 
             ${isEditing && isOwnProfile ? 'cursor-pointer' : ''}`}
             onClick={handleImageClick}
           >
             <img
               src={previewImage || userProfile.profilePicture || AvatarPlaceholder}
               alt="User Avatar"
-              className="w-16 h-16 sm:w-22 sm:h-22 md:w-26 md:h-26 rounded-full object-cover 
+              className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full object-cover 
               border-3 border-white dark:border-gray-800 shadow-md"
             />
 

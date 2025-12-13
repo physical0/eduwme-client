@@ -15,47 +15,49 @@ const SideNavBar = () => {
 
   return (
     <>
-      {/* Burger Menu Button - Fixed position */}
-      <button
-        onClick={() => setIsCollapsed(!isCollapsed)}
-        className="fixed top-4 left-6 z-[60] flex flex-col gap-1.5 p-2.5 rounded-xl glass-card hover:bg-white/20 dark:hover:bg-white/10 transition-all duration-300 group shadow-lg w-16 h-12 md:w-20 md:h-14 justify-center items-center"
-        aria-label="Toggle navigation"
-      >
-        <div
-          className={`w-12 md:w-14 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? 'rotate-45 translate-y-2.5' : ''
-            }`}
-        ></div>
-        <div
-          className={`w-12 md:w-14 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? 'opacity-0' : ''
-            }`}
-        ></div>
-        <div
-          className={`w-12 md:w-14 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? '-rotate-45 -translate-y-2.5' : ''
-            }`}
-        ></div>
-      </button>
-
       {/* Side Navigation */}
-      <nav className={`fixed left-0 top-0 h-full pt-24 pb-8 glass-card border-r-2 border-white/20 dark:border-white/10 shadow-2xl z-50 backdrop-blur-xl transition-all duration-300 ease-in-out ${isCollapsed ? '-translate-x-full' : 'translate-x-0'
-        } w-24 md:w-28 lg:w-32`}>
-        <div className="h-full flex flex-col justify-start">
-          <ul className="flex flex-col items-center gap-6 md:gap-8">
+      <nav className={`fixed left-0 top-0 h-full pt-20 pb-6 glass-card border-r-2 border-white/20 dark:border-white/10 shadow-2xl z-40 backdrop-blur-xl transition-all duration-300 ease-in-out ${isCollapsed ? '-translate-x-full' : 'translate-x-0'
+        } w-20 md:w-22 lg:w-24`}>
+
+        {/* Enhanced Chevron Toggle Button - More visible */}
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="hidden md:flex absolute -right-4 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-purple-500/40 to-blue-500/40 hover:from-purple-600/50 hover:to-blue-600/50 p-2 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl z-50 hover:scale-110"
+          aria-label="Toggle navigation"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            className={`w-5 h-5 text-white transition-transform duration-300 ${isCollapsed ? 'rotate-0' : 'rotate-180'
+              }`}
+          >
+            <polyline points="15 18 9 12 15 6"></polyline>
+          </svg>
+        </button>
+
+        <div className="h-full flex pt-10 flex-col justify-start">
+          <ul className="flex flex-col items-center gap-4 md:gap-5">
             {/* Home Link */}
             <li className="w-full flex justify-center">
               <NavLink to="/home">
                 {({ isActive }) => (
-                  <div className={`relative flex flex-col items-center w-14 md:w-16 py-2.5 md:py-3 px-2 rounded-2xl transition-all duration-300 group ${isActive
+                  <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
                     ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={HomeIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
+                        className={`w-6 md:w-7 lg:w-8 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
                           }`}
                         alt="Home"
                       />
-                      <span className="text-xs sm:text-sm md:text-base mt-1 font-semibold text-center block">Home</span>
+                      <span className="text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block">Home</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
@@ -71,18 +73,18 @@ const SideNavBar = () => {
             <li className="w-full flex justify-center">
               <NavLink to="/leaderboard">
                 {({ isActive }) => (
-                  <div className={`relative flex flex-col items-center w-14 md:w-16 py-2.5 md:py-3 px-2 rounded-2xl transition-all duration-300 group ${isActive
+                  <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
                     ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={TrophyIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
+                        className={`w-6 md:w-7 lg:w-8 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
                           }`}
                         alt="Leaderboard"
                       />
-                      <span className="text-xs sm:text-sm md:text-base mt-1 font-semibold text-center block">Ranks</span>
+                      <span className="text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block">Ranks</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
@@ -98,18 +100,18 @@ const SideNavBar = () => {
             <li className="w-full flex justify-center">
               <NavLink to={profileLink}>
                 {({ isActive }) => (
-                  <div className={`relative flex flex-col items-center w-14 md:w-16 py-2.5 md:py-3 px-2 rounded-2xl transition-all duration-300 group ${isActive
+                  <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
                     ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={ProfileIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
+                        className={`w-6 md:w-7 lg:w-8 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
                           }`}
                         alt="Profile"
                       />
-                      <span className="text-xs sm:text-sm md:text-base mt-1 font-semibold text-center block">Profile</span>
+                      <span className="text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block">Profile</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
@@ -125,7 +127,7 @@ const SideNavBar = () => {
             <li className="w-full flex justify-center">
               <NavLink to="/shop">
                 {({ isActive }) => (
-                  <div className={`relative flex flex-col items-center w-14 md:w-16 py-2.5 md:py-3 px-2 rounded-2xl transition-all duration-300 group ${isActive
+                  <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
                     ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
@@ -136,7 +138,7 @@ const SideNavBar = () => {
                           }`}
                         alt="Shop"
                       />
-                      <span className="text-xs sm:text-sm md:text-base mt-1 font-semibold text-center block">Shop</span>
+                      <span className="text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block">Shop</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
@@ -152,18 +154,18 @@ const SideNavBar = () => {
             <li className="w-full flex justify-center">
               <NavLink to="/settings">
                 {({ isActive }) => (
-                  <div className={`relative flex flex-col items-center w-14 md:w-16 py-2.5 md:py-3 px-2 rounded-2xl transition-all duration-300 group ${isActive
+                  <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
                     ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={SettingsIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
+                        className={`w-6 md:w-7 lg:w-8 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
                           }`}
                         alt="Settings"
                       />
-                      <span className="text-xs sm:text-sm md:text-base mt-1 font-semibold text-center block">Settings</span>
+                      <span className="text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block">Settings</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">

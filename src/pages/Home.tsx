@@ -280,8 +280,8 @@ const Home = () => {
 
   return (
     // Main container with gradient background
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20">
-      <div className="max-w-[92%] sm:max-w-[85%] md:max-w-5xl lg:max-w-6xl mx-auto px-1 sm:px-2 md:px-4 py-2 sm:py-3 md:py-8 pb-20 md:pb-16">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 pt-4">
+      <div className="max-w-[90%] sm:max-w-[82%] md:max-w-3xl lg:max-w-4xl mx-auto px-1 sm:px-2 md:px-2 py-2 sm:py-3 md:py-4 pb-16 md:pb-10">
 
         {/* Enhanced user stats section with glassmorphism */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6 md:mb-8">
@@ -326,7 +326,7 @@ const Home = () => {
             // Enhanced batch container with glassmorphism
             <div
               key={batch.courseBatchId}
-              className="mb-6 sm:mb-8 md:mb-12 glass-card rounded-2xl md:rounded-3xl p-3 sm:p-4 md:p-6 lg:p-8 shadow-xl hover:shadow-2xl transition-all duration-500 fade-in-stagger border-2 border-white/20 dark:border-white/10"
+              className="mb-6 sm:mb-8 md:mb-6 glass-card rounded-2xl md:rounded-2xl p-3 sm:p-4 md:p-4 lg:p-5 shadow-xl hover:shadow-2xl transition-all duration-500 fade-in-stagger border-2 border-white/20 dark:border-white/10"
               style={{ animationDelay: `${batchIndex * 100}ms` }}
             >
               {/* Enhanced batch header */}
@@ -373,7 +373,7 @@ const Home = () => {
 
               {/* Locked message with enhanced styling */}
               {!batch.isUnlocked && (
-                <div className="glass-card rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6 text-center border border-gray-300/20 dark:border-gray-600/20">
+                <div className="glass-card rounded-xl md:rounded-xl p-4 sm:p-5 md:p-4 text-center border border-gray-300/20 dark:border-gray-600/20">
                   <p className="text-sm sm:text-base md:text-lg text-gray-700 dark:text-gray-300 font-medium">
                     🎯 Complete previous stages to unlock this learning area
                   </p>
@@ -382,7 +382,7 @@ const Home = () => {
 
               {/* Enhanced course grid */}
               {batch.isUnlocked && (
-                <div className="grid grid-cols-3 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-4 lg:grid-cols-5 gap-2 xs:gap-2.5 sm:gap-4 md:gap-6">
+                <div className="grid grid-cols-3 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 xs:gap-2.5 sm:gap-4 md:gap-3 lg:gap-4">
                   {orderedCoursesToShow.map((course, courseIndex) => {
                     const courseSpecificProgress = batchProgress?.courses?.find(c => c.courseId === course.courseId);
                     const isCompleted = courseSpecificProgress?.status === "completed";
@@ -501,7 +501,7 @@ const Home = () => {
 
               {/* Enhanced empty message */}
               {batch.isUnlocked && orderedCoursesToShow.length === 0 && (
-                <div className="glass-card rounded-xl md:rounded-2xl p-4 sm:p-5 md:p-6 text-center border border-yellow-300/20 dark:border-yellow-600/20">
+                <div className="glass-card rounded-xl md:rounded-xl p-4 sm:p-5 md:p-4 text-center border border-yellow-300/20 dark:border-yellow-600/20">
                   <p className="text-sm sm:text-base md:text-lg text-yellow-700 dark:text-yellow-400 font-medium">
                     📚 No courses available in this learning area yet
                   </p>
@@ -513,7 +513,7 @@ const Home = () => {
 
         {/* Enhanced empty state message */}
         {courseBatches.length === 0 && !loading && (
-          <div className="glass-card rounded-2xl md:rounded-3xl p-6 sm:p-8 md:p-12 text-center border-2 border-blue-300/20 dark:border-blue-600/20">
+          <div className="glass-card rounded-2xl md:rounded-2xl p-6 sm:p-8 md:p-8 text-center border-2 border-blue-300/20 dark:border-blue-600/20">
             <p className="text-base sm:text-lg md:text-xl lg:text-2xl font-semibold gradient-text">
               🎓 No learning areas available yet. Check back soon!
             </p>
