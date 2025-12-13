@@ -140,18 +140,18 @@ const LeaderboardPage = () => {
 
       {/* Top 3 users podium */}
       {users.length > 0 && (
-        <div className="grid grid-cols-3 gap-1 sm:gap-4 mb-6 md:mb-8 max-w-md sm:max-w-xl md:max-w-2xl mx-auto">
+        <div className="grid grid-cols-3 gap-1 sm:gap-4 mb-6 md:mb-6 max-w-md sm:max-w-lg md:max-w-xl mx-auto">
           {/* Silver - 2nd place (left) */}
-          <div className="col-span-1 flex flex-col items-center bg-gray-100 dark:bg-gray-800 rounded-xl sm:rounded-2xl p-1 sm:p-2 md:p-4 border border-gray-300 dark:border-gray-700 shadow-md">
+          <div className="col-span-1 flex flex-col items-center bg-gray-100 dark:bg-gray-800 rounded-xl sm:rounded-2xl p-1 sm:p-2 md:p-3 border border-gray-300 dark:border-gray-700 shadow-md">
             <div className="relative mb-1 sm:mb-2">
-              <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs sm:text-base md:text-lg font-bold overflow-hidden">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs sm:text-base md:text-lg font-bold overflow-hidden">
                 {users[1] && users[1].profilePicture ? (
                   <img src={users[1].profilePicture} alt={users[1].username} className="w-full h-full object-cover" />
                 ) : (
                   <span>{getInitials(users[1]?.username || "")}</span>
                 )}
               </div>
-              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-full bg-gray-400 text-white font-bold text-[10px] sm:text-xs md:text-sm flex items-center justify-center border-2 border-white dark:border-gray-800">
+              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-6 sm:h-6 md:w-6 md:h-6 rounded-full bg-gray-400 text-white font-bold text-[10px] sm:text-xs md:text-xs flex items-center justify-center border-2 border-white dark:border-gray-800">
                 2
               </div>
             </div>
@@ -169,16 +169,16 @@ const LeaderboardPage = () => {
           </div>
 
           {/* Gold - 1st place (center) */}
-          <div className="col-span-1 flex flex-col items-center bg-yellow-100 dark:bg-yellow-900/40 rounded-xl sm:rounded-2xl p-1 sm:p-2 md:p-4 border-2 border-yellow-300 dark:border-yellow-600 shadow-md transform scale-105 sm:scale-110 -mt-2 sm:-mt-4 z-10">
+          <div className="col-span-1 flex flex-col items-center bg-yellow-100 dark:bg-yellow-900/40 rounded-xl sm:rounded-2xl p-1 sm:p-2 md:p-3 border-2 border-yellow-300 dark:border-yellow-600 shadow-md transform scale-105 sm:scale-110 -mt-2 sm:-mt-4 z-10">
             <div className="relative mb-1 sm:mb-2">
-              <div className="w-10 h-10 sm:w-14 sm:h-14 md:w-20 md:h-20 rounded-full bg-yellow-300 dark:bg-yellow-600 flex items-center justify-center text-sm sm:text-lg md:text-xl font-bold overflow-hidden">
+              <div className="w-10 h-10 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full bg-yellow-300 dark:bg-yellow-600 flex items-center justify-center text-sm sm:text-lg md:text-xl font-bold overflow-hidden">
                 {users[0] && users[0].profilePicture ? (
                   <img src={users[0].profilePicture} alt={users[0].username} className="w-full h-full object-cover" />
                 ) : (
                   <span>{getInitials(users[0]?.username || "")}</span>
                 )}
               </div>
-              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 rounded-full bg-yellow-500 text-white font-bold text-[10px] sm:text-xs md:text-sm flex items-center justify-center border-2 border-white dark:border-yellow-900">
+              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-5 h-5 sm:w-7 sm:h-7 md:w-7 md:h-7 rounded-full bg-yellow-500 text-white font-bold text-[10px] sm:text-xs md:text-sm flex items-center justify-center border-2 border-white dark:border-yellow-900">
                 1
               </div>
             </div>
@@ -196,16 +196,16 @@ const LeaderboardPage = () => {
           </div>
 
           {/* Bronze - 3rd place (right) */}
-          <div className="col-span-1 flex flex-col items-center bg-amber-50 dark:bg-amber-900/30 rounded-xl sm:rounded-2xl p-1 sm:p-2 md:p-4 border border-amber-300 dark:border-amber-700 shadow-md">
+          <div className="col-span-1 flex flex-col items-center bg-amber-50 dark:bg-amber-900/30 rounded-xl sm:rounded-2xl p-1 sm:p-2 md:p-3 border border-amber-300 dark:border-amber-700 shadow-md">
             <div className="relative mb-1 sm:mb-2">
-              <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-16 md:h-16 rounded-full bg-amber-300 dark:bg-amber-600 flex items-center justify-center text-xs sm:text-base md:text-lg font-bold overflow-hidden">
+              <div className="w-8 h-8 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-amber-300 dark:bg-amber-600 flex items-center justify-center text-xs sm:text-base md:text-lg font-bold overflow-hidden">
                 {users[2] && users[2].profilePicture ? (
                   <img src={users[2].profilePicture} alt={users[2].username} className="w-full h-full object-cover" />
                 ) : (
                   <span>{getInitials(users[2]?.username || "")}</span>
                 )}
               </div>
-              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-6 sm:h-6 md:w-7 md:h-7 rounded-full bg-amber-600 text-white font-bold text-[10px] sm:text-xs md:text-sm flex items-center justify-center border-2 border-white dark:border-amber-900">
+              <div className="absolute -top-1 -right-1 sm:-top-2 sm:-right-2 w-4 h-4 sm:w-6 sm:h-6 md:w-6 md:h-6 rounded-full bg-amber-600 text-white font-bold text-[10px] sm:text-xs md:text-xs flex items-center justify-center border-2 border-white dark:border-amber-900">
                 3
               </div>
             </div>
@@ -238,7 +238,7 @@ const LeaderboardPage = () => {
           {users.map((user, index) => (
             <div
               key={user.username}
-              className={`px-3 sm:px-4 py-2 sm:py-3 md:py-4 grid grid-cols-12 gap-1 items-center ${getRankBgColor(index + 1)} ${currentUser?.username === user.username ? 'border-l-4 border-[#374DB0] dark:border-purple-500' : ''} transition-colors hover:bg-[#374DB0]/5 dark:hover:bg-purple-900/10`}
+              className={`px-3 sm:px-4 py-2 sm:py-3 md:py-3 grid grid-cols-12 gap-1 items-center ${getRankBgColor(index + 1)} ${currentUser?.username === user.username ? 'border-l-4 border-[#374DB0] dark:border-purple-500' : ''} transition-colors hover:bg-[#374DB0]/5 dark:hover:bg-purple-900/10`}
             >
               {/* Rank column - Purple text in dark mode */}
               <div className="col-span-2 sm:col-span-1">
