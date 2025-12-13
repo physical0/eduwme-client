@@ -18,19 +18,19 @@ const SideNavBar = () => {
       {/* Burger Menu Button - Fixed position */}
       <button
         onClick={() => setIsCollapsed(!isCollapsed)}
-        className="fixed top-4 left-4 z-[60] flex flex-col gap-1.5 p-2.5 rounded-xl glass-card hover:bg-white/20 dark:hover:bg-white/10 transition-all duration-300 group shadow-lg w-16 h-12 md:w-20 md:h-14 justify-center items-center"
+        className="fixed top-4 left-6 z-[60] flex flex-col gap-1.5 p-2.5 rounded-xl glass-card hover:bg-white/20 dark:hover:bg-white/10 transition-all duration-300 group shadow-lg w-16 h-12 md:w-20 md:h-14 justify-center items-center"
         aria-label="Toggle navigation"
       >
         <div
-          className={`w-8 md:w-10 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? 'rotate-45 translate-y-2.5' : ''
+          className={`w-12 md:w-14 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? 'rotate-45 translate-y-2.5' : ''
             }`}
         ></div>
         <div
-          className={`w-8 md:w-10 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? 'opacity-0' : ''
+          className={`w-12 md:w-14 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? 'opacity-0' : ''
             }`}
         ></div>
         <div
-          className={`w-8 md:w-10 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? '-rotate-45 -translate-y-2.5' : ''
+          className={`w-12 md:w-14 h-1 rounded-full bg-gradient-to-r from-purple-500 to-blue-500 dark:from-purple-400 dark:to-blue-400 transition-all duration-300 ${isCollapsed ? '-rotate-45 -translate-y-2.5' : ''
             }`}
         ></div>
       </button>
@@ -51,7 +51,7 @@ const SideNavBar = () => {
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={HomeIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "group-hover:drop-shadow-md"
+                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
                           }`}
                         alt="Home"
                       />
@@ -78,7 +78,7 @@ const SideNavBar = () => {
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={TrophyIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "group-hover:drop-shadow-md"
+                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
                           }`}
                         alt="Leaderboard"
                       />
@@ -105,7 +105,7 @@ const SideNavBar = () => {
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={ProfileIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "group-hover:drop-shadow-md"
+                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
                           }`}
                         alt="Profile"
                       />
@@ -132,7 +132,7 @@ const SideNavBar = () => {
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={ShopIcon}
-                        className={`w-9 md:w-10 lg:w-11 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "group-hover:drop-shadow-md"
+                        className={`w-9 md:w-10 lg:w-11 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
                           }`}
                         alt="Shop"
                       />
@@ -159,7 +159,7 @@ const SideNavBar = () => {
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
                       <img
                         src={SettingsIcon}
-                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "group-hover:drop-shadow-md"
+                        className={`w-7 md:w-8 lg:w-9 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
                           }`}
                         alt="Settings"
                       />

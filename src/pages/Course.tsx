@@ -443,19 +443,7 @@ const Course = () => {
                           </p>
                         </div>
 
-                        {/* Status badge */}
-                        {isCompleted && (
-                          <div className="mt-2 sm:mt-3 flex items-center justify-center gap-1.5">
-                            <span className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-green-500 to-emerald-500 text-white rounded-full text-[9px] sm:text-[10px] md:text-xs font-bold shadow-md">
-                              Completed
-                            </span>
-                            {exerciseProgress?.score !== undefined && (
-                              <span className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-full text-[9px] sm:text-[10px] md:text-xs font-bold shadow-md">
-                                {exerciseProgress.score}%
-                              </span>
-                            )}
-                          </div>
-                        )}
+
                         {isInProgress && (
                           <div className="mt-2 sm:mt-3 text-center">
                             <span className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full text-[9px] sm:text-[10px] md:text-xs font-bold shadow-md">

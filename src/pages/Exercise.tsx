@@ -336,162 +336,163 @@ const Exercise = () => {
   }
 
   return (
-    // Main container with centered content
-    <div className="max-w-full md:max-w-3xl mx-auto px-2 sm:px-3 py-1 md:py-3 transition-colors duration-300 dark:bg-gray-900">
-      {/* Reduced gap and min-height */}
-      <div className="flex flex-col gap-1 sm:gap-2 min-h-[calc(100vh-100px)]">
-        {/* Header with smaller buttons */}
-        <div className="flex justify-between items-center">
-          <button
-            onClick={() => navigate(`/courses/${exercise.courseId}`)}
-            className="group flex items-center gap-1 px-2 py-1 md:px-4 md:py-2 rounded-lg
-            bg-white dark:bg-gray-800 hover:bg-blue-50 dark:hover:bg-blue-900/30
-            border border-gray-200 dark:border-gray-700 hover:border-blue-300 dark:hover:border-blue-600
-            shadow-sm hover:shadow transition-all duration-200
-            text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300
-            font-medium text-xs md:text-base"
-            aria-label="Return to course page"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              className="w-4 h-4 md:w-5 md:h-5 transform group-hover:-translate-x-1 transition-transform duration-200"
+    // Main container with gradient background
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20">
+      <div className="max-w-full md:max-w-3xl mx-auto px-2 sm:px-3 py-1 md:py-3">
+        {/* Reduced gap and min-height */}
+        <div className="flex flex-col gap-1 sm:gap-2 min-h-[calc(100vh-100px)]">
+          {/* Enhanced header with glassmorphism */}
+          <div className="flex justify-between items-center mb-3 sm:mb-4">
+            <button
+              onClick={() => navigate(`/courses/${exercise.courseId}`)}
+              className="group glass-card flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-xl sm:rounded-2xl
+            shadow-lg hover:shadow-xl
+            transition-all duration-300
+            font-semibold text-xs sm:text-sm md:text-base
+            hover:scale-105 hover:-translate-x-1"
+              aria-label="Return to course page"
             >
-              <path
-                fillRule="evenodd"
-                d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
-                clipRule="evenodd"
-              />
-            </svg>
-            Back to Course
-          </button>
-
-          {/* Timer with responsive colors and animation */}
-          <div className={`py-0.5 sm:py-1 px-2 sm:px-4 rounded-full font-medium sm:font-bold text-white text-xs sm:text-sm md:text-base
-            ${timeLeft > 5 ? 'bg-green-500 dark:bg-green-600' :
-              timeLeft > 2 ? 'bg-yellow-500 dark:bg-yellow-600' :
-                'bg-red-500 dark:bg-red-600 animate-pulse'}`}>
-            {timeLeft}s
-          </div>
-        </div>
-
-        {/* Main content with reduced spacing */}
-        <div className="text-center">
-          <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 dark:text-white">
-            {exercise.title}
-          </h1>
-          <p className="text-xs text-gray-600 dark:text-gray-400">
-            {exercise.type} • Difficulty: {exercise.difficultyLevel}
-          </p>
-        </div>
-
-        <div className="bg-white dark:bg-gray-800 shadow-md rounded-lg p-1.5 sm:p-3 transition-colors">
-          <p className="text-xs sm:text-sm md:text-base text-gray-800 dark:text-white">
-            {exercise.question}
-          </p>
-        </div>
-
-        <div className="bg-gray-100 dark:bg-gray-800/50 border border-dashed border-gray-300 dark:border-gray-700 rounded-lg p-1.5 sm:p-3 min-h-[6rem] sm:min-h-[8rem] md:min-h-[10rem] flex flex-col items-center justify-center overflow-auto">
-          {exercise.animType ? (
-            <ExerciseAnimation
-              animType={exercise.animType}
-              question={exercise.question}
-            />
-          ) : (
-            <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">No animation for this exercise</p>
-          )}
-        </div>
-
-        <div className="grid grid-cols-2 gap-1.5 sm:gap-2">
-          {exercise.type === 'multiple-choice' ? (
-            exercise.options.map((option, index) => (
-              <button
-                key={index}
-                onClick={() => handleOptionSelect(option)}
-                disabled={!isTimerRunning || showResult}
-                className={`
-                  p-2 sm:p-2.5 rounded-lg border text-left transition-all duration-150 text-xs sm:text-sm
-                  flex items-center min-h-[2.75rem] sm:min-h-[3rem]
-                  ${selectedOption === option
-                    ? 'bg-blue-500 text-white border-blue-600 dark:bg-blue-600 dark:border-blue-700'
-                    : 'bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 hover:border-blue-400 dark:hover:border-blue-500 dark:text-blue-200'}
-                  ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer'}
-                `}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transform group-hover:-translate-x-1 transition-transform duration-200 text-purple-600 dark:text-purple-400"
               >
-                {option}
-              </button>
-            ))
-          ) : (
-            <div className="col-span-2">
-              <input
-                type="text"
-                value={textAnswer}
-                onChange={handleTextChange}
-                disabled={!isTimerRunning || showResult}
-                placeholder="Type your answer here..."
-                className={`
-                  w-full p-2 sm:p-2.5 rounded-lg border text-xs sm:text-sm
-                  min-h-[2.75rem] sm:min-h-[3rem]
-                  bg-white dark:bg-gray-800 border-gray-300 dark:border-gray-600 
-                  focus:border-blue-400 dark:focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200 dark:focus:ring-blue-800 dark:text-blue-200
-                  ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : ''}
-                `}
-              />
+                <path
+                  fillRule="evenodd"
+                  d="M17 10a.75.75 0 01-.75.75H5.612l4.158 3.96a.75.75 0 11-1.04 1.08l-5.5-5.25a.75.75 0 010-1.08l5.5-5.25a.75.75 0 111.04 1.08L5.612 9.25H16.25A.75.75 0 0117 10z"
+                  clipRule="evenodd"
+                />
+              </svg>
+              <span className="gradient-text">Back to Course</span>
+            </button>
+
+            {/* Timer with responsive colors and animation */}
+            <div className={`py-0.5 sm:py-1 px-2 sm:px-4 rounded-full font-medium sm:font-bold text-white text-xs sm:text-sm md:text-base
+            ${timeLeft > 5 ? 'bg-green-500 dark:bg-green-600' :
+                timeLeft > 2 ? 'bg-yellow-500 dark:bg-yellow-600' :
+                  'bg-red-500 dark:bg-red-600 animate-pulse'}`}>
+              {timeLeft}s
             </div>
-          )}
-        </div>
+          </div>
 
-        {/* Submit button right after options with fixed spacing */}
-        {!showResult ? (
-          <button
-            onClick={handleSubmitAnswer}
-            disabled={
-              (exercise.type === 'multiple-choice' && !selectedOption) ||
-              (exercise.type === 'fill-in' && !textAnswer.trim()) ||
-              !isTimerRunning ||
-              showResult
-            }
-            className={`
-              w-full py-1.5 sm:py-2 text-xs sm:text-sm md:text-base font-medium rounded-lg transition-colors mt-1.5 sm:mt-2
-              ${((exercise.type === 'multiple-choice' && !selectedOption) ||
-                (exercise.type === 'fill-in' && !textAnswer.trim()) ||
-                !isTimerRunning ||
-                showResult)
-                ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white dark:text-gray-300'
-                : 'bg-green-500 dark:bg-green-600 text-white hover:bg-green-600 dark:hover:bg-green-700'}
-            `}
-          >
-            Submit Answer
-          </button>
-        ) : (
-          <div className={`p-1.5 sm:p-2.5 text-center rounded-lg mt-1.5 sm:mt-2 ${result?.correct
-              ? 'bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-300'
-              : 'bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300'
-            }`}>
-            <p className="font-bold text-xs sm:text-sm">
-              {result?.correct ? '✓ Correct!' : '✗ Incorrect!'}
+          {/* Enhanced main content */}
+          <div className="text-center mb-3 sm:mb-4">
+            <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold gradient-text mb-1">
+              {exercise.title}
+            </h1>
+            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+              {exercise.type} • Difficulty: {exercise.difficultyLevel}
             </p>
-            <p className="text-[10px] sm:text-xs">{result?.message}</p>
+          </div>
 
-            {/* XP and rewards - even more compact */}
-            {completionData && !completionData.alreadyCompleted && (
-              <div className="mt-0.5 sm:mt-1 font-semibold text-[10px] sm:text-xs flex flex-wrap justify-center gap-1 sm:gap-2">
-                <span>XP: +{completionData.awardedXp}</span>
-                {completionData.gems && <span>Gems: +{completionData.gems}</span>}
-                <span>Total: {completionData.currentXp} XP</span>
-                <span>Level: {completionData.level}</span>
+          <div className="glass-card border-2 border-white/20 dark:border-white/10 shadow-xl rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 mb-3 sm:mb-4">
+            <p className="text-xs sm:text-sm md:text-base text-gray-800 dark:text-white font-medium">
+              {exercise.question}
+            </p>
+          </div>
+
+          <div className="glass-card border-2 border-white/30 dark:border-white/10 rounded-xl sm:rounded-2xl p-2 sm:p-3 md:p-4 min-h-[6rem] sm:min-h-[8rem] md:min-h-[10rem] flex flex-col items-center justify-center overflow-auto mb-3 sm:mb-4 shadow-lg">
+            {exercise.animType ? (
+              <ExerciseAnimation
+                animType={exercise.animType}
+                question={exercise.question}
+              />
+            ) : (
+              <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">No animation for this exercise</p>
+            )}
+          </div>
+
+          <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
+            {exercise.type === 'multiple-choice' ? (
+              exercise.options.map((option, index) => (
+                <button
+                  key={index}
+                  onClick={() => handleOptionSelect(option)}
+                  disabled={!isTimerRunning || showResult}
+                  className={`
+                  glass-card p-3 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl border-2 text-left transition-all duration-300 text-xs sm:text-sm md:text-base
+                  flex items-center min-h-[3rem] sm:min-h-[3.5rem] font-medium
+                  ${selectedOption === option
+                      ? 'bg-gradient-to-br from-purple-500 to-blue-500 border-purple-400/50 shadow-xl scale-105 text-gray-800 dark:text-gray-200 glow'
+                      : 'border-white/40 dark:border-white/20 hover:border-purple-400/50 dark:hover:border-purple-500/50 hover:scale-105 hover:shadow-xl text-gray-800 dark:text-white'}
+                  ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer shimmer'}
+                `}
+                >
+                  {option}
+                </button>
+              ))
+            ) : (
+              <div className="col-span-2">
+                <input
+                  type="text"
+                  value={textAnswer}
+                  onChange={handleTextChange}
+                  disabled={!isTimerRunning || showResult}
+                  placeholder="Type your answer here..."
+                  className={`
+                  glass-card w-full p-3 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl border-2 text-xs sm:text-sm md:text-base
+                  min-h-[3rem] sm:min-h-[3.5rem] font-medium
+                  border-white/40 dark:border-white/20
+                  focus:border-purple-400/50 dark:focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-800
+                  text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400
+                  ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : 'shadow-lg'}
+                `}
+                />
               </div>
             )}
-
-            <p className="text-[10px] mt-0.5 sm:mt-1 text-gray-600 dark:text-gray-400">
-              Returning to course page...
-            </p>
           </div>
-        )}
 
-        {/* Optional spacer div to push content up from bottom */}
-        <div className="flex-grow"></div>
+          {/* Enhanced submit button */}
+          {!showResult ? (
+            <button
+              onClick={handleSubmitAnswer}
+              disabled={
+                (exercise.type === 'multiple-choice' && !selectedOption) ||
+                (exercise.type === 'fill-in' && !textAnswer.trim()) ||
+                !isTimerRunning ||
+                showResult
+              }
+              className={`
+              w-full py-2.5 sm:py-3 md:py-3.5 text-sm sm:text-base md:text-lg font-bold rounded-xl sm:rounded-2xl transition-all duration-300
+              ${((exercise.type === 'multiple-choice' && !selectedOption) ||
+                  (exercise.type === 'fill-in' && !textAnswer.trim()) ||
+                  !isTimerRunning ||
+                  showResult)
+                  ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white dark:text-gray-300'
+                  : 'bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105 shimmer'}
+            `}
+            >
+              Submit Answer
+            </button>
+          ) : (
+            <div className={`glass-card p-3 sm:p-4 md:p-5 text-center rounded-xl sm:rounded-2xl border-2 shadow-xl ${result?.correct
+              ? 'border-green-400/50 dark:border-green-500/50 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 text-green-800 dark:text-green-300'
+              : 'border-red-400/50 dark:border-red-500/50 bg-gradient-to-br from-red-50/50 to-pink-50/50 dark:from-red-900/20 dark:to-pink-900/20 text-red-800 dark:text-red-300'
+              }`}>
+              <p className="font-bold text-base sm:text-lg md:text-xl mb-1">
+                {result?.correct ? '✓ Correct!' : '✗ Incorrect!'}
+              </p>
+              <p className="text-xs sm:text-sm md:text-base">{result?.message}</p>
+
+              {/* Enhanced XP and rewards */}
+              {completionData && !completionData.alreadyCompleted && (
+                <div className="mt-2 sm:mt-3 font-bold text-xs sm:text-sm md:text-base flex flex-wrap justify-center gap-2 sm:gap-3">
+                  <span className="px-2.5 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-full shadow-md">XP: +{completionData.awardedXp}</span>
+                  {completionData.gems && <span className="px-2.5 py-1 bg-gradient-to-r from-blue-400 to-cyan-400 text-white rounded-full shadow-md">Gems: +{completionData.gems}</span>}
+                  <span className="px-2.5 py-1 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-full shadow-md">Total: {completionData.currentXp} XP</span>
+                  <span className="px-2.5 py-1 bg-gradient-to-r from-green-400 to-emerald-400 text-white rounded-full shadow-md">Level: {completionData.level}</span>
+                </div>
+              )}
+
+              <p className="text-xs sm:text-sm mt-2 sm:mt-3 text-gray-600 dark:text-gray-400 font-medium">
+                Returning to course page...
+              </p>
+            </div>
+          )}
+          {/* Optional spacer div to push content up from bottom */}
+          <div className="flex-grow"></div>
+        </div>
       </div>
     </div>
   );
