@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import TrophyIcon from "@src/assets/trophy.svg";
 import HomeIcon from "@src/assets/home.svg";
@@ -6,10 +5,11 @@ import ProfileIcon from "@src/assets/profile.svg";
 import SettingsIcon from "@src/assets/settings.svg";
 import ShopIcon from "@src/assets/store.svg";
 import { useAuth } from "@src/contexts/AuthContext";
+import { useSideNav } from "@src/contexts/SideNavContext";
 
 const SideNavBar = () => {
   const { user } = useAuth();
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { isCollapsed, setIsCollapsed } = useSideNav();
 
   const profileLink = `/profile/${user?._id}`;
 
@@ -37,7 +37,7 @@ const SideNavBar = () => {
 
       {/* Side Navigation */}
       <nav className={`fixed left-0 top-0 h-full pt-24 pb-8 glass-card border-r-2 border-white/20 dark:border-white/10 shadow-2xl z-50 backdrop-blur-xl transition-all duration-300 ease-in-out ${isCollapsed ? '-translate-x-full' : 'translate-x-0'
-        } w-20 md:w-24 lg:w-28`}>
+        } w-24 md:w-28 lg:w-32`}>
         <div className="h-full flex flex-col justify-start">
           <ul className="flex flex-col items-center gap-6 md:gap-8">
             {/* Home Link */}
@@ -55,7 +55,7 @@ const SideNavBar = () => {
                           }`}
                         alt="Home"
                       />
-                      <span className="text-[10px] md:text-xs mt-1 font-semibold text-center block">Home</span>
+                      <span className="text-xs sm:text-sm md:text-base mt-1 font-semibold text-center block">Home</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
@@ -82,7 +82,7 @@ const SideNavBar = () => {
                           }`}
                         alt="Leaderboard"
                       />
-                      <span className="text-[10px] md:text-xs mt-1 font-semibold text-center block">Ranks</span>
+                      <span className="text-xs sm:text-sm md:text-base mt-1 font-semibold text-center block">Ranks</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
@@ -109,7 +109,7 @@ const SideNavBar = () => {
                           }`}
                         alt="Profile"
                       />
-                      <span className="text-[10px] md:text-xs mt-1 font-semibold text-center block">Profile</span>
+                      <span className="text-xs sm:text-sm md:text-base mt-1 font-semibold text-center block">Profile</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
@@ -136,7 +136,7 @@ const SideNavBar = () => {
                           }`}
                         alt="Shop"
                       />
-                      <span className="text-[10px] md:text-xs mt-1 font-semibold text-center block">Shop</span>
+                      <span className="text-xs sm:text-sm md:text-base mt-1 font-semibold text-center block">Shop</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
@@ -163,7 +163,7 @@ const SideNavBar = () => {
                           }`}
                         alt="Settings"
                       />
-                      <span className="text-[10px] md:text-xs mt-1 font-semibold text-center block">Settings</span>
+                      <span className="text-xs sm:text-sm md:text-base mt-1 font-semibold text-center block">Settings</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
@@ -187,7 +187,7 @@ const SideNavBar = () => {
                   <span className="text-base md:text-lg lg:text-xl font-bold bg-gradient-to-r from-orange-500 to-yellow-500 bg-clip-text text-transparent">
                     {user?.streak || 0}
                   </span>
-                  <span className="text-[9px] md:text-[10px] font-semibold text-gray-600 dark:text-gray-400">
+                  <span className="text-[10px] sm:text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400">
                     {user?.streak === 1 ? "day" : "days"}
                   </span>
                 </div>

@@ -9,6 +9,8 @@ import App from "./App.tsx";
 import { AuthProvider } from "./contexts/AuthContext.tsx";
 // Theme Provider import
 import { ThemeProvider } from "./contexts/ThemeContext.tsx";
+// SideNav Provider import
+import { SideNavProvider } from "./contexts/SideNavContext.tsx";
 
 // Layout Import
 import RootLayout from "./rootlayout.tsx";
@@ -37,36 +39,38 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider>
       <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<RootLayout />}>
-              {/* Tanpa layout, standalone */}
-              <Route path="/" element={<App />} />
+        <SideNavProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<RootLayout />}>
+                {/* Tanpa layout, standalone */}
+                <Route path="/" element={<App />} />
 
-              {/* Protected routes - Require authentication */}
-              <Route element={
-                <RequireAuth>
-                  <MainLayout />
-                </RequireAuth>
-              }>
-                <Route path="/home" element={<HomePage />} />
-                <Route path="/dashboard" element={<HomePage />} />
-                <Route path="/leaderboard" element={<LeaderboardPage />} />
-                <Route path="/shop" element={<ShopPage />} />
-                <Route path="/profile/:userId" element={<ProfilePage />} />
-                <Route path="/courses/:courseId" element={<Courses />} />
-                <Route path="/exercise/:exerciseId" element={<ExercisePage />} />
-                <Route path="/auto-exercise/:courseId" element={<AutoExercise />} />               <Route path="/settings" element={<Settings />} />
-              </Route>
+                {/* Protected routes - Require authentication */}
+                <Route element={
+                  <RequireAuth>
+                    <MainLayout />
+                  </RequireAuth>
+                }>
+                  <Route path="/home" element={<HomePage />} />
+                  <Route path="/dashboard" element={<HomePage />} />
+                  <Route path="/leaderboard" element={<LeaderboardPage />} />
+                  <Route path="/shop" element={<ShopPage />} />
+                  <Route path="/profile/:userId" element={<ProfilePage />} />
+                  <Route path="/courses/:courseId" element={<Courses />} />
+                  <Route path="/exercise/:exerciseId" element={<ExercisePage />} />
+                  <Route path="/auto-exercise/:courseId" element={<AutoExercise />} />               <Route path="/settings" element={<Settings />} />
+                </Route>
 
-              {/* Dengan layout auth */}
-              <Route element={<AuthGuard><AuthLayout /></AuthGuard>}>
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
+                {/* Dengan layout auth */}
+                <Route element={<AuthGuard><AuthLayout /></AuthGuard>}>
+                  <Route path="/login" element={<Login />} />
+                  <Route path="/register" element={<Register />} />
+                </Route>
               </Route>
-            </Route>
-          </Routes>
-        </BrowserRouter>
+            </Routes>
+          </BrowserRouter>
+        </SideNavProvider>
       </AuthProvider>
     </ThemeProvider>
   </StrictMode>,
