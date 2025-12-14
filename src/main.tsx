@@ -20,11 +20,11 @@ import AuthLayout from "./pages/auth/layout.tsx";
 // Page Import
 import HomePage from "./pages/main/home.tsx";
 import LeaderboardPage from "./pages/main/leaderboard.tsx";
-import ProfilePage from "./pages/main/Profile.tsx";
+import ProfilePage from "./pages/main/profile.tsx";
 import Courses from "./pages/main/course/Course.tsx";
 import ExercisePage from "./pages/main/course/Exercise.tsx";
-import Settings from "./pages/main/Settings.tsx";
-import ShopPage from "./pages/main/Shop.tsx";
+import Settings from "./pages/main/settings.tsx";
+import ShopPage from "./pages/main/shop.tsx";
 
 // Auth Pages Import
 import Register from "./pages/auth/register.tsx";
