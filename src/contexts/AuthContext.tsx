@@ -31,6 +31,7 @@ interface AuthContextType {
   isLoading: boolean;
   logout: () => Promise<void>;
   login: (username: string, password: string) => Promise<boolean>;
+  loginWithGoogle: (credential: string) => Promise<boolean>;
   updateUserStreak: () => Promise<void>;
   getAuthHeader: () => Promise<{ Authorization?: string | undefined }>;
 }
@@ -183,6 +184,53 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
+  const loginWithGoogle = async (credential: string) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/users/auth/google`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify({ credential }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.message || "Google login failed");
+      }
+
+      // Get the response data which includes token and fallbackRequired flag
+      const responseData = await response.json();
+
+      // Store token in sessionStorage as fallback
+      if (responseData.fallbackRequired && responseData.token) {
+        sessionStorage.setItem("authToken", responseData.token);
+      }
+
+      // After successful login, fetch the user data
+      const userResponse = await fetch(`${API_BASE_URL}/users/getme`, {
+        credentials: "include",
+        headers: responseData.token ? {
+          "Authorization": `Bearer ${responseData.token}`
+        } : {},
+      });
+
+      if (userResponse.ok) {
+        const userData = await userResponse.json();
+        setUser(userData);
+        setIsAuthenticated(true);
+        return true;
+      }
+      else {
+        throw new Error("Failed to get user data after Google login");
+      }
+    } catch (error) {
+      console.error("Google login error:", error);
+      throw error;
+    }
+  };
+
   const updateUserStreak = useCallback(async () => {
     if (user && isAuthenticated) {
       // Pass the getAuthHeader function to the streakService
@@ -217,6 +265,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     isLoading,
     logout,
     login,
+    loginWithGoogle,
     updateUserStreak,
     getAuthHeader
   };
