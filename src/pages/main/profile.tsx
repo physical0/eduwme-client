@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useParams } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
-import AvatarPlaceholder from "../assets/avatar_placeholder.jpg";
+import { useAuth } from "@src/contexts/AuthContext";
+import AvatarPlaceholder from "@src/assets/avatar_placeholder.jpg";
 import LoadingPage from "@src/components/loading";
 
 interface UserProfile {

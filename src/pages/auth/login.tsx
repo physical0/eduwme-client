@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Link, useLocation, useNavigate } from "react-router";
-import { useAuth } from "../../contexts/AuthContext";
+import { useAuth } from "@src/contexts/AuthContext";
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -31,8 +31,8 @@ const Login = () => {
 
   // Responsive button with better sizing for laptop
   const submitButtonClass = `w-full max-w-[160px] md:max-w-[180px] flex justify-center py-2 px-4 md:py-2.5 md:px-5 rounded-full text-sm md:text-base font-medium text-white ${isSubmitting
-      ? "bg-[#303442] cursor-not-allowed"
-      : "bg-[#303442] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#303442]"
+    ? "bg-[#303442] cursor-not-allowed"
+    : "bg-[#303442] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#303442]"
     }`;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {

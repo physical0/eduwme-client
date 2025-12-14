@@ -18,20 +18,20 @@ import MainLayout from "./pages/layout.tsx";
 import AuthLayout from "./pages/auth/layout.tsx";
 
 // Page Import
-import HomePage from "./pages/home.tsx";
-import LeaderboardPage from "./pages/leaderboard.tsx";
-import ProfilePage from "./pages/Profile.tsx";
-import Courses from "./pages/Course.tsx";
-import ExercisePage from "./pages/Exercise.tsx";
-import Settings from "./pages/Settings.tsx";
-import ShopPage from "./pages/Shop.tsx";
+import HomePage from "./pages/main/home.tsx";
+import LeaderboardPage from "./pages/main/leaderboard.tsx";
+import ProfilePage from "./pages/main/Profile.tsx";
+import Courses from "./pages/main/course/Course.tsx";
+import ExercisePage from "./pages/main/course/Exercise.tsx";
+import Settings from "./pages/main/Settings.tsx";
+import ShopPage from "./pages/main/Shop.tsx";
 
 // Auth Pages Import
 import Register from "./pages/auth/register.tsx";
 import Login from "./pages/auth/login.tsx";
 import { AuthGuard } from "./contexts/AuthGuard.tsx";
 import { RequireAuth } from "./contexts/RequireAuth.tsx";
-import AutoExercise from "./pages/AutoExercise.tsx";
+import AutoExercise from "./pages/main/course/AutoExercise.tsx";
 
 
 

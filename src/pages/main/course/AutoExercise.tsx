@@ -1,17 +1,9 @@
 import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { useParams, useNavigate } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../../contexts/AuthContext";
 import ExerciseAnimation from "@src/components/ExerciseAnimation";
 import LoadingPage from "@src/components/loading";
 
-// Debounce utility function - define it before using it
-const debounce = <T extends (...args: unknown[]) => unknown>(fn: T, ms = 300) => {
-  let timeoutId: ReturnType<typeof setTimeout>;
-  return function (this: unknown, ...args: Parameters<T>) {
-    clearTimeout(timeoutId);
-    timeoutId = setTimeout(() => fn.apply(this, args), ms);
-  };
-};
 
 // Define interfaces for our data
 interface ExerciseData {
@@ -45,13 +37,39 @@ interface CompletionResult {
   courseProgress: number;
 }
 
-const Exercise = () => {
-  const { exerciseId } = useParams<{ exerciseId: string }>();
+
+interface ExerciseProgress {
+  exerciseId: string;
+  status: "not_started" | "in_progress" | "completed";
+  score?: number;
+  lastAttempted?: Date;
+}
+
+interface CourseProgressItem {
+  courseId: string;
+  status: "not_started" | "in_progress" | "completed";
+  totalExercisesInCourse: number;
+  completedExercisesCount: number;
+  exercises: ExerciseProgress[];
+}
+
+interface BatchProgress {
+  courseBatchId: string;
+  status: "not_started" | "in_progress" | "completed";
+  totalCoursesInBatch: number;
+  completedCoursesCount: number;
+  courses: CourseProgressItem[];
+}
+
+const AutoExercise = () => {
+  const { courseId } = useParams<{ courseId: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
 
   // State
-  const [exercise, setExercise] = useState<ExerciseData | null>(null);
+  const [allExercises, setAllExercises] = useState<ExerciseData[]>([]);
+  const [completedExercises, setCompletedExercises] = useState<Set<string>>(new Set());
+  const [currentExercise, setCurrentExercise] = useState<ExerciseData | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [selectedOption, setSelectedOption] = useState<string | null>(null);
@@ -60,10 +78,10 @@ const Exercise = () => {
   const [result, setResult] = useState<{ correct: boolean; message: string } | null>(null);
   const [completionData, setCompletionData] = useState<CompletionResult | null>(null);
   const [showResult, setShowResult] = useState<boolean>(false);
-  const [retryCount, setRetryCount] = useState<number>(0);
   const [textAnswer, setTextAnswer] = useState<string>("");
+  const [allCompleted, setAllCompleted] = useState<boolean>(false);
+  const [progress, setProgress] = useState<number>(0);
   const { getAuthHeader } = useAuth();
-
 
   const MAX_TIME: number = 50;
 
@@ -71,69 +89,163 @@ const Exercise = () => {
   const timeLimit = useMemo(() => {
     // Base time: 60 seconds for level 1, decreasing by 10 seconds per level
     // Min time: 20 seconds for hardest exercises
-    return Math.max(MAX_TIME - ((exercise?.difficultyLevel || 1) - 1) * 10, 20);
-  }, [exercise?.difficultyLevel]);
+    return Math.max(MAX_TIME - ((currentExercise?.difficultyLevel || 1) - 1) * 10, 20);
+  }, [currentExercise?.difficultyLevel]);
 
   const timerRef = useRef<number | null>(null);
 
   const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:3000";
 
-  // Debounced option selection
-  // Replace with direct selection instead of using debounce
+  // Fetch all exercises for the course
+  const fetchCourseExercises = useCallback(async () => {
+    if (!courseId) return;
+
+    try {
+      setLoading(true);
+
+      // Step 1: Fetch course details to get exerciseBatchList
+      const courseResponse = await fetch(
+        `${API_BASE_URL}/courses/getCoursesById/${courseId}`,
+        {
+          credentials: "include",
+          headers: await getAuthHeader()
+        }
+      );
+
+      if (!courseResponse.ok) {
+        throw new Error(`Failed to fetch course: ${courseResponse.status}`);
+      }
+
+      const courseData = await courseResponse.json();
+      const course = courseData.course;
+
+      // Step 2: Fetch exercises from the batch list
+      const exercisePromises = course.exerciseBatchList.map(
+        async (exerciseId: string) => {
+          const exerciseResponse = await fetch(
+            `${API_BASE_URL}/exercises/getExercise/${exerciseId}`,
+            {
+              credentials: "include",
+              headers: await getAuthHeader()
+            }
+          );
+
+          if (!exerciseResponse.ok) {
+            console.warn(`Failed to fetch exercise ${exerciseId}`);
+            return null;
+          }
+
+          const exerciseData = await exerciseResponse.json();
+          return exerciseData.exercise;
+        }
+      );
+
+      const fetchedExercises = (await Promise.all(exercisePromises)).filter(
+        (exercise): exercise is ExerciseData => exercise !== null
+      );
+
+      setAllExercises(fetchedExercises);
+
+      // Step 3: Get user progress to identify completed exercises
+      if (user) {
+        const userResponse = await fetch(`${API_BASE_URL}/users/getme`, {
+          credentials: "include",
+          headers: await getAuthHeader()
+        });
+
+        if (userResponse.ok) {
+          const userData = await userResponse.json();
+          const batchProgress = userData.courseBatchesProgress?.find(
+            (batch: BatchProgress) => batch.courseBatchId === course.courseBatchId
+          );
+
+          const currentCourseProgress = batchProgress?.courses?.find(
+            (c: CourseProgressItem) => c.courseId === courseId
+          );
+
+          if (currentCourseProgress?.exercises) {
+            const completedExerciseIds = new Set<string>(
+              currentCourseProgress.exercises
+                .filter((ex: ExerciseProgress) => ex.status === "completed")
+                .map((ex: ExerciseProgress) => ex.exerciseId as string)
+            );
+            setCompletedExercises(completedExerciseIds);
+
+            // Update progress
+            setProgress(completedExerciseIds.size / fetchedExercises.length);
+          }
+        }
+      }
+
+      setError(null);
+      setLoading(false);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An unknown error occurred");
+      setLoading(false);
+    }
+  }, [courseId, user, API_BASE_URL]);
+
+  // Select a random uncompleted exercise
+  const selectNextExercise = useCallback(() => {
+    // Filter out completed exercises
+    const remainingExercises = allExercises.filter(
+      exercise => !completedExercises.has(exercise.exerciseId)
+    );
+
+    if (remainingExercises.length === 0) {
+      // All exercises completed
+      setAllCompleted(true);
+      setCurrentExercise(null);
+      return;
+    }
+
+    // Select a random exercise from remaining ones
+    const randomIndex = Math.floor(Math.random() * remainingExercises.length);
+    const selectedExercise = remainingExercises[randomIndex];
+
+    // Reset exercise-specific state
+    setCurrentExercise(selectedExercise);
+    setSelectedOption(null);
+    setTextAnswer("");
+    setResult(null);
+    setCompletionData(null);
+    setShowResult(false);
+    setTimeLeft(timeLimit);
+    setIsTimerRunning(true);
+  }, [allExercises, completedExercises, timeLimit]);
+
+  // Initial fetch and setup
+  useEffect(() => {
+    fetchCourseExercises();
+
+    return () => {
+      // Clean up timer when component unmounts
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [fetchCourseExercises]);
+
+  // Select first exercise when data is loaded
+  useEffect(() => {
+    if (!loading && allExercises.length > 0 && !currentExercise) {
+      selectNextExercise();
+    }
+  }, [loading, allExercises, currentExercise, selectNextExercise]);
+
+  // Handle option selection
   const handleOptionSelect = useCallback((option: string) => {
     if (!isTimerRunning || result) return;
     setSelectedOption(option);
   }, [isTimerRunning, result]);
 
+  // Handle text input for fill-in exercises
   const handleTextChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     if (!isTimerRunning || result) return;
     setTextAnswer(e.target.value);
   }, [isTimerRunning, result]);
 
-  // Fetch exercise data with rate limit handling
-  const fetchExercise = useCallback(async () => {
-    if (!exerciseId) return;
-
-    try {
-      setLoading(true);
-      const response = await fetch(`${API_BASE_URL}/exercises/getExercise/${exerciseId}`, {
-        credentials: "include",
-        headers: await getAuthHeader()
-      });
-
-      if (response.status === 429) {
-        setError("Too many requests. Please wait a moment before trying again.");
-        return;
-      }
-
-      if (!response.ok) {
-        throw new Error(`Failed to fetch exercise: ${response.status}`);
-      }
-
-      const data = await response.json();
-      setExercise(data.exercise);
-      // Use the dynamic timeLimit instead of the constant
-      setTimeLeft(timeLimit); // Reset timer when new exercise loads
-      setIsTimerRunning(true);
-      setError(null); // Clear any previous errors
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An unknown error occurred");
-    } finally {
-      setLoading(false);
-    }
-  }, [exerciseId, API_BASE_URL, timeLimit]);
-
-  // Debounced fetch to prevent rapid API calls
-  const debouncedFetch = useCallback(
-    debounce(() => {
-      fetchExercise();
-    }, 500),
-    [fetchExercise]
-  );
-
-  // Start timer
+  // Timer logic
   useEffect(() => {
-    if (loading || !isTimerRunning) return;
+    if (loading || !isTimerRunning || !currentExercise) return;
 
     timerRef.current = window.setInterval(() => {
       setTimeLeft((prevTime) => {
@@ -158,40 +270,25 @@ const Exercise = () => {
     return () => {
       if (timerRef.current) clearInterval(timerRef.current);
     };
-  }, [loading, isTimerRunning, result]);
+  }, [loading, isTimerRunning, result, currentExercise]);
 
-  // Initial fetch
-  useEffect(() => {
-    // Use the debounced version if there have been retries
-    if (retryCount > 0) {
-      debouncedFetch();
-    } else {
-      fetchExercise();
-    }
-
-    return () => {
-      // Clean up timer when component unmounts
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [fetchExercise, debouncedFetch, retryCount]);
-
-
-  // Debounced submit function
-  const debouncedSubmit = useCallback(() => {
-    if (!exercise || !isTimerRunning) return;
+  // Submit answer
+  const handleSubmitAnswer = useCallback(() => {
+    if (!currentExercise || !isTimerRunning) return;
 
     // For multiple-choice, we need selectedOption. For fill-in, we need textAnswer
-    if (exercise.type === 'multiple-choice' && !selectedOption) return;
-    if (exercise.type === 'fill-in' && !textAnswer.trim()) return;
+    if (currentExercise.type === 'multiple-choice' && !selectedOption) return;
+    if (currentExercise.type === 'fill-in' && !textAnswer.trim()) return;
 
     // Stop the timer immediately to prevent multiple submissions
     setIsTimerRunning(false);
     if (timerRef.current) clearInterval(timerRef.current);
 
     const submitFn = async () => {
-      const isCorrect = exercise.type === 'multiple-choice'
-        ? selectedOption === exercise.answer
-        : textAnswer.trim().toLowerCase() === exercise.answer.toLowerCase(); // Case insensitive comparison
+      const isCorrect = currentExercise.type === 'multiple-choice'
+        ? selectedOption === currentExercise.answer
+        : textAnswer.trim().toLowerCase() === currentExercise.answer.toLowerCase(); // Case insensitive comparison
+
 
       if (isCorrect) {
         // Correct answer within time limit
@@ -199,7 +296,7 @@ const Exercise = () => {
           if (!user) throw new Error("User not authenticated");
 
           const response = await fetch(
-            `${API_BASE_URL}/courses/complete/${user._id}/${exercise.courseBatchId}/${exercise.courseId}/${exercise.exerciseId}`,
+            `${API_BASE_URL}/courses/complete/${user._id}/${currentExercise.courseBatchId}/${currentExercise.courseId}/${currentExercise.exerciseId}`,
             {
               method: "POST",
               credentials: "include",
@@ -226,6 +323,19 @@ const Exercise = () => {
           const completionResult = await response.json();
           setCompletionData(completionResult);
 
+          // Add to completed exercises
+          setCompletedExercises(prev => {
+            const updated = new Set(prev);
+            updated.add(currentExercise.exerciseId);
+            return updated;
+          });
+
+          // Update progress
+          setProgress(() => {
+            const newProgress = (completedExercises.size + 1) / allExercises.length;
+            return Math.min(newProgress, 1);
+          });
+
           setResult({
             correct: true,
             message: `Correct! ${completionResult.alreadyCompleted
@@ -243,93 +353,113 @@ const Exercise = () => {
         // Incorrect answer
         setResult({
           correct: false,
-          message: "Incorrect answer. Try again next time!"
+          message: "Incorrect answer. Let's try another exercise!"
         });
       }
 
       setShowResult(true);
     };
 
-    // Execute immediately without using debounce
+    // Execute immediately
     submitFn();
 
-  }, [exercise, selectedOption, textAnswer, isTimerRunning, user, API_BASE_URL]);
+  }, [currentExercise, selectedOption, textAnswer, isTimerRunning, user, API_BASE_URL, allExercises.length, completedExercises]);
 
-  // Submit answer handler
-  const handleSubmitAnswer = useCallback(() => {
-    debouncedSubmit();
-  }, [debouncedSubmit]);
+  // Auto-move to next exercise after showing result
+  useEffect(() => {
+    if (showResult) {
+      const nextExerciseTimer = setTimeout(() => {
+        selectNextExercise();
+      }, 2000); // Go to next exercise after 2 seconds
+
+      return () => clearTimeout(nextExerciseTimer);
+    }
+  }, [showResult, selectNextExercise]);
 
   // Return to course page
   const handleReturn = useCallback(() => {
-    if (exercise?.courseId) {
-      navigate(`/courses/${exercise.courseId}`);
+    if (courseId) {
+      navigate(`/courses/${courseId}`);
     } else {
-      console.log("No courseId found in exercise data, navigating to home.");
+      navigate("/home");
     }
-  }, [exercise, navigate]);
+  }, [courseId, navigate]);
 
-  // Retry fetch with debounce
-  const handleRetry = useCallback(() => {
-    setRetryCount(prev => prev + 1);
-    setError(null);
-  }, []);
-
-  // Auto-return after showing result
-  useEffect(() => {
-    if (showResult) {
-      const returnTimer = setTimeout(() => {
-        handleReturn();
-      }, 3000); // Return after 3 seconds of showing result
-
-      return () => clearTimeout(returnTimer);
-    }
-  }, [showResult, handleReturn]);
-
-  // Loading state with responsive sizing and dark mode
+  // Loading state
   if (loading) {
-    return <LoadingPage message="Loading exercise..." fullScreen={false} />;
+    return <LoadingPage message="Loading auto exercise mode..." fullScreen={false} />;
   }
 
-  // Error state with more compact styling
+  // Error state
   if (error) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-3">
         <p className="text-sm md:text-base text-red-600 dark:text-red-400 mb-2 md:mb-3 text-center">
           Error: {error}
         </p>
-
-        {error.includes("Too many requests") && (
-          <button
-            onClick={handleRetry}
-            className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg mb-2 md:mb-3 text-xs md:text-sm transition-colors"
-          >
-            Retry in a moment
-          </button>
-        )}
-
         <button
-          onClick={() => navigate(-1)}
+          onClick={handleReturn}
           className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm transition-colors"
         >
-          Go Back
+          Return to Course
         </button>
       </div>
     );
   }
 
-  // Exercise not found state with more compact styling
-  if (!exercise) {
+  // All exercises completed state
+  if (allCompleted) {
+    return (
+      <div className="max-w-full md:max-w-3xl mx-auto px-2 sm:px-3 py-1 md:py-3">
+        <div className="flex flex-col items-center justify-center min-h-[60vh] px-3 text-center gap-4">
+          <div className="glass-card border-2 border-green-400/50 dark:border-green-500/50 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl shadow-xl">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold gradient-text mb-3 sm:mb-4">
+              🎉 Congratulations! 🎉
+            </h2>
+            <p className="text-sm sm:text-base md:text-lg text-gray-700 dark:text-gray-300 font-medium mb-4 sm:mb-6">
+              You've completed all exercises in this course!
+            </p>
+            <button
+              onClick={handleReturn}
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl sm:rounded-2xl text-sm sm:text-base md:text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 shimmer"
+            >
+              Return to Course
+            </button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // No exercises available
+  if (allExercises.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] px-3">
         <p className="text-sm md:text-base text-yellow-600 dark:text-yellow-400 mb-2 md:mb-3 text-center">
-          Exercise not found
+          No exercises available for this course
         </p>
         <button
-          onClick={() => navigate("/")}
+          onClick={handleReturn}
           className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm transition-colors"
         >
-          Return to Home
+          Return to Course
+        </button>
+      </div>
+    );
+  }
+
+  // Current exercise not found (shouldn't happen, but as a safeguard)
+  if (!currentExercise) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh] px-3">
+        <p className="text-sm md:text-base text-yellow-600 dark:text-yellow-400 mb-2 md:mb-3 text-center">
+          No exercise available to display
+        </p>
+        <button
+          onClick={handleReturn}
+          className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm transition-colors"
+        >
+          Return to Course
         </button>
       </div>
     );
@@ -344,12 +474,12 @@ const Exercise = () => {
           {/* Enhanced header with glassmorphism */}
           <div className="flex justify-between items-center mb-3 sm:mb-4">
             <button
-              onClick={() => navigate(`/courses/${exercise.courseId}`)}
+              onClick={handleReturn}
               className="group glass-card flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-xl sm:rounded-2xl
-            shadow-lg hover:shadow-xl
-            transition-all duration-300
-            font-semibold text-xs sm:text-sm md:text-base
-            hover:scale-105 hover:-translate-x-1"
+              shadow-lg hover:shadow-xl
+              transition-all duration-300
+              font-semibold text-xs sm:text-sm md:text-base
+              hover:scale-105 hover:-translate-x-1"
               aria-label="Return to course page"
             >
               <svg
@@ -367,36 +497,49 @@ const Exercise = () => {
               <span className="gradient-text">Back to Course</span>
             </button>
 
-            {/* Timer with responsive colors and animation */}
-            <div className={`py-0.5 sm:py-1 px-2 sm:px-4 rounded-full font-medium sm:font-bold text-white text-xs sm:text-sm md:text-base
-            ${timeLeft > 5 ? 'bg-green-500 dark:bg-green-600' :
-                timeLeft > 2 ? 'bg-yellow-500 dark:bg-yellow-600' :
-                  'bg-red-500 dark:bg-red-600 animate-pulse'}`}>
-              {timeLeft}s
+            {/* Enhanced progress indicator */}
+            <div className="flex flex-col items-end">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-semibold text-gray-600 dark:text-gray-400">
+                  {Math.round(progress * 100)}% Complete
+                </span>
+                <div className={`py-0.5 sm:py-1 px-2 sm:px-4 rounded-full font-medium sm:font-bold text-white text-xs sm:text-sm md:text-base
+                ${timeLeft > 5 ? 'bg-green-500 dark:bg-green-600' :
+                    timeLeft > 2 ? 'bg-yellow-500 dark:bg-yellow-600' :
+                      'bg-red-500 dark:bg-red-600 animate-pulse'}`}>
+                  {timeLeft}s
+                </div>
+              </div>
+              <div className="w-32 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-1">
+                <div
+                  className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full transition-all duration-700"
+                  style={{ width: `${progress * 100}%` }}
+                ></div>
+              </div>
             </div>
           </div>
 
           {/* Enhanced main content */}
           <div className="text-center mb-3 sm:mb-4">
             <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold gradient-text mb-1">
-              {exercise.title}
+              {currentExercise.title}
             </h1>
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
-              {exercise.type} • Difficulty: {exercise.difficultyLevel}
+              {currentExercise.type} • Difficulty: {currentExercise.difficultyLevel}
             </p>
           </div>
 
           <div className="glass-card border-2 border-white/20 dark:border-white/10 shadow-xl rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 mb-3 sm:mb-4">
             <p className="text-xs sm:text-sm md:text-base text-gray-800 dark:text-white font-medium">
-              {exercise.question}
+              {currentExercise.question}
             </p>
           </div>
 
           <div className="glass-card border-2 border-white/30 dark:border-white/10 rounded-xl sm:rounded-2xl p-2 sm:p-3 md:p-4 min-h-[6rem] sm:min-h-[8rem] md:min-h-[10rem] flex flex-col items-center justify-center overflow-auto mb-3 sm:mb-4 shadow-lg">
-            {exercise.animType ? (
+            {currentExercise.animType ? (
               <ExerciseAnimation
-                animType={exercise.animType}
-                question={exercise.question}
+                animType={currentExercise.animType}
+                question={currentExercise.question}
               />
             ) : (
               <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">No animation for this exercise</p>
@@ -404,8 +547,8 @@ const Exercise = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
-            {exercise.type === 'multiple-choice' ? (
-              exercise.options.map((option, index) => (
+            {currentExercise.type === 'multiple-choice' ? (
+              currentExercise.options.map((option, index) => (
                 <button
                   key={index}
                   onClick={() => handleOptionSelect(option)}
@@ -448,15 +591,15 @@ const Exercise = () => {
             <button
               onClick={handleSubmitAnswer}
               disabled={
-                (exercise.type === 'multiple-choice' && !selectedOption) ||
-                (exercise.type === 'fill-in' && !textAnswer.trim()) ||
+                (currentExercise.type === 'multiple-choice' && !selectedOption) ||
+                (currentExercise.type === 'fill-in' && !textAnswer.trim()) ||
                 !isTimerRunning ||
                 showResult
               }
               className={`
               w-full py-2.5 sm:py-3 md:py-3.5 text-sm sm:text-base md:text-lg font-bold rounded-xl sm:rounded-2xl transition-all duration-300
-              ${((exercise.type === 'multiple-choice' && !selectedOption) ||
-                  (exercise.type === 'fill-in' && !textAnswer.trim()) ||
+              ${((currentExercise.type === 'multiple-choice' && !selectedOption) ||
+                  (currentExercise.type === 'fill-in' && !textAnswer.trim()) ||
                   !isTimerRunning ||
                   showResult)
                   ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white dark:text-gray-300'
@@ -486,7 +629,7 @@ const Exercise = () => {
               )}
 
               <p className="text-xs sm:text-sm mt-2 sm:mt-3 text-gray-600 dark:text-gray-400 font-medium">
-                Returning to course page...
+                Loading next exercise...
               </p>
             </div>
           )}
@@ -498,4 +641,4 @@ const Exercise = () => {
   );
 };
 
-export default Exercise;
+export default AutoExercise;

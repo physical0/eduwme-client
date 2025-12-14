@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import AdditionIcon from "@src/assets/additionIcon.svg";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "../../contexts/AuthContext";
 import EducationalNews from "@src/components/EducationalNews";
 import LoadingPage from "@src/components/loading";
 

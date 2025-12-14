@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
-import { useAuth } from "../contexts/AuthContext";
+import { useAuth } from "@src/contexts/AuthContext";
 import LoadingPage from "@src/components/loading";
 
 // Define interfaces for type safety
