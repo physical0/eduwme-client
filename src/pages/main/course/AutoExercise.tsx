@@ -26,7 +26,7 @@ interface CompletionResult {
   awardedXp: number;
   currentXp: number;
   level: number;
-  gems?: number;
+  awardedGems: number;
   alreadyCompleted: boolean;
   exerciseStatus: {
     courseBatchId: string;
@@ -340,7 +340,7 @@ const AutoExercise = () => {
             correct: true,
             message: `Correct! ${completionResult.alreadyCompleted
               ? "You've already completed this exercise before."
-              : `You earned ${completionResult.awardedXp} XP!`}`
+              : `You earned ${completionResult.awardedXp} XP${completionResult.awardedGems ? ` and ${completionResult.awardedGems} Gems` : ''}!`}`
           });
         } catch (err) {
           setResult({
@@ -587,50 +587,69 @@ const AutoExercise = () => {
           </div>
 
           {/* Enhanced submit button */}
-          {!showResult ? (
-            <button
-              onClick={handleSubmitAnswer}
-              disabled={
-                (currentExercise.type === 'multiple-choice' && !selectedOption) ||
-                (currentExercise.type === 'fill-in' && !textAnswer.trim()) ||
-                !isTimerRunning ||
-                showResult
-              }
-              className={`
+          <button
+            onClick={handleSubmitAnswer}
+            disabled={
+              (currentExercise.type === 'multiple-choice' && !selectedOption) ||
+              (currentExercise.type === 'fill-in' && !textAnswer.trim()) ||
+              !isTimerRunning ||
+              showResult
+            }
+            className={`
               w-full py-2 sm:py-2.5 md:py-3 text-sm sm:text-base md:text-lg font-bold rounded-xl sm:rounded-2xl transition-all duration-300
               ${((currentExercise.type === 'multiple-choice' && !selectedOption) ||
-                  (currentExercise.type === 'fill-in' && !textAnswer.trim()) ||
-                  !isTimerRunning ||
-                  showResult)
-                  ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white dark:text-gray-300'
-                  : 'bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-600 hover:to-cyan-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105 animate-cyan-wave shimmer'}
+                (currentExercise.type === 'fill-in' && !textAnswer.trim()) ||
+                !isTimerRunning ||
+                showResult)
+                ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white dark:text-gray-300'
+                : 'bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-600 hover:to-cyan-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105 animate-cyan-wave shimmer'}
             `}
-            >
-              Submit Answer
-            </button>
-          ) : (
-            <div className={`glass-card p-3 sm:p-4 md:p-5 text-center rounded-xl sm:rounded-2xl border-2 shadow-xl ${result?.correct
-              ? 'border-green-400/50 dark:border-green-500/50 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 text-green-800 dark:text-green-300'
-              : 'border-red-400/50 dark:border-red-500/50 bg-gradient-to-br from-red-50/50 to-pink-50/50 dark:from-red-900/20 dark:to-pink-900/20 text-red-800 dark:text-red-300'
-              }`}>
-              <p className="font-bold text-base sm:text-lg md:text-xl mb-1">
-                {result?.correct ? '✓ Correct!' : '✗ Incorrect!'}
-              </p>
-              <p className="text-xs sm:text-sm md:text-base">{result?.message}</p>
+          >
+            Submit Answer
+          </button>
 
-              {/* Enhanced XP and rewards */}
-              {completionData && !completionData.alreadyCompleted && (
-                <div className="mt-2 sm:mt-3 font-bold text-xs sm:text-sm md:text-base flex flex-wrap justify-center gap-2 sm:gap-3">
-                  <span className="px-2.5 py-1 bg-gradient-to-r from-yellow-400 to-orange-400 text-white rounded-full shadow-md">XP: +{completionData.awardedXp}</span>
-                  {completionData.gems && <span className="px-2.5 py-1 bg-gradient-to-r from-blue-400 to-cyan-400 text-white rounded-full shadow-md">Gems: +{completionData.gems}</span>}
-                  <span className="px-2.5 py-1 bg-gradient-to-r from-purple-400 to-pink-400 text-white rounded-full shadow-md">Total: {completionData.currentXp} XP</span>
-                  <span className="px-2.5 py-1 bg-gradient-to-r from-green-400 to-emerald-400 text-white rounded-full shadow-md">Level: {completionData.level}</span>
+          {/* Result Modal Overlay */}
+          {showResult && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-white/50 backdrop-blur-md animate-fade-in">
+              <div
+                className={`
+                  relative glass-card p-5 sm:p-6 md:p-8 rounded-2xl md:rounded-3xl shadow-2xl w-full max-w-sm md:max-w-md transform transition-all scale-100 animate-scale-in border-2 text-center
+                  ${result?.correct
+                    ? 'border-green-400/50 bg-gradient-to-br from-green-50/90 to-emerald-50/90 dark:from-green-900/90 dark:to-emerald-900/90 text-green-800 dark:text-green-100'
+                    : 'border-red-400/50 bg-gradient-to-br from-red-50/90 to-pink-50/90 dark:from-red-900/90 dark:to-pink-900/90 text-red-900 dark:text-red-100'}
+                `}
+              >
+                <div className="mb-4">
+                  <div className={`w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-full flex items-center justify-center text-3xl sm:text-4xl shadow-lg mb-3 ${result?.correct ? 'bg-green-100 dark:bg-green-800 text-green-600 dark:text-green-200' : 'bg-red-100 dark:bg-red-800 text-red-600 dark:text-red-200'
+                    }`}>
+                    {result?.correct ? '✓' : '✗'}
+                  </div>
+                  <h2 className="text-xl sm:text-2xl font-bold mb-2">
+                    {result?.correct ? 'Awesome!' : 'Oops!'}
+                  </h2>
+                  <p className="font-medium text-sm sm:text-base opacity-90">
+                    {result?.message}
+                  </p>
                 </div>
-              )}
 
-              <p className="text-xs sm:text-sm mt-2 sm:mt-3 text-gray-600 dark:text-gray-400 font-medium">
-                Loading next exercise...
-              </p>
+                {/* Enhanced XP and rewards */}
+                {completionData && !completionData.alreadyCompleted && (
+                  <div className="bg-white/60 rounded-xl p-3 mb-4 backdrop-blur-md shadow-sm">
+                    <p className="text-sm font-semibold mb-2 opacity-80 uppercase tracking-wider">Rewards Earned</p>
+                    <div className="flex flex-wrap justify-center gap-2">
+                      <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full shadow-sm font-bold text-sm">+{completionData.awardedXp} XP</span>
+                      <span className="px-3 py-1 bg-gradient-to-r from-blue-400 to-cyan-500 text-white rounded-full shadow-sm font-bold text-sm">+{completionData.awardedGems} Gems
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                <div className="mt-4 pt-4 border-t border-black/10 dark:border-white/10">
+                  <p className="text-sm font-medium opacity-70 animate-pulse">
+                    Loading next exercise...
+                  </p>
+                </div>
+              </div>
             </div>
           )}
           {/* Optional spacer div to push content up from bottom */}
