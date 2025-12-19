@@ -8,12 +8,19 @@
   --color-header-blue: #444444;
 
   /* Gradient colors */
-  --gradient-primary-start: #667eea;
-  --gradient-primary-end: #764ba2;
-  --gradient-secondary-start: #f093fb;
-  --gradient-secondary-end: #f5576c;
-  --gradient-accent-start: #4facfe;
-  --gradient-accent-end: #00f2fe;
+  /* Gradient colors - Updated to Green/Sky Theme */
+  --gradient-primary-start: #22c55e;
+  /* green-500 */
+  --gradient-primary-end: #0ea5e9;
+  /* sky-500 */
+  --gradient-secondary-start: #34d399;
+  /* emerald-400 */
+  --gradient-secondary-end: #38bdf8;
+  /* sky-400 */
+  --gradient-accent-start: #10b981;
+  /* emerald-500 */
+  --gradient-accent-end: #0284c7;
+  /* sky-600 */
 
   /* Animation durations */
   --duration-fast: 200ms;
@@ -60,7 +67,7 @@
 .gradient-border-animated {
   position: relative;
   background: linear-gradient(white, white) padding-box,
-    linear-gradient(var(--angle, 0deg), #667eea 0%, #764ba2 50%, #667eea 100%) border-box;
+    linear-gradient(var(--angle, 0deg), #22c55e 0%, #0ea5e9 50%, #22c55e 100%) border-box;
   border: 2px solid transparent;
   animation: rotate-gradient 3s linear infinite;
 }
@@ -173,7 +180,7 @@
 
 /* Gradient Text */
 .gradient-text {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #22c55e 0%, #0ea5e9 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -181,7 +188,7 @@
 
 /* Animated Gradient Background */
 .gradient-bg-animated {
-  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #4facfe);
+  background: linear-gradient(-45deg, #22c55e, #10b981, #0ea5e9, #38bdf8);
   background-size: 400% 400%;
   animation: gradient-shift 15s ease infinite;
 }

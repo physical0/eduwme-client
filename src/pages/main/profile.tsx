@@ -473,7 +473,7 @@ const ProfilePage = () => {
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="mt-4 px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors text-sm sm:text-base"
+          className="mt-4 px-3 py-1.5 sm:px-4 sm:py-2 bg-sky-500 text-white rounded-md hover:bg-sky-600 dark:bg-sky-600 dark:hover:bg-sky-700 transition-colors text-sm sm:text-base"
         >
           Try Again
         </button>
@@ -522,7 +522,7 @@ const ProfilePage = () => {
             onClick={handleEditToggle}
             className={`px-2 py-1 sm:px-4 sm:py-2 rounded-md transition-colors text-xs sm:text-base ${isEditing
               ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-              : "bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
+              : "bg-gradient-to-r from-sky-500 to-emerald-500 text-white hover:from-sky-600 hover:to-emerald-600 shadow-md transform hover:scale-105 transition-all"
               }`}
           >
             {isEditing ? "Cancel" : "Edit"}
@@ -542,7 +542,7 @@ const ProfilePage = () => {
               className="w-full h-full object-cover"
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20"></div>
+            <div className="w-full h-full bg-gradient-to-r from-sky-100 to-emerald-100 dark:from-sky-900/20 dark:to-emerald-900/20"></div>
           )}
         </div>
 
@@ -582,8 +582,8 @@ const ProfilePage = () => {
             <button
               type="button"
               onClick={handleImageClick}
-              className=" text-blue-500 dark:text-blue-400 
-              hover:text-blue-700 dark:hover:text-blue-300 text-[10px] sm:text-sm"
+              className=" text-sky-500 dark:text-sky-400 
+              hover:text-sky-700 dark:hover:text-sky-300 text-[10px] sm:text-sm"
             >
               Change Photo
             </button>
@@ -633,7 +633,7 @@ const ProfilePage = () => {
               value={editedNickname}
               onChange={(e) => setEditedNickname(e.target.value)}
               className="w-full p-1.5 sm:p-3 border border-gray-300 dark:border-gray-600 rounded-md 
-                focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-xs sm:text-base"
+                focus:outline-none focus:ring-2 focus:ring-emerald-500 dark:bg-gray-700 dark:text-white text-xs sm:text-base"
               placeholder="Enter a nickname"
             />
           </div>
@@ -644,7 +644,7 @@ const ProfilePage = () => {
               value={editedBiodata}
               onChange={(e) => setEditedBiodata(e.target.value)}
               className="w-full p-1.5 sm:p-3 border border-gray-300 dark:border-gray-600 rounded-md 
-                focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[80px] sm:min-h-[120px] 
+                focus:outline-none focus:ring-2 focus:ring-emerald-500 min-h-[80px] sm:min-h-[120px] 
                 dark:bg-gray-700 dark:text-white text-xs sm:text-base"
               placeholder="Tell us about yourself"
             />
@@ -654,8 +654,8 @@ const ProfilePage = () => {
             <button
               type="submit"
               disabled={isSaving}
-              className={`px-3 sm:px-6 py-1 sm:py-2 bg-green-500 text-white rounded-md 
-                hover:bg-green-600 transition-colors text-xs sm:text-base ${isSaving ? "opacity-70 cursor-not-allowed" : ""
+              className={`px-3 sm:px-6 py-1 sm:py-2 bg-gradient-to-r from-emerald-500 to-green-500 text-white rounded-md 
+                hover:from-emerald-600 hover:to-green-600 transition-all shadow-md text-xs sm:text-base ${isSaving ? "opacity-70 cursor-not-allowed" : ""
                 }`}
             >
               {isSaving ? "Saving..." : "Save"}
@@ -680,15 +680,15 @@ const ProfilePage = () => {
           </div>
 
           <div className="grid grid-cols-2 gap-2 sm:gap-4">
-            <div className="p-2 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-md shadow-sm text-center">
-              <strong className="text-blue-600 dark:text-blue-400 block text-[10px] sm:text-sm">XP</strong>
-              <p className="text-blue-800 dark:text-blue-300 text-lg sm:text-2xl font-semibold">
+            <div className="p-2 sm:p-4 bg-sky-50 dark:bg-sky-900/20 rounded-md shadow-sm text-center">
+              <strong className="text-sky-600 dark:text-sky-400 block text-[10px] sm:text-sm">XP</strong>
+              <p className="text-sky-800 dark:text-sky-300 text-lg sm:text-2xl font-semibold">
                 {userProfile.xp}
               </p>
             </div>
-            <div className="p-2 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-md shadow-sm text-center">
-              <strong className="text-green-600 dark:text-green-400 block text-[10px] sm:text-sm">Level</strong>
-              <p className="text-green-800 dark:text-green-300 text-lg sm:text-2xl font-semibold">
+            <div className="p-2 sm:p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-md shadow-sm text-center">
+              <strong className="text-emerald-600 dark:text-emerald-400 block text-[10px] sm:text-sm">Level</strong>
+              <p className="text-emerald-800 dark:text-emerald-300 text-lg sm:text-2xl font-semibold">
                 {userProfile.level}
               </p>
             </div>

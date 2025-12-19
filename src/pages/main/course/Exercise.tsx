@@ -356,7 +356,7 @@ const Exercise = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
-                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transform group-hover:-translate-x-1 transition-transform duration-200 text-purple-600 dark:text-purple-400"
+                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transform group-hover:-translate-x-1 transition-transform duration-200 text-emerald-600 dark:text-emerald-400"
               >
                 <path
                   fillRule="evenodd"
@@ -414,8 +414,8 @@ const Exercise = () => {
                   glass-card p-3 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl border-2 text-left transition-all duration-300 text-xs sm:text-sm md:text-base
                   flex items-center min-h-[3rem] sm:min-h-[3.5rem] font-medium
                   ${selectedOption === option
-                      ? 'bg-gradient-to-br from-purple-500 to-blue-500 border-purple-400/50 shadow-xl scale-105 text-gray-800 dark:text-gray-200 glow'
-                      : 'border-white/40 dark:border-white/20 hover:border-purple-400/50 dark:hover:border-purple-500/50 hover:scale-105 hover:shadow-xl text-gray-800 dark:text-white'}
+                      ? 'bg-gradient-to-br from-green-500 to-sky-500 border-emerald-400/50 shadow-xl scale-105 text-gray-800 dark:text-gray-200 glow'
+                      : 'border-white/40 dark:border-white/20 hover:border-emerald-400/50 dark:hover:border-emerald-500/50 hover:scale-105 hover:shadow-xl text-gray-800 dark:text-white'}
                   ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer shimmer'}
                 `}
                 >
@@ -434,7 +434,7 @@ const Exercise = () => {
                   glass-card w-full p-3 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl border-2 text-xs sm:text-sm md:text-base
                   min-h-[3rem] sm:min-h-[3.5rem] font-medium
                   border-white/40 dark:border-white/20
-                  focus:border-purple-400/50 dark:focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-800
+                  focus:border-emerald-400/50 dark:focus:border-emerald-500/50 focus:outline-none focus:ring-2 focus:ring-emerald-200 dark:focus:ring-emerald-800
                   text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400
                   ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : 'shadow-lg'}
                 `}
@@ -460,7 +460,7 @@ const Exercise = () => {
                   !isTimerRunning ||
                   showResult)
                   ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white dark:text-gray-300'
-                  : 'bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105 shimmer'}
+                  : 'bg-gradient-to-r from-sky-500 to-emerald-500 hover:from-sky-600 hover:to-emerald-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105 shimmer'}
             `}
             >
               Submit Answer

@@ -285,7 +285,7 @@ const Shop = () => {
         <p className="text-sm sm:text-base text-red-600 dark:text-red-400 mb-3 sm:mb-4">Error: {error}</p>
         <button
           onClick={() => navigate(-1)}
-          className="px-2 py-1 sm:px-3 sm:py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors text-sm"
+          className="px-2 py-1 sm:px-3 sm:py-1.5 bg-sky-500 hover:bg-sky-600 text-white rounded-lg dark:bg-sky-600 dark:hover:bg-sky-700 transition-colors text-sm"
         >
           Go Back
         </button>
@@ -300,7 +300,7 @@ const Shop = () => {
         <h1 className="text-base sm:text-xl md:text-2xl font-bold text-gray-800 dark:text-white">Shop</h1>
 
         {/* User gems badge */}
-        <div className="bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full flex items-center shadow text-xs sm:text-sm">
+        <div className="bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 px-1.5 py-0.5 sm:px-2 sm:py-1 rounded-full flex items-center shadow text-xs sm:text-sm">
           <span className="mr-0.5 sm:mr-1 text-sm sm:text-base">💎</span>
           <span className="font-semibold">{user?.gems || 0}</span>
         </div>
@@ -311,7 +311,7 @@ const Shop = () => {
         <button
           onClick={() => setActiveTab("shop")}
           className={`py-1 sm:py-2 px-2 sm:px-4 text-xs sm:text-sm font-medium border-b-2 ${activeTab === "shop"
-            ? "border-[#374DB0] dark:border-[#5a6fd1] text-[#374DB0] dark:text-[#5a6fd1]"
+            ? "border-emerald-500 dark:border-emerald-400 text-emerald-600 dark:text-emerald-400"
             : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             }`}
         >
@@ -320,7 +320,7 @@ const Shop = () => {
         <button
           onClick={() => setActiveTab("inventory")}
           className={`py-1 sm:py-2 px-2 sm:px-4 text-xs sm:text-sm font-medium border-b-2 ${activeTab === "inventory"
-            ? "border-[#374DB0] dark:border-[#5a6fd1] text-[#374DB0] dark:text-[#5a6fd1]"
+            ? "border-emerald-500 dark:border-emerald-400 text-emerald-600 dark:text-emerald-400"
             : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
             }`}
         >
@@ -335,7 +335,7 @@ const Shop = () => {
             ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300"
             : purchaseStatus.status === "error"
               ? "bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-300"
-              : "bg-blue-100 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
+              : "bg-sky-100 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300"
             }`}
         >
           {purchaseStatus.message}
@@ -382,7 +382,7 @@ const Shop = () => {
                                 className="max-h-full max-w-full object-contain"
                               />
                             ) : (
-                              <div className="w-10 h-10 sm:w-20 sm:h-20 rounded-full bg-[#374DB0]/20 dark:bg-[#5a6fd1]/20 flex items-center justify-center text-xl sm:text-4xl">
+                              <div className="w-10 h-10 sm:w-20 sm:h-20 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-xl sm:text-4xl">
                                 {item.category === "avatar" && "👤"}
                                 {item.category === "background" && "🏞️"}
                                 {item.category === "badge" && "🏅"}
@@ -411,7 +411,7 @@ const Shop = () => {
                                 ? "bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-300 cursor-default"
                                 : (user?.gems || 0) < item.price
                                   ? "bg-gray-100 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
-                                  : "bg-[#374DB0] dark:bg-[#5a6fd1] text-white hover:bg-[#293a8c] dark:hover:bg-[#4a5eb3] transition-colors"
+                                  : "bg-gradient-to-r from-sky-500 to-emerald-500 text-white hover:from-sky-600 hover:to-emerald-600 transition-all shadow-sm"
                                 }`}
                             >
                               {isOwned ? "Owned" : (user?.gems || 0) < item.price ? "Not enough" : "Buy"}
@@ -434,12 +434,12 @@ const Shop = () => {
           {/* No items message */}
           {inventory.length === 0 ? (
             <div className="bg-blue-50 dark:bg-blue-800/20 rounded-md p-2 sm:p-3 text-center">
-              <p className="text-blue-700 dark:text-blue-300 text-xs mb-1.5 sm:mb-3">
+              <p className="text-sky-700 dark:text-sky-300 text-xs mb-1.5 sm:mb-3">
                 You don't have any items yet.
               </p>
               <button
                 onClick={() => setActiveTab("shop")}
-                className="px-1.5 py-0.5 sm:px-3 sm:py-1 bg-[#374DB0] dark:bg-[#5a6fd1] text-white rounded-md hover:bg-[#293a8c] dark:hover:bg-[#4a5eb3] transition-colors text-[10px] sm:text-sm"
+                className="px-1.5 py-0.5 sm:px-3 sm:py-1 bg-gradient-to-r from-sky-500 to-emerald-500 text-white rounded-md hover:from-sky-600 hover:to-emerald-600 transition-all shadow-sm text-[10px] sm:text-sm"
               >
                 Go to Shop
               </button>
@@ -479,7 +479,7 @@ const Shop = () => {
                               className="max-h-full max-w-full object-contain"
                             />
                           ) : (
-                            <div className="w-10 h-10 sm:w-20 sm:h-20 rounded-full bg-[#374DB0]/20 dark:bg-[#5a6fd1]/20 flex items-center justify-center text-xl sm:text-4xl">
+                            <div className="w-10 h-10 sm:w-20 sm:h-20 rounded-full bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-xl sm:text-4xl">
                               {item.details.category === "background" && "🏞️"}
                               {item.details.category === "badge" && "🏅"}
                               {item.details.category === "theme" && "🎨"}
@@ -497,7 +497,7 @@ const Shop = () => {
                           onClick={() => handleEquipToggle(item.itemId, item.isEquipped)}
                           className={`w-full px-1 py-0.5 sm:px-3 sm:py-1 text-[9px] sm:text-xs font-medium rounded-md ${item.isEquipped
                             ? "bg-green-100 dark:bg-green-800 text-green-700 dark:text-green-300 hover:bg-green-200 dark:hover:bg-green-700"
-                            : "bg-[#374DB0] dark:bg-[#5a6fd1] text-white hover:bg-[#293a8c] dark:hover:bg-[#4a5eb3]"
+                            : "bg-gradient-to-r from-sky-500 to-emerald-500 text-white hover:from-sky-600 hover:to-emerald-600 shadow-sm"
                             } transition-colors`}
                         >
                           {item.isEquipped ? "Unequip" : "Equip"}

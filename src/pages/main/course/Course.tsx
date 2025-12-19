@@ -172,7 +172,7 @@ const Course = () => {
         <p className="text-sm sm:text-base md:text-lg text-red-600 dark:text-red-400 mb-3 sm:mb-4 font-medium">Error: {error}</p>
         <button
           onClick={() => navigate(-1)}
-          className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+          className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base bg-gradient-to-r from-green-500 to-sky-600 hover:from-green-600 hover:to-sky-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
         >
           Go Back
         </button>
@@ -187,7 +187,7 @@ const Course = () => {
         <p className="text-sm sm:text-base md:text-lg text-yellow-600 dark:text-yellow-400 mb-3 sm:mb-4 font-medium">Course not found</p>
         <button
           onClick={() => navigate("/")}
-          className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base bg-gradient-to-r from-blue-500 to-purple-600 hover:from-blue-600 hover:to-purple-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+          className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base bg-gradient-to-r from-green-500 to-sky-600 hover:from-green-600 hover:to-sky-700 text-white rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
         >
           Return to Home
         </button>
@@ -217,7 +217,7 @@ const Course = () => {
             xmlns="http://www.w3.org/2000/svg"
             viewBox="0 0 20 20"
             fill="currentColor"
-            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transform group-hover:-translate-x-1 transition-transform duration-200 text-purple-600 dark:text-purple-400"
+            className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transform group-hover:-translate-x-1 transition-transform duration-200 text-emerald-600 dark:text-emerald-400"
           >
             <path
               fillRule="evenodd"
@@ -243,7 +243,7 @@ const Course = () => {
                 ) : (
                   <div className="w-full h-full flex items-center justify-center rounded-xl relative overflow-hidden">
                     {/* Animated gradient background */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-purple-500 via-pink-500 to-blue-500 animate-pulse"></div>
+                    <div className="absolute inset-0 bg-gradient-to-br from-green-500 via-emerald-500 to-sky-500 animate-pulse"></div>
 
                     {/* Pattern overlay */}
                     <div className="absolute inset-0 opacity-20">
@@ -288,8 +288,8 @@ const Course = () => {
                 <button
                   onClick={() => navigate(`/auto-exercise/${courseId}`)}
                   className="group px-2.5 py-1 sm:px-3 sm:py-1.5 md:px-4 md:py-2 text-[10px] sm:text-xs md:text-sm font-semibold rounded-lg sm:rounded-xl
-                      bg-gradient-to-r from-purple-500 via-pink-500 to-indigo-600 
-                      hover:from-purple-600 hover:via-pink-600 hover:to-indigo-700
+                      bg-gradient-to-r from-green-500 via-emerald-500 to-sky-600 
+                      hover:from-green-600 hover:via-emerald-600 hover:to-sky-700
                       text-white shadow-lg hover:shadow-xl transition-all duration-300
                       transform hover:scale-105 shimmer"
                 >
@@ -335,9 +335,9 @@ const Course = () => {
                   />
                   <defs>
                     <linearGradient id="progress-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#8b5cf6" />
-                      <stop offset="50%" stopColor="#ec4899" />
-                      <stop offset="100%" stopColor="#3b82f6" />
+                      <stop offset="0%" stopColor="#22c55e" />
+                      <stop offset="50%" stopColor="#10b981" />
+                      <stop offset="100%" stopColor="#0ea5e9" />
                     </linearGradient>
                   </defs>
                 </svg>
@@ -365,7 +365,7 @@ const Course = () => {
               <div key={level} className="mb-4 sm:mb-6 md:mb-8 fade-in-stagger" style={{ animationDelay: `${levelIndex * 100}ms` }}>
                 {/* Enhanced level heading */}
                 <h2 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold mb-3 sm:mb-4 md:mb-5 gradient-text flex items-center gap-2">
-                  <span className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white text-sm sm:text-base shadow-lg">
+                  <span className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-gradient-to-br from-green-500 to-sky-500 flex items-center justify-center text-white text-sm sm:text-base shadow-lg">
                     {level}
                   </span>
                   Level {level} Exercises
@@ -394,8 +394,8 @@ const Course = () => {
                           ${isCompleted
                             ? "border-green-400/50 dark:border-green-500/50 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20"
                             : isInProgress
-                              ? "border-blue-400/50 dark:border-blue-500/50 bg-gradient-to-br from-blue-50/50 to-purple-50/50 dark:from-blue-900/20 dark:to-purple-900/20"
-                              : "border-white/40 dark:border-white/20 hover:border-purple-400/50 dark:hover:border-purple-500/50"}
+                              ? "border-sky-400/50 dark:border-sky-500/50 bg-gradient-to-br from-sky-50/50 to-emerald-50/50 dark:from-sky-900/20 dark:to-emerald-900/20"
+                              : "border-white/40 dark:border-white/20 hover:border-emerald-400/50 dark:hover:border-emerald-500/50"}
                           shimmer
                           fade-in-stagger
                         `}
@@ -404,7 +404,7 @@ const Course = () => {
                         {/* Exercise header */}
                         <div className="flex items-center gap-2 sm:gap-3 mb-2 sm:mb-3">
                           {/* Exercise number badge */}
-                          <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-purple-500 to-blue-500 flex items-center justify-center text-white text-xs sm:text-sm md:text-base font-bold shadow-lg">
+                          <div className="flex-shrink-0 w-7 h-7 sm:w-8 sm:h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-br from-green-500 to-sky-500 flex items-center justify-center text-white text-xs sm:text-sm md:text-base font-bold shadow-lg">
                             {index + 1}
                           </div>
 
@@ -428,10 +428,10 @@ const Course = () => {
 
                         {/* Exercise metadata */}
                         <div className="flex items-center gap-1.5 sm:gap-2 mb-2 sm:mb-3">
-                          <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300 rounded-full text-[9px] sm:text-[10px] md:text-xs font-semibold">
+                          <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-[9px] sm:text-[10px] md:text-xs font-semibold">
                             {exercise.type}
                           </span>
-                          <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full text-[9px] sm:text-[10px] md:text-xs font-semibold">
+                          <span className="px-2 py-0.5 sm:px-2.5 sm:py-1 bg-sky-100 dark:bg-sky-900/30 text-sky-700 dark:text-sky-300 rounded-full text-[9px] sm:text-[10px] md:text-xs font-semibold">
                             {exercise.animType}
                           </span>
                         </div>
@@ -446,7 +446,7 @@ const Course = () => {
 
                         {isInProgress && (
                           <div className="mt-2 sm:mt-3 text-center">
-                            <span className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full text-[9px] sm:text-[10px] md:text-xs font-bold shadow-md">
+                            <span className="px-2.5 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-sky-500 to-emerald-500 text-white rounded-full text-[9px] sm:text-[10px] md:text-xs font-bold shadow-md">
                               In Progress
                             </span>
                           </div>

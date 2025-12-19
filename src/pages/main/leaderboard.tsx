@@ -89,7 +89,7 @@ const LeaderboardPage = () => {
     if (rank === 1) return "text-yellow-500"; // Gold
     if (rank === 2) return "text-gray-400";   // Silver
     if (rank === 3) return "text-amber-600";  // Bronze
-    return "text-[#374DB0]";                  // Match your app's blue
+    return "text-sky-600 dark:text-sky-400";                  // Match your app's Sky/Blue theme
   };
 
   // Generate background colors based on rank
@@ -123,7 +123,7 @@ const LeaderboardPage = () => {
         {/* Enhanced button with better responsive padding and dark mode */}
         <button
           onClick={() => window.location.reload()}
-          className="px-3 py-1.5 md:px-4 md:py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors"
+          className="px-3 py-1.5 md:px-4 md:py-2 bg-sky-500 hover:bg-sky-600 text-white rounded-lg dark:bg-sky-600 dark:hover:bg-sky-700 transition-colors"
         >
           Retry
         </button>
@@ -162,7 +162,7 @@ const LeaderboardPage = () => {
               {users[1]?.xp || 0} XP
             </p>
             <div className="mt-1 flex items-center gap-1">
-              <span className="text-[10px] sm:text-xs text-[#374DB0] dark:text-[#8e9ce7] dark:text-outline">
+              <span className="text-[10px] sm:text-xs text-sky-600 dark:text-sky-400 dark:text-outline">
                 Lvl {users[1]?.level || 1}
               </span>
             </div>
@@ -189,7 +189,7 @@ const LeaderboardPage = () => {
               {users[0]?.xp || 0} XP
             </p>
             <div className="mt-1 flex items-center gap-1">
-              <span className="text-[10px] sm:text-xs text-[#374DB0] dark:text-[#8e9ce7] dark:text-outline">
+              <span className="text-[10px] sm:text-xs text-sky-600 dark:text-sky-400 dark:text-outline">
                 Lvl {users[0]?.level || 1}
               </span>
             </div>
@@ -216,7 +216,7 @@ const LeaderboardPage = () => {
               {users[2]?.xp || 0} XP
             </p>
             <div className="mt-1 flex items-center gap-1">
-              <span className="text-[10px] sm:text-xs text-[#374DB0] dark:text-[#8e9ce7] dark:text-outline">
+              <span className="text-[10px] sm:text-xs text-sky-600 dark:text-sky-400 dark:text-outline">
                 Lvl {users[2]?.level || 1}
               </span>
             </div>
@@ -225,9 +225,9 @@ const LeaderboardPage = () => {
       )}
 
       {/* Full leaderboard table */}
-      <div className="bg-white/60 dark:bg-gray-800/60 rounded-xl sm:rounded-2xl shadow-md overflow-hidden border border-[#374DB0]/20 dark:border-[#374DB0]/40">
-        {/* Table header - Changed to purple text in dark mode */}
-        <div className="bg-[#374DB0] dark:bg-[#2d3d8c] px-3 sm:px-4 py-2 sm:py-3 text-white grid grid-cols-12 gap-1">
+      <div className="bg-white/60 dark:bg-gray-800/60 rounded-xl sm:rounded-2xl shadow-md overflow-hidden border border-sky-200 dark:border-sky-800/40">
+        {/* Table header - Changed to sky/emerald gradient in dark mode */}
+        <div className="bg-gradient-to-r from-emerald-600 to-sky-600 px-3 sm:px-4 py-2 sm:py-3 text-white grid grid-cols-12 gap-1">
           <div className="col-span-2 sm:col-span-1 text-[10px] sm:text-xs font-medium uppercase dark:text-purple-600">Rank</div>
           <div className="col-span-6 sm:col-span-7 md:col-span-8 text-[10px] sm:text-xs font-medium uppercase dark:text-purple-600">User</div>
           <div className="col-span-4 sm:col-span-4 md:col-span-3 text-right text-[10px] sm:text-xs font-medium uppercase dark:text-purple-600">XP</div>
@@ -238,7 +238,7 @@ const LeaderboardPage = () => {
           {users.map((user, index) => (
             <div
               key={user.username}
-              className={`px-3 sm:px-4 py-2 sm:py-3 md:py-3 grid grid-cols-12 gap-1 items-center ${getRankBgColor(index + 1)} ${currentUser?.username === user.username ? 'border-l-4 border-[#374DB0] dark:border-purple-500' : ''} transition-colors hover:bg-[#374DB0]/5 dark:hover:bg-purple-900/10`}
+              className={`px-3 sm:px-4 py-2 sm:py-3 md:py-3 grid grid-cols-12 gap-1 items-center ${getRankBgColor(index + 1)} ${currentUser?.username === user.username ? 'border-l-4 border-sky-500 dark:border-sky-400' : ''} transition-colors hover:bg-sky-50 dark:hover:bg-sky-900/10`}
             >
               {/* Rank column - Purple text in dark mode */}
               <div className="col-span-2 sm:col-span-1">
@@ -250,7 +250,7 @@ const LeaderboardPage = () => {
               {/* User column */}
               <div className="col-span-6 sm:col-span-7 md:col-span-8">
                 <div className="flex items-center">
-                  <div className="flex-shrink-0 h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full flex items-center justify-center bg-[#374DB0]/10 dark:bg-purple-900/30 text-[#374DB0] dark:text-purple-800 font-bold">
+                  <div className="flex-shrink-0 h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full flex items-center justify-center bg-sky-100 dark:bg-sky-900/30 text-sky-600 dark:text-sky-400 font-bold">
                     {user.profilePicture ? (
                       <img src={user.profilePicture} alt={user.username} className="h-6 w-6 sm:h-8 sm:w-8 md:h-10 md:w-10 rounded-full" />
                     ) : (
@@ -267,7 +267,7 @@ const LeaderboardPage = () => {
                         <div className="text-[8px] sm:text-[10px] text-yellow-600 dark:text-yellow-300 mr-2">🔥 {getStreakDays(user)}</div>
                       )}
                       {/* Level badge - Purple in dark mode */}
-                      <span className="px-1 sm:px-1.5 py-0.5 text-[8px] sm:text-[10px] rounded-full bg-[#374DB0]/10 dark:bg-purple-900/30 text-[#374DB0] dark:text-purple-800">
+                      <span className="px-1 sm:px-1.5 py-0.5 text-[8px] sm:text-[10px] rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400">
                         Lvl {user.level || 1}
                       </span>
                     </div>
@@ -285,7 +285,7 @@ const LeaderboardPage = () => {
       </div>
 
       {users.length === 0 && (
-        <div className="text-center py-8 sm:py-10 bg-white/60 dark:bg-gray-800/60 rounded-xl sm:rounded-2xl shadow-md border border-[#374DB0]/20 dark:border-[#374DB0]/40">
+        <div className="text-center py-8 sm:py-10 bg-white/60 dark:bg-gray-800/60 rounded-xl sm:rounded-2xl shadow-md border border-sky-200/20 dark:border-sky-800/40">
           <p className="text-gray-500 dark:text-purple-200">No users on the leaderboard yet.</p>
         </div>
       )}

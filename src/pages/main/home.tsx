@@ -358,13 +358,13 @@ const Home = () => {
                   <div className="flex items-center gap-2 sm:gap-3">
                     <div className="w-24 sm:w-32 md:w-40 bg-gray-200/50 dark:bg-gray-700/50 rounded-full h-2 sm:h-2.5 md:h-3 backdrop-blur-sm border border-white/20">
                       <div
-                        className="bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 h-full rounded-full transition-all duration-700 ease-out shadow-lg"
+                        className="bg-gradient-to-r from-green-500 via-emerald-500 to-sky-500 h-full rounded-full transition-all duration-700 ease-out shadow-lg"
                         style={{
                           width: `${batch.coursesLength > 0 ? (batchProgress.completedCoursesCount / batch.coursesLength) * 100 : 0}%`
                         }}
                       ></div>
                     </div>
-                    <span className="text-xs sm:text-sm md:text-base font-bold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
+                    <span className="text-xs sm:text-sm md:text-base font-bold bg-gradient-to-r from-emerald-600 to-sky-600 dark:from-emerald-400 dark:to-sky-400 bg-clip-text text-transparent">
                       {batchProgress.completedCoursesCount}/{batch.coursesLength}
                     </span>
                   </div>
@@ -400,7 +400,7 @@ const Home = () => {
                           className={`${ButtonStyle} relative shimmer`}
                         >
                           {/* Gradient background overlay on hover */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-blue-500/0 group-hover:from-purple-500/20 group-hover:to-blue-500/20 rounded-2xl md:rounded-3xl transition-all duration-300"></div>
+                          <div className="absolute inset-0 bg-gradient-to-br from-green-500/0 to-sky-500/0 group-hover:from-green-500/20 group-hover:to-sky-500/20 rounded-2xl md:rounded-3xl transition-all duration-300"></div>
 
                           {/* Enhanced circle progress indicator with gradient */}
                           <div className="absolute inset-0 w-full h-full">
@@ -420,8 +420,8 @@ const Home = () => {
                                   {/* Gradient progress circle */}
                                   <defs>
                                     <linearGradient id={`gradient-${course.courseId}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                                      <stop offset="0%" stopColor={isCompleted ? "#10b981" : "#8b5cf6"} />
-                                      <stop offset="100%" stopColor={isCompleted ? "#059669" : "#3b82f6"} />
+                                      <stop offset="0%" stopColor={isCompleted ? "#10b981" : "#22c55e"} />
+                                      <stop offset="100%" stopColor={isCompleted ? "#059669" : "#0ea5e9"} />
                                     </linearGradient>
                                   </defs>
                                   <circle
@@ -489,7 +489,7 @@ const Home = () => {
 
                         {/* Enhanced in progress badge */}
                         {isInProgress && (
-                          <span className="mt-1 inline-block px-2 py-0.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full text-[9px] xs:text-[10px] sm:text-xs font-semibold shadow-md">
+                          <span className="mt-1 inline-block px-2 py-0.5 bg-gradient-to-r from-sky-500 to-emerald-500 text-white rounded-full text-[9px] xs:text-[10px] sm:text-xs font-semibold shadow-md">
                             In Progress
                           </span>
                         )}
