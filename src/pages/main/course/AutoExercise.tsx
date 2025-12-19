@@ -557,7 +557,7 @@ const AutoExercise = () => {
                   glass-card p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl border-2 text-left transition-all duration-300 text-xs sm:text-sm md:text-base
                   flex items-center min-h-[2.5rem] sm:min-h-[3rem] font-medium
                   ${selectedOption === option
-                      ? 'bg-gradient-to-br from-cyan-400 to-cyan-600 border-cyan-400/50 shadow-xl scale-105 text-white glow animate-cyan-wave'
+                      ? 'border-cyan-500 shadow-[0_0_20px_rgba(6,182,212,0.6),0_0_40px_rgba(6,182,212,0.4)] scale-105 bg-white dark:bg-gray-800 text-gray-800 dark:text-white'
                       : 'border-white/40 dark:border-white/20 hover:border-cyan-400/50 dark:hover:border-cyan-500/50 hover:scale-105 hover:shadow-xl text-gray-800 dark:text-white'}
                   ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer shimmer'}
                 `}
