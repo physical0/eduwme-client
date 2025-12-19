@@ -72,19 +72,19 @@ interface UserProgress {
 
 // Enhanced ButtonStyle with modern glassmorphism and gradient effects
 const ButtonStyle = `
-  w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24
-  p-2 sm:p-2.5 md:p-3 
+  w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 lg:w-16 lg:h-16
+  p-1.5 sm:p-2 
   relative overflow-hidden
   flex flex-col justify-center items-center 
-  rounded-2xl sm:rounded-2xl md:rounded-3xl
+  rounded-xl sm:rounded-2xl md:rounded-2xl
   bg-white/80 dark:bg-gray-800/60
   backdrop-blur-md
-  border-2 border-white/40 dark:border-gray-700/40
-  shadow-lg hover:shadow-2xl
-  text-base sm:text-lg md:text-xl lg:text-2xl 
-  gap-0.5 sm:gap-1
+  border md:border-2 border-white/40 dark:border-gray-700/40
+  shadow-md hover:shadow-lg
+  text-sm sm:text-base md:text-lg lg:text-lg 
+  gap-0.5
   transition-all duration-300 ease-out
-  hover:scale-110 hover:-translate-y-1
+  hover:scale-105 hover:-translate-y-0.5
   group
   card-lift
 `;
@@ -143,7 +143,7 @@ const getIconForCourse = (title: string): CourseIcon => {
   } else {
     return {
       icon: "📚",
-      size: { xs: "text-2xl", sm: "text-3xl", md: "text-4xl", lg: "text-5xl" }
+      size: { xs: "text-2xl", sm: "text-3xl", md: "text-3xl", lg: "text-4xl" }
     };
   }
 };
@@ -280,37 +280,37 @@ const Home = () => {
 
   return (
     // Main container with gradient background
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 pt-4">
-      <div className="max-w-[90%] sm:max-w-[82%] md:max-w-3xl lg:max-w-4xl mx-auto px-1 sm:px-2 md:px-2 py-2 sm:py-3 md:py-4 pb-16 md:pb-10">
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 pt-2 sm:pt-4">
+      <div className="max-w-5xl mx-auto px-3 sm:px-4 lg:px-6 py-2 pb-16">
 
         {/* Enhanced user stats section with glassmorphism */}
-        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4 mb-4 sm:mb-6 md:mb-8">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2 sm:gap-4 mb-2 sm:mb-4">
           {/* Gradient heading */}
-          <h1 className="text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold gradient-text">
+          <h1 className="text-lg sm:text-xl md:text-2xl font-bold gradient-text">
             Learning Areas
           </h1>
 
           {/* Enhanced user stats badges with glassmorphism */}
           <div className="flex gap-2 sm:gap-3 md:gap-4 items-center">
             {/* Gems badge with glow effect */}
-            <div className="glass-card px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-full flex items-center gap-1.5 sm:gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
-              <span className="text-lg sm:text-xl md:text-2xl group-hover:scale-110 transition-transform duration-300">💎</span>
-              <span className="font-bold text-sm sm:text-base md:text-lg bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
+            <div className="glass-card px-2 py-1 sm:px-3 sm:py-1.5 rounded-full flex items-center gap-1 sm:gap-1.5 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 group">
+              <span className="text-base sm:text-lg group-hover:scale-110 transition-transform duration-300">💎</span>
+              <span className="font-bold text-xs sm:text-sm bg-gradient-to-r from-blue-600 to-cyan-600 dark:from-blue-400 dark:to-cyan-400 bg-clip-text text-transparent">
                 {user?.gems || 0}
               </span>
             </div>
 
             {/* XP badge with glow effect */}
-            <div className="glass-card px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-full flex items-center gap-1.5 sm:gap-2 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 group">
-              <span className="text-lg sm:text-xl md:text-2xl group-hover:scale-110 transition-transform duration-300">🏅</span>
-              <span className="font-bold text-sm sm:text-base md:text-lg bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-400 dark:to-orange-400 bg-clip-text text-transparent">
+            <div className="glass-card px-2 py-1 sm:px-3 sm:py-1.5 rounded-full flex items-center gap-1 sm:gap-1.5 shadow-md hover:shadow-lg transition-all duration-300 hover:scale-105 group">
+              <span className="text-base sm:text-lg group-hover:scale-110 transition-transform duration-300">🏅</span>
+              <span className="font-bold text-xs sm:text-sm bg-gradient-to-r from-yellow-600 to-orange-600 dark:from-yellow-400 dark:to-orange-400 bg-clip-text text-transparent">
                 {user?.xp || 0} XP
               </span>
             </div>
           </div>
         </div>
 
-        <div className="lg:col-span-1 mb-4 sm:mb-6">
+        <div className="lg:col-span-1 mb-3 sm:mb-4">
           <EducationalNews />
         </div>
 
@@ -326,14 +326,14 @@ const Home = () => {
             // Enhanced batch container with glassmorphism
             <div
               key={batch.courseBatchId}
-              className="mb-6 sm:mb-8 md:mb-6 glass-card rounded-2xl md:rounded-2xl p-3 sm:p-4 md:p-4 lg:p-5 shadow-xl hover:shadow-2xl transition-all duration-500 fade-in-stagger border-2 border-white/20 dark:border-white/10"
+              className="mb-4 sm:mb-5 glass-card rounded-xl sm:rounded-2xl p-3 sm:p-4 shadow-lg hover:shadow-xl transition-all duration-500 fade-in-stagger border-2 border-white/20 dark:border-white/10"
               style={{ animationDelay: `${batchIndex * 100}ms` }}
             >
               {/* Enhanced batch header */}
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 mb-3 sm:mb-4 md:mb-6 pb-2 sm:pb-3 md:pb-4 border-b-2 border-gradient-to-r from-purple-500/20 to-blue-500/20">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 sm:gap-3 mb-2 sm:mb-3 pb-2 border-b-2 border-gradient-to-r from-purple-500/20 to-blue-500/20">
                 <div className="flex items-center gap-2 sm:gap-3">
                   {/* Gradient stage heading */}
-                  <h2 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-bold gradient-text">
+                  <h2 className="text-base sm:text-lg md:text-xl font-bold gradient-text">
                     Stage {batch.stage}
                   </h2>
 
@@ -358,13 +358,13 @@ const Home = () => {
                   <div className="flex items-center gap-2 sm:gap-3">
                     <div className="w-24 sm:w-32 md:w-40 bg-gray-200/50 dark:bg-gray-700/50 rounded-full h-2 sm:h-2.5 md:h-3 backdrop-blur-sm border border-white/20">
                       <div
-                        className="bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 h-full rounded-full transition-all duration-700 ease-out shadow-lg"
+                        className="bg-gradient-to-r from-cyan-500 via-cyan-400 to-cyan-600 h-full rounded-full transition-all duration-700 ease-out shadow-lg animate-cyan-wave"
                         style={{
                           width: `${batch.coursesLength > 0 ? (batchProgress.completedCoursesCount / batch.coursesLength) * 100 : 0}%`
                         }}
                       ></div>
                     </div>
-                    <span className="text-xs sm:text-sm md:text-base font-bold bg-gradient-to-r from-purple-600 to-blue-600 dark:from-purple-400 dark:to-blue-400 bg-clip-text text-transparent">
+                    <span className="text-xs sm:text-sm md:text-base font-bold bg-gradient-to-r from-cyan-500 to-cyan-400 dark:from-cyan-400 dark:to-cyan-300 bg-clip-text text-transparent">
                       {batchProgress.completedCoursesCount}/{batch.coursesLength}
                     </span>
                   </div>
@@ -380,9 +380,9 @@ const Home = () => {
                 </div>
               )}
 
-              {/* Enhanced course grid */}
+              {/* Enhanced course grid - adjusted columns */}
               {batch.isUnlocked && (
-                <div className="grid grid-cols-3 xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 gap-2 xs:gap-2.5 sm:gap-4 md:gap-3 lg:gap-4">
+                <div className="grid grid-cols-4 xs:grid-cols-4 sm:grid-cols-5 md:grid-cols-6 lg:grid-cols-7 xl:grid-cols-8 gap-2 sm:gap-3">
                   {orderedCoursesToShow.map((course, courseIndex) => {
                     const courseSpecificProgress = batchProgress?.courses?.find(c => c.courseId === course.courseId);
                     const isCompleted = courseSpecificProgress?.status === "completed";
@@ -400,7 +400,7 @@ const Home = () => {
                           className={`${ButtonStyle} relative shimmer`}
                         >
                           {/* Gradient background overlay on hover */}
-                          <div className="absolute inset-0 bg-gradient-to-br from-purple-500/0 to-blue-500/0 group-hover:from-purple-500/20 group-hover:to-blue-500/20 rounded-2xl md:rounded-3xl transition-all duration-300"></div>
+                          <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-cyan-400/0 group-hover:from-cyan-500/20 group-hover:to-cyan-400/20 rounded-2xl md:rounded-3xl transition-all duration-300"></div>
 
                           {/* Enhanced circle progress indicator with gradient */}
                           <div className="absolute inset-0 w-full h-full">
@@ -420,8 +420,8 @@ const Home = () => {
                                   {/* Gradient progress circle */}
                                   <defs>
                                     <linearGradient id={`gradient-${course.courseId}`} x1="0%" y1="0%" x2="100%" y2="100%">
-                                      <stop offset="0%" stopColor={isCompleted ? "#10b981" : "#8b5cf6"} />
-                                      <stop offset="100%" stopColor={isCompleted ? "#059669" : "#3b82f6"} />
+                                      <stop offset="0%" stopColor={isCompleted ? "#10b981" : "#22d3ee"} />
+                                      <stop offset="100%" stopColor={isCompleted ? "#059669" : "#06b6d4"} />
                                     </linearGradient>
                                   </defs>
                                   <circle
@@ -489,7 +489,7 @@ const Home = () => {
 
                         {/* Enhanced in progress badge */}
                         {isInProgress && (
-                          <span className="mt-1 inline-block px-2 py-0.5 bg-gradient-to-r from-blue-500 to-purple-500 text-white rounded-full text-[9px] xs:text-[10px] sm:text-xs font-semibold shadow-md">
+                          <span className="mt-1 inline-block px-2 py-0.5 bg-gradient-to-r from-cyan-500 to-cyan-400 text-white rounded-full text-[9px] xs:text-[10px] sm:text-xs font-semibold shadow-md animate-cyan-wave">
                             In Progress
                           </span>
                         )}

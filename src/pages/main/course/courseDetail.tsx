@@ -10,7 +10,7 @@ const CourseDetail = () => {
 
   return (
     <div className="p-6 md:p-10">
-      <Link to="/dashboard" className="text-blue-500 hover:underline mb-4 inline-block">
+      <Link to="/dashboard" className="text-cyan-600 hover:underline mb-4 inline-block">
         &larr; Back to Learning Path
       </Link>
       <h1 className="text-3xl font-bold mb-6">

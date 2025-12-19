@@ -16,13 +16,13 @@ const SideNavBar = () => {
   return (
     <>
       {/* Side Navigation */}
-      <nav className={`fixed left-0 top-0 h-full pt-20 pb-6 glass-card border-r-2 border-white/20 dark:border-white/10 shadow-2xl z-40 backdrop-blur-xl transition-all duration-300 ease-in-out ${isCollapsed ? '-translate-x-full' : 'translate-x-0'
-        } w-20 md:w-22 lg:w-24`}>
+      <nav className={`fixed left-0 top-0 h-full pt-20 pb-6 glass-card border-r-2 border-white/20 dark:border-white/10 shadow-2xl z-40 backdrop-blur-xl transition-all duration-300 ease-in-out ${isCollapsed ? '-translate-x-full md:translate-x-0 md:w-20' : 'translate-x-0 w-20 md:w-64'
+        }`}>
 
         {/* Enhanced Chevron Toggle Button - More visible */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden md:flex absolute -right-4 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-purple-500/40 to-blue-500/40 hover:from-purple-600/50 hover:to-blue-600/50 p-2 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl z-50 hover:scale-110"
+          className="hidden md:flex absolute -right-4 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-cyan-400 to-cyan-600 hover:from-cyan-500 hover:to-cyan-700 p-2 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl z-50 hover:scale-110 animate-cyan-wave"
           aria-label="Toggle navigation"
         >
           <svg
@@ -47,7 +47,7 @@ const SideNavBar = () => {
               <NavLink to="/home">
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
-                    ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
+                    ? "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-lg scale-110 animate-cyan-wave"
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
@@ -57,11 +57,11 @@ const SideNavBar = () => {
                           }`}
                         alt="Home"
                       />
-                      <span className="text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block">Home</span>
+                      <span className={`text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block ${!isCollapsed ? 'md:inline' : 'md:hidden'}`}>Home</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
-                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400 shadow-lg animate-pulse"></div>
+                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-300 via-cyan-100 to-cyan-300 shadow-lg animate-pulse"></div>
                       </div>
                     )}
                   </div>
@@ -74,7 +74,7 @@ const SideNavBar = () => {
               <NavLink to="/leaderboard">
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
-                    ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
+                    ? "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-lg scale-110 animate-cyan-wave"
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
@@ -84,11 +84,11 @@ const SideNavBar = () => {
                           }`}
                         alt="Leaderboard"
                       />
-                      <span className="text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block">Ranks</span>
+                      <span className={`text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block ${!isCollapsed ? 'md:inline' : 'md:hidden'}`}>Ranks</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
-                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400 shadow-lg animate-pulse"></div>
+                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-300 via-cyan-100 to-cyan-300 shadow-lg animate-pulse"></div>
                       </div>
                     )}
                   </div>
@@ -101,7 +101,7 @@ const SideNavBar = () => {
               <NavLink to={profileLink}>
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
-                    ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
+                    ? "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-lg scale-110 animate-cyan-wave"
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
@@ -111,11 +111,11 @@ const SideNavBar = () => {
                           }`}
                         alt="Profile"
                       />
-                      <span className="text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block">Profile</span>
+                      <span className={`text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block ${!isCollapsed ? 'md:inline' : 'md:hidden'}`}>Profile</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
-                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400 shadow-lg animate-pulse"></div>
+                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-300 via-cyan-100 to-cyan-300 shadow-lg animate-pulse"></div>
                       </div>
                     )}
                   </div>
@@ -128,7 +128,7 @@ const SideNavBar = () => {
               <NavLink to="/shop">
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
-                    ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
+                    ? "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-lg scale-110 animate-cyan-wave"
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
@@ -138,11 +138,11 @@ const SideNavBar = () => {
                           }`}
                         alt="Shop"
                       />
-                      <span className="text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block">Shop</span>
+                      <span className={`text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block ${!isCollapsed ? 'md:inline' : 'md:hidden'}`}>Shop</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
-                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400 shadow-lg animate-pulse"></div>
+                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-300 via-cyan-100 to-cyan-300 shadow-lg animate-pulse"></div>
                       </div>
                     )}
                   </div>
@@ -155,7 +155,7 @@ const SideNavBar = () => {
               <NavLink to="/settings">
                 {({ isActive }) => (
                   <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
-                    ? "bg-gradient-to-br from-purple-500 to-blue-500 text-white shadow-lg scale-110"
+                    ? "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-lg scale-110 animate-cyan-wave"
                     : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
                     }`}>
                     <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
@@ -165,11 +165,11 @@ const SideNavBar = () => {
                           }`}
                         alt="Settings"
                       />
-                      <span className="text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block">Settings</span>
+                      <span className={`text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block ${!isCollapsed ? 'md:inline' : 'md:hidden'}`}>Settings</span>
                     </div>
                     {isActive && (
                       <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
-                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-yellow-400 via-orange-400 to-yellow-400 shadow-lg animate-pulse"></div>
+                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-300 via-cyan-100 to-cyan-300 shadow-lg animate-pulse"></div>
                       </div>
                     )}
                   </div>

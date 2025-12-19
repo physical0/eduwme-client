@@ -399,7 +399,7 @@ const AutoExercise = () => {
         </p>
         <button
           onClick={handleReturn}
-          className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm transition-colors"
+          className="px-2 py-1 md:px-3 md:py-1.5 bg-gradient-to-r from-cyan-400 to-cyan-600 hover:from-cyan-500 hover:to-cyan-700 text-white rounded-lg text-xs md:text-sm transition-all animate-cyan-wave"
         >
           Return to Course
         </button>
@@ -412,7 +412,7 @@ const AutoExercise = () => {
     return (
       <div className="max-w-full md:max-w-3xl mx-auto px-2 sm:px-3 py-1 md:py-3">
         <div className="flex flex-col items-center justify-center min-h-[60vh] px-3 text-center gap-4">
-          <div className="glass-card border-2 border-green-400/50 dark:border-green-500/50 bg-gradient-to-br from-green-50/50 to-emerald-50/50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 sm:p-8 md:p-10 rounded-2xl sm:rounded-3xl shadow-xl">
+          <div className="glass-card border-2 border-white/20 dark:border-white/10 shadow-xl rounded-2xl sm:rounded-3xl p-6 sm:p-8 md:p-10">
             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold gradient-text mb-3 sm:mb-4">
               🎉 Congratulations! 🎉
             </h2>
@@ -421,7 +421,7 @@ const AutoExercise = () => {
             </p>
             <button
               onClick={handleReturn}
-              className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white rounded-xl sm:rounded-2xl text-sm sm:text-base md:text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 shimmer"
+              className="px-4 sm:px-6 py-2 sm:py-3 bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-600 hover:to-cyan-500 text-white rounded-xl sm:rounded-2xl text-sm sm:text-base md:text-lg font-bold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 animate-cyan-wave shimmer"
             >
               Return to Course
             </button>
@@ -440,7 +440,7 @@ const AutoExercise = () => {
         </p>
         <button
           onClick={handleReturn}
-          className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm transition-colors"
+          className="px-2 py-1 md:px-3 md:py-1.5 bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-600 hover:to-cyan-500 text-white rounded-lg text-xs md:text-sm transition-all animate-cyan-wave"
         >
           Return to Course
         </button>
@@ -457,7 +457,7 @@ const AutoExercise = () => {
         </p>
         <button
           onClick={handleReturn}
-          className="px-2 py-1 md:px-3 md:py-1.5 bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white rounded-lg text-xs md:text-sm transition-colors"
+          className="px-2 py-1 md:px-3 md:py-1.5 bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-600 hover:to-cyan-500 text-white rounded-lg text-xs md:text-sm transition-all animate-cyan-wave"
         >
           Return to Course
         </button>
@@ -468,14 +468,14 @@ const AutoExercise = () => {
   return (
     // Main container with gradient background
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20">
-      <div className="max-w-full md:max-w-3xl mx-auto px-2 sm:px-3 py-1 md:py-3">
+      <div className="max-w-full md:max-w-3xl mx-auto px-2 sm:px-3 py-1 md:py-2">
         {/* Reduced gap and min-height */}
-        <div className="flex flex-col gap-1 sm:gap-2 min-h-[calc(100vh-100px)]">
+        <div className="flex flex-col gap-1 sm:gap-1.5 min-h-[calc(100vh-80px)]">
           {/* Enhanced header with glassmorphism */}
-          <div className="flex justify-between items-center mb-3 sm:mb-4">
+          <div className="flex justify-between items-center mb-2 sm:mb-3">
             <button
               onClick={handleReturn}
-              className="group glass-card flex items-center gap-1.5 sm:gap-2 px-3 py-1.5 sm:px-4 sm:py-2 md:px-5 md:py-2.5 rounded-xl sm:rounded-2xl
+              className="group glass-card flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-4 sm:py-1.5 md:px-5 md:py-2 rounded-xl sm:rounded-2xl
               shadow-lg hover:shadow-xl
               transition-all duration-300
               font-semibold text-xs sm:text-sm md:text-base
@@ -486,7 +486,7 @@ const AutoExercise = () => {
                 xmlns="http://www.w3.org/2000/svg"
                 viewBox="0 0 20 20"
                 fill="currentColor"
-                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transform group-hover:-translate-x-1 transition-transform duration-200 text-purple-600 dark:text-purple-400"
+                className="w-4 h-4 sm:w-5 sm:h-5 md:w-6 md:h-6 transform group-hover:-translate-x-1 transition-transform duration-200 text-cyan-500 dark:text-cyan-400"
               >
                 <path
                   fillRule="evenodd"
@@ -512,7 +512,7 @@ const AutoExercise = () => {
               </div>
               <div className="w-32 h-1.5 bg-gray-200 dark:bg-gray-700 rounded-full mt-1">
                 <div
-                  className="h-full bg-gradient-to-r from-purple-500 via-pink-500 to-blue-500 rounded-full transition-all duration-700"
+                  className="h-full bg-gradient-to-r from-cyan-500 via-cyan-400 to-cyan-600 rounded-full transition-all duration-700 animate-cyan-wave"
                   style={{ width: `${progress * 100}%` }}
                 ></div>
               </div>
@@ -520,7 +520,7 @@ const AutoExercise = () => {
           </div>
 
           {/* Enhanced main content */}
-          <div className="text-center mb-3 sm:mb-4">
+          <div className="text-center mb-2">
             <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold gradient-text mb-1">
               {currentExercise.title}
             </h1>
@@ -529,13 +529,13 @@ const AutoExercise = () => {
             </p>
           </div>
 
-          <div className="glass-card border-2 border-white/20 dark:border-white/10 shadow-xl rounded-xl sm:rounded-2xl p-3 sm:p-4 md:p-5 mb-3 sm:mb-4">
+          <div className="glass-card border-2 border-white/20 dark:border-white/10 shadow-xl rounded-xl sm:rounded-2xl p-2 sm:p-3 md:p-4 mb-2 sm:mb-3">
             <p className="text-xs sm:text-sm md:text-base text-gray-800 dark:text-white font-medium">
               {currentExercise.question}
             </p>
           </div>
 
-          <div className="glass-card border-2 border-white/30 dark:border-white/10 rounded-xl sm:rounded-2xl p-2 sm:p-3 md:p-4 min-h-[6rem] sm:min-h-[8rem] md:min-h-[10rem] flex flex-col items-center justify-center overflow-auto mb-3 sm:mb-4 shadow-lg">
+          <div className="glass-card border-2 border-white/30 dark:border-white/10 rounded-xl sm:rounded-2xl p-2 sm:p-2.5 md:p-3 min-h-[5rem] sm:min-h-[6rem] md:min-h-[8rem] flex flex-col items-center justify-center overflow-auto mb-2 sm:mb-3 shadow-lg">
             {currentExercise.animType ? (
               <ExerciseAnimation
                 animType={currentExercise.animType}
@@ -546,7 +546,7 @@ const AutoExercise = () => {
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:gap-3 mb-3 sm:mb-4">
+          <div className="grid grid-cols-2 gap-2 sm:gap-2.5 mb-2 sm:mb-3">
             {currentExercise.type === 'multiple-choice' ? (
               currentExercise.options.map((option, index) => (
                 <button
@@ -554,11 +554,11 @@ const AutoExercise = () => {
                   onClick={() => handleOptionSelect(option)}
                   disabled={!isTimerRunning || showResult}
                   className={`
-                  glass-card p-3 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl border-2 text-left transition-all duration-300 text-xs sm:text-sm md:text-base
-                  flex items-center min-h-[3rem] sm:min-h-[3.5rem] font-medium
+                  glass-card p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl border-2 text-left transition-all duration-300 text-xs sm:text-sm md:text-base
+                  flex items-center min-h-[2.5rem] sm:min-h-[3rem] font-medium
                   ${selectedOption === option
-                      ? 'bg-gradient-to-br from-purple-500 to-blue-500 border-purple-400/50 shadow-xl scale-105 text-gray-800 dark:text-gray-200 glow'
-                      : 'border-white/40 dark:border-white/20 hover:border-purple-400/50 dark:hover:border-purple-500/50 hover:scale-105 hover:shadow-xl text-gray-800 dark:text-white'}
+                      ? 'bg-gradient-to-br from-cyan-400 to-cyan-600 border-cyan-400/50 shadow-xl scale-105 text-white glow animate-cyan-wave'
+                      : 'border-white/40 dark:border-white/20 hover:border-cyan-400/50 dark:hover:border-cyan-500/50 hover:scale-105 hover:shadow-xl text-gray-800 dark:text-white'}
                   ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : 'cursor-pointer shimmer'}
                 `}
                 >
@@ -574,10 +574,10 @@ const AutoExercise = () => {
                   disabled={!isTimerRunning || showResult}
                   placeholder="Type your answer here..."
                   className={`
-                  glass-card w-full p-3 sm:p-3.5 md:p-4 rounded-xl sm:rounded-2xl border-2 text-xs sm:text-sm md:text-base
-                  min-h-[3rem] sm:min-h-[3.5rem] font-medium
+                  glass-card w-full p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl border-2 text-xs sm:text-sm md:text-base
+                  min-h-[2.5rem] sm:min-h-[3rem] font-medium
                   border-white/40 dark:border-white/20
-                  focus:border-purple-400/50 dark:focus:border-purple-500/50 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-800
+                  focus:border-cyan-400/50 dark:focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:focus:ring-cyan-800
                   text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400
                   ${!isTimerRunning || showResult ? 'opacity-70 cursor-not-allowed' : 'shadow-lg'}
                 `}
@@ -597,13 +597,13 @@ const AutoExercise = () => {
                 showResult
               }
               className={`
-              w-full py-2.5 sm:py-3 md:py-3.5 text-sm sm:text-base md:text-lg font-bold rounded-xl sm:rounded-2xl transition-all duration-300
+              w-full py-2 sm:py-2.5 md:py-3 text-sm sm:text-base md:text-lg font-bold rounded-xl sm:rounded-2xl transition-all duration-300
               ${((currentExercise.type === 'multiple-choice' && !selectedOption) ||
                   (currentExercise.type === 'fill-in' && !textAnswer.trim()) ||
                   !isTimerRunning ||
                   showResult)
                   ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed text-white dark:text-gray-300'
-                  : 'bg-gradient-to-r from-cyan-500 to-blue-500 hover:from-cyan-600 hover:to-blue-600 text-white shadow-lg hover:shadow-xl transform hover:scale-105 shimmer'}
+                  : 'bg-gradient-to-r from-cyan-500 to-cyan-400 hover:from-cyan-600 hover:to-cyan-500 text-white shadow-lg hover:shadow-xl transform hover:scale-105 animate-cyan-wave shimmer'}
             `}
             >
               Submit Answer

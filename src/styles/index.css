@@ -7,14 +7,19 @@
   --color-confirm-blue: #303442;
   --color-header-blue: #444444;
 
-  /* Gradient colors */
-  --gradient-primary-start: #667eea;
-  --gradient-primary-end: #764ba2;
-  --gradient-secondary-start: #f093fb;
-  --gradient-secondary-end: #f5576c;
-  --gradient-accent-start: #4facfe;
-  --gradient-accent-end: #00f2fe;
-
+  /* Gradient colors - Updated to Animated Cyan Theme */
+  --gradient-primary-start: #06b6d4;
+  /* cyan-500 */
+  --gradient-primary-end: #0891b2;
+  /* cyan-600 */
+  --gradient-secondary-start: #22d3ee;
+  /* cyan-400 */
+  --gradient-secondary-end: #06b6d4;
+  /* cyan-500 */
+  --gradient-accent-start: #67e8f9;
+  /* cyan-300 */
+  --gradient-accent-end: #0ea5e9;
+  /* sky-500 (slight variation) */
   /* Animation durations */
   --duration-fast: 200ms;
   --duration-normal: 300ms;
@@ -60,7 +65,7 @@
 .gradient-border-animated {
   position: relative;
   background: linear-gradient(white, white) padding-box,
-    linear-gradient(var(--angle, 0deg), #667eea 0%, #764ba2 50%, #667eea 100%) border-box;
+    linear-gradient(var(--angle, 0deg), #06b6d4 0%, #22d3ee 50%, #06b6d4 100%) border-box;
   border: 2px solid transparent;
   animation: rotate-gradient 3s linear infinite;
 }
@@ -173,15 +178,32 @@
 
 /* Gradient Text */
 .gradient-text {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #06b6d4 0%, #22d3ee 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
+/* Animated Cyan Wave - Brighter & Subtler */
+.animate-cyan-wave {
+  background: linear-gradient(90deg, #06b6d4, #67e8f9, #06b6d4);
+  background-size: 200% 100%;
+  animation: cyan-wave 10s linear infinite;
+}
+
+@keyframes cyan-wave {
+  0% {
+    background-position: 100% 0;
+  }
+
+  100% {
+    background-position: -100% 0;
+  }
+}
+
 /* Animated Gradient Background */
 .gradient-bg-animated {
-  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #4facfe);
+  background: linear-gradient(-45deg, #06b6d4, #22d3ee, #0891b2, #67e8f9);
   background-size: 400% 400%;
   animation: gradient-shift 15s ease infinite;
 }

@@ -473,7 +473,7 @@ const ProfilePage = () => {
         </p>
         <button
           onClick={() => window.location.reload()}
-          className="mt-4 px-3 py-1.5 sm:px-4 sm:py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 transition-colors text-sm sm:text-base"
+          className="mt-4 px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white rounded-md hover:from-cyan-500 hover:to-cyan-700 dark:bg-cyan-600 dark:hover:bg-cyan-700 transition-all text-sm sm:text-base animate-cyan-wave"
         >
           Try Again
         </button>
@@ -491,210 +491,211 @@ const ProfilePage = () => {
   }
 
   return (
-    // Reduced width and padding, more compact container
-    <div className="w-[85%] max-w-[280px] sm:max-w-md md:max-w-lg mx-auto px-1.5 py-2 md:py-4 pb-14 md:pb-10 
-      shadow-sm md:shadow-lg rounded-lg mt-1 sm:mt-3 md:mt-4 dark:bg-gray-800/40">
-      {/* Success message - smaller text and padding for mobile */}
-      {updateSuccess && (
-        <div className="mb-2 sm:mb-4 p-1.5 sm:p-3 bg-green-100 dark:bg-green-900/30 
-          text-green-700 dark:text-green-400 rounded-md text-center text-xs sm:text-sm">
-          Profile updated successfully!
-        </div>
-      )}
-
-      {/* Error message - smaller text and padding for mobile */}
-      {updateError && (
-        <div className="mb-2 sm:mb-4 p-1.5 sm:p-3 bg-red-100 dark:bg-red-900/30 
-          text-red-700 dark:text-red-400 rounded-md text-center text-xs sm:text-sm">
-          Error: {updateError}
-        </div>
-      )}
-
-      {/* Header section - more compact for mobile */}
-      <div className="flex justify-between items-center mb-1.5 sm:mb-3 md:mb-4">
-        <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
-          Profile
-        </h1>
-
-        {/* Smaller button on mobile */}
-        {isOwnProfile && (
-          <button
-            onClick={handleEditToggle}
-            className={`px-2 py-1 sm:px-4 sm:py-2 rounded-md transition-colors text-xs sm:text-base ${isEditing
-              ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-              : "bg-blue-500 text-white hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700"
-              }`}
-          >
-            {isEditing ? "Cancel" : "Edit"}
-          </button>
+    // Standardized container - reduced width
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 pt-2 sm:pt-4">
+      <div className="max-w-xl mx-auto px-3 sm:px-5 py-4 pb-16 mt-2 
+      shadow-lg rounded-xl bg-white/50 dark:bg-gray-800/40 backdrop-blur-sm">
+        {/* Success message - smaller text and padding for mobile */}
+        {updateSuccess && (
+          <div className="mb-2 sm:mb-3 p-1 sm:p-2 bg-green-100 dark:bg-green-900/30 
+          text-green-700 dark:text-green-400 rounded-md text-center text-[10px] sm:text-xs">
+            Profile updated successfully!
+          </div>
         )}
-      </div>
 
-      <div className="relative">
-        {/* Banner section - display user's equipped banner */}
-        <div className="w-full h-20 sm:h-24 md:h-28 rounded-t-lg overflow-hidden relative">
-          {isLoadingInventory ? (
-            <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
-          ) : bannerImage ? (
-            <img
-              src={bannerImage}
-              alt="Profile Banner"
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/20 dark:to-purple-900/20"></div>
-          )}
-        </div>
-
-        {/* Profile image section - with overlap on banner */}
-        <div className="flex flex-col items-center -mt-6 sm:-mt-7 md:-mt-8 relative z-10 mb-1.5 sm:mb-2 md:mb-3">
-          <input
-            type="file"
-            ref={fileInputRef}
-            onChange={handleImageChange}
-            accept="image/*"
-            className="hidden"
-          />
-
-          {/* Profile image with drop shadow for better visibility over banner */}
-          <div
-            className={`relative w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 mb-1 sm:mb-1.5 md:mb-2 
-            ${isEditing && isOwnProfile ? 'cursor-pointer' : ''}`}
-            onClick={handleImageClick}
-          >
-            <img
-              src={previewImage || userProfile.profilePicture || AvatarPlaceholder}
-              alt="User Avatar"
-              className="w-14 h-14 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full object-cover 
-              border-3 border-white dark:border-gray-800 shadow-md"
-            />
-
-            {/* Overlay icon */}
-            {isEditing && isOwnProfile && (
-              <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-900 bg-opacity-40 rounded-full">
-                <span className="text-white text-lg sm:text-2xl md:text-3xl"> {base64Image ? <img src={base64Image} alt="Profile" className="w-full h-full object-cover rounded-full" /> : "👤"}</span>
-              </div>
-            )}
+        {/* Error message - smaller text and padding for mobile */}
+        {updateError && (
+          <div className="mb-2 sm:mb-3 p-1 sm:p-2 bg-red-100 dark:bg-red-900/30 
+          text-red-700 dark:text-red-400 rounded-md text-center text-[10px] sm:text-xs">
+            Error: {updateError}
           </div>
+        )}
 
-          {/* Smaller text for upload button */}
-          {isEditing && isOwnProfile && (
+        {/* Header section - more compact for mobile */}
+        <div className="flex justify-between items-center mb-1 sm:mb-2 md:mb-3">
+          <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 dark:text-white">
+            Profile
+          </h1>
+
+          {/* Smaller button on mobile */}
+          {isOwnProfile && (
             <button
-              type="button"
-              onClick={handleImageClick}
-              className=" text-blue-500 dark:text-blue-400 
-              hover:text-blue-700 dark:hover:text-blue-300 text-[10px] sm:text-sm"
-            >
-              Change Photo
-            </button>
-          )}
-
-          {/* Add size warning message here - only when an image has been selected */}
-          {/* Add size warning message here - only when a NEW image has been selected */}
-          {isEditing && isOwnProfile && previewImage && base64Image && (
-            <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 
-            mt-0 mb-2 text-center max-w-[200px] sm:max-w-[250px]">
-              Images will be automatically compressed to under 30KB.
-              Simple images with good contrast work best.
-            </p>
-          )}
-
-          {/* Username with badge */}
-          <div className="flex items-center justify-center gap-1 sm:gap-2">
-            <h2 className="text-lg sm:text-2xl font-semibold text-gray-800 dark:text-white">
-              {userProfile.username}
-            </h2>
-
-            {/* Badge display */}
-            {badgeImage && (
-              <div className="relative group">
-                <img
-                  src={badgeImage}
-                  alt={badgeName || "User Badge"}
-                  className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 object-contain"
-                />
-                {/* Tooltip for badge name */}
-                <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                  {badgeName || "User Badge"}
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
-
-      {isEditing ? (
-        /* Edit Form - more compact for mobile */
-        <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-6">
-          <div className="space-y-1 sm:space-y-2">
-            <label className="block text-gray-700 dark:text-gray-300 font-medium text-xs sm:text-base">Nickname</label>
-            <input
-              type="text"
-              value={editedNickname}
-              onChange={(e) => setEditedNickname(e.target.value)}
-              className="w-full p-1.5 sm:p-3 border border-gray-300 dark:border-gray-600 rounded-md 
-                focus:outline-none focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-white text-xs sm:text-base"
-              placeholder="Enter a nickname"
-            />
-          </div>
-
-          <div className="space-y-1 sm:space-y-2">
-            <label className="block text-gray-700 dark:text-gray-300 font-medium text-xs sm:text-base">Bio</label>
-            <textarea
-              value={editedBiodata}
-              onChange={(e) => setEditedBiodata(e.target.value)}
-              className="w-full p-1.5 sm:p-3 border border-gray-300 dark:border-gray-600 rounded-md 
-                focus:outline-none focus:ring-2 focus:ring-blue-500 min-h-[80px] sm:min-h-[120px] 
-                dark:bg-gray-700 dark:text-white text-xs sm:text-base"
-              placeholder="Tell us about yourself"
-            />
-          </div>
-
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              disabled={isSaving}
-              className={`px-3 sm:px-6 py-1 sm:py-2 bg-green-500 text-white rounded-md 
-                hover:bg-green-600 transition-colors text-xs sm:text-base ${isSaving ? "opacity-70 cursor-not-allowed" : ""
+              onClick={handleEditToggle}
+              className={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-md transition-colors text-[10px] sm:text-sm ${isEditing
+                ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
+                : "bg-gradient-to-r from-cyan-400 to-cyan-600 text-white hover:from-cyan-500 hover:to-cyan-700 shadow-md transform hover:scale-105 transition-all animate-cyan-wave"
                 }`}
             >
-              {isSaving ? "Saving..." : "Save"}
+              {isEditing ? "Cancel" : "Edit"}
             </button>
-          </div>
-        </form>
-      ) : (
-        /* Display Profile Info - more compact for mobile */
-        <div className="space-y-2 sm:space-y-4">
-          <div className="p-2 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-md shadow-sm">
-            <strong className="text-gray-600 dark:text-gray-400 text-xs sm:text-base">Nickname:</strong>
-            <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-lg">
-              {userProfile.nickname || "No nickname set"}
-            </p>
+          )}
+        </div>
+
+        <div className="relative">
+          {/* Banner section - display user's equipped banner */}
+          <div className="w-full h-16 sm:h-20 md:h-24 rounded-t-lg overflow-hidden relative">
+            {isLoadingInventory ? (
+              <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+            ) : bannerImage ? (
+              <img
+                src={bannerImage}
+                alt="Profile Banner"
+                className="w-full h-full object-cover"
+              />
+            ) : (
+              <div className="w-full h-full bg-gradient-to-r from-cyan-100 to-cyan-200 dark:from-cyan-900/20 dark:to-cyan-800/20 animate-cyan-wave"></div>
+            )}
           </div>
 
-          <div className="p-2 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-md shadow-sm">
-            <strong className="text-gray-600 dark:text-gray-400 text-xs sm:text-base">Bio:</strong>
-            <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-lg whitespace-pre-wrap">
-              {userProfile.biodata || "No bio provided."}
-            </p>
-          </div>
+          {/* Profile image section - with overlap on banner */}
+          <div className="flex flex-col items-center -mt-5 sm:-mt-6 md:-mt-8 relative z-10 mb-1 sm:mb-1.5 md:mb-2">
+            <input
+              type="file"
+              ref={fileInputRef}
+              onChange={handleImageChange}
+              accept="image/*"
+              className="hidden"
+            />
 
-          <div className="grid grid-cols-2 gap-2 sm:gap-4">
-            <div className="p-2 sm:p-4 bg-blue-50 dark:bg-blue-900/20 rounded-md shadow-sm text-center">
-              <strong className="text-blue-600 dark:text-blue-400 block text-[10px] sm:text-sm">XP</strong>
-              <p className="text-blue-800 dark:text-blue-300 text-lg sm:text-2xl font-semibold">
-                {userProfile.xp}
-              </p>
+            {/* Profile image with drop shadow for better visibility over banner */}
+            <div
+              className={`relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mb-0.5 sm:mb-1 
+            ${isEditing && isOwnProfile ? 'cursor-pointer' : ''}`}
+              onClick={handleImageClick}
+            >
+              <img
+                src={previewImage || userProfile.profilePicture || AvatarPlaceholder}
+                alt="User Avatar"
+                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover 
+              border-2 border-white dark:border-gray-800 shadow-md"
+              />
+
+              {/* Overlay icon */}
+              {isEditing && isOwnProfile && (
+                <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-900 bg-opacity-40 rounded-full">
+                  <span className="text-white text-base sm:text-xl md:text-2xl"> {base64Image ? <img src={base64Image} alt="Profile" className="w-full h-full object-cover rounded-full" /> : "👤"}</span>
+                </div>
+              )}
             </div>
-            <div className="p-2 sm:p-4 bg-green-50 dark:bg-green-900/20 rounded-md shadow-sm text-center">
-              <strong className="text-green-600 dark:text-green-400 block text-[10px] sm:text-sm">Level</strong>
-              <p className="text-green-800 dark:text-green-300 text-lg sm:text-2xl font-semibold">
-                {userProfile.level}
+
+            {/* Smaller text for upload button */}
+            {isEditing && isOwnProfile && (
+              <button
+                type="button"
+                onClick={handleImageClick}
+                className=" text-cyan-500 dark:text-cyan-400 
+              hover:text-cyan-700 dark:hover:text-cyan-300 text-[9px] sm:text-xs"
+              >
+                Change Photo
+              </button>
+            )}
+
+            {/* Add size warning message here - only when a NEW image has been selected */}
+            {isEditing && isOwnProfile && previewImage && base64Image && (
+              <p className="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400 
+            mt-0 mb-1 text-center max-w-[150px] sm:max-w-[200px]">
+                Images will be automatically compressed to under 30KB.
+                Simple images with good contrast work best.
               </p>
+            )}
+
+            {/* Username with badge */}
+            <div className="flex items-center justify-center gap-1">
+              <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">
+                {userProfile.username}
+              </h2>
+
+              {/* Badge display */}
+              {badgeImage && (
+                <div className="relative group">
+                  <img
+                    src={badgeImage}
+                    alt={badgeName || "User Badge"}
+                    className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 object-contain"
+                  />
+                  {/* Tooltip for badge name */}
+                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
+                    {badgeName || "User Badge"}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </div>
-      )}
+
+        {isEditing ? (
+          /* Edit Form - more compact for mobile */
+          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-6">
+            <div className="space-y-1 sm:space-y-2">
+              <label className="block text-gray-700 dark:text-gray-300 font-medium text-xs sm:text-base">Nickname</label>
+              <input
+                type="text"
+                value={editedNickname}
+                onChange={(e) => setEditedNickname(e.target.value)}
+                className="w-full p-1.5 sm:p-3 border border-gray-300 dark:border-gray-600 rounded-md 
+                focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-xs sm:text-base"
+                placeholder="Enter a nickname"
+              />
+            </div>
+
+            <div className="space-y-1 sm:space-y-2">
+              <label className="block text-gray-700 dark:text-gray-300 font-medium text-xs sm:text-base">Bio</label>
+              <textarea
+                value={editedBiodata}
+                onChange={(e) => setEditedBiodata(e.target.value)}
+                className="w-full p-1.5 sm:p-3 border border-gray-300 dark:border-gray-600 rounded-md 
+                focus:outline-none focus:ring-2 focus:ring-cyan-500 min-h-[80px] sm:min-h-[120px] 
+                dark:bg-gray-700 dark:text-white text-xs sm:text-base"
+                placeholder="Tell us about yourself"
+              />
+            </div>
+
+            <div className="flex justify-end">
+              <button
+                type="submit"
+                disabled={isSaving}
+                className={`px-3 sm:px-6 py-1 sm:py-2 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white rounded-md 
+                hover:from-cyan-500 hover:to-cyan-700 transition-all shadow-md text-xs sm:text-base animate-cyan-wave ${isSaving ? "opacity-70 cursor-not-allowed" : ""
+                  }`}
+              >
+                {isSaving ? "Saving..." : "Save"}
+              </button>
+            </div>
+          </form>
+        ) : (
+          /* Display Profile Info - more compact for mobile */
+          <div className="space-y-2 sm:space-y-4">
+            <div className="p-2 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-md shadow-sm">
+              <strong className="text-gray-600 dark:text-gray-400 text-xs sm:text-base">Nickname:</strong>
+              <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-lg">
+                {userProfile.nickname || "No nickname set"}
+              </p>
+            </div>
+
+            <div className="p-2 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-md shadow-sm">
+              <strong className="text-gray-600 dark:text-gray-400 text-xs sm:text-base">Bio:</strong>
+              <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-lg whitespace-pre-wrap">
+                {userProfile.biodata || "No bio provided."}
+              </p>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2 sm:gap-4">
+              <div className="p-2 sm:p-4 bg-cyan-50 dark:bg-cyan-900/20 rounded-md shadow-sm text-center">
+                <strong className="text-cyan-600 dark:text-cyan-400 block text-[10px] sm:text-sm">XP</strong>
+                <p className="text-cyan-800 dark:text-cyan-300 text-lg sm:text-2xl font-semibold">
+                  {userProfile.xp}
+                </p>
+              </div>
+              <div className="p-2 sm:p-4 bg-cyan-100 dark:bg-cyan-800/30 rounded-md shadow-sm text-center">
+                <strong className="text-cyan-700 dark:text-cyan-300 block text-[10px] sm:text-sm">Level</strong>
+                <p className="text-cyan-900 dark:text-cyan-200 text-lg sm:text-2xl font-semibold">
+                  {userProfile.level}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
     </div>
   );
 };
