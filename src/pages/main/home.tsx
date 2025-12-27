@@ -346,7 +346,7 @@ const Home = () => {
                   )}
 
                   {batch.isUnlocked && (
-                    <span className="px-2 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-green-400 to-emerald-500 dark:from-green-500 dark:to-emerald-600 text-white rounded-full text-xs sm:text-sm font-semibold shadow-md flex items-center gap-1 shimmer">
+                    <span className="px-2 py-1 sm:px-3 sm:py-1.5 bg-gradient-to-r from-green-400 to-emerald-500 dark:from-green-500 dark:to-emerald-600 text-white rounded-full text-xs sm:text-sm font-semibold shadow-md flex items-center gap-1">
                       <span className="text-sm sm:text-base">🔓</span>
                       Unlocked
                     </span>
@@ -389,16 +389,26 @@ const Home = () => {
                     const isInProgress = courseSpecificProgress?.status === "in_progress" && !isCompleted;
 
                     return (
+
+
                       <div
                         key={course.courseId}
                         className="flex flex-col items-center text-center fade-in-stagger"
                         style={{ animationDelay: `${(batchIndex * 100) + (courseIndex * 50)}ms` }}
                       >
+                        {/* Enhanced completion checkmark badge */}
+                        {isCompleted && (
+                          <span className="absolute -top-1 right-2 sm:-top-1.5 sm:right-2 md:-top-2 md:right-2 bg-gradient-to-br from-green-400 to-emerald-500 text-white text-xs sm:text-sm rounded-full p-1 sm:p-1.5 leading-none flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 z-20 shadow-lg animate-bounce">
+                            ✓
+                          </span>
+                        )}
                         {/* Enhanced course button with glassmorphism */}
                         <NavLink
                           to={`/courses/${course.courseId}`}
                           className={`${ButtonStyle} relative shimmer`}
                         >
+
+
                           {/* Gradient background overlay on hover */}
                           <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/0 to-cyan-400/0 group-hover:from-cyan-500/20 group-hover:to-cyan-400/20 rounded-2xl md:rounded-3xl transition-all duration-300"></div>
 
@@ -473,19 +483,19 @@ const Home = () => {
                               className="w-6 h-6 sm:w-8 sm:h-8 md:w-12 md:h-12 lg:w-14 lg:h-14 z-10 relative group-hover:scale-110 transition-transform duration-300 drop-shadow-lg"
                             />
                           )}
-
-                          {/* Enhanced completion checkmark badge */}
-                          {isCompleted && (
-                            <span className="absolute -top-1 -right-1 sm:-top-1.5 sm:-right-1.5 md:-top-2 md:-right-2 bg-gradient-to-br from-green-400 to-emerald-500 text-white text-xs sm:text-sm rounded-full p-1 sm:p-1.5 leading-none flex items-center justify-center w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 z-20 shadow-lg animate-bounce">
-                              ✓
-                            </span>
-                          )}
                         </NavLink>
 
                         {/* Enhanced course title */}
                         <p className="mt-1.5 sm:mt-2 md:mt-3 font-semibold text-xs xs:text-sm sm:text-base md:text-lg text-gray-800 dark:text-gray-100 line-clamp-2 w-full">
                           {course.title}
                         </p>
+
+                        {/* Enhanced in progress badge */}
+                        {isCompleted && (
+                          <span className="mt-1 inline-block px-2 py-0.5 bg-gradient-to-r from-green-500 to-emerald-400 text-white rounded-full text-[9px] xs:text-[10px] sm:text-xs font-semibold shadow-md">
+                            Completed
+                          </span>
+                        )}
 
                         {/* Enhanced in progress badge */}
                         {isInProgress && (

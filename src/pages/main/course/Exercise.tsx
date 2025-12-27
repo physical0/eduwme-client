@@ -496,8 +496,7 @@ const Exercise = () => {
                     <p className="text-sm font-semibold mb-2 opacity-80 uppercase tracking-wider">Rewards Earned</p>
                     <div className="flex flex-wrap justify-center gap-2">
                       <span className="px-3 py-1 bg-gradient-to-r from-yellow-400 to-orange-500 text-white rounded-full shadow-sm font-bold text-sm">+{completionData.awardedXp} XP</span>
-                      <span className="px-3 py-1 bg-gradient-to-r from-blue-400 to-cyan-500 text-white rounded-full shadow-sm font-bold text-sm">+{completionData.awardedGems}
-                        Gems</span>
+                      <span className="px-3 py-1 bg-gradient-to-r from-blue-400 to-cyan-500 text-white rounded-full shadow-sm font-bold text-sm">+{completionData.awardedGems} Gems</span>
                     </div>
                   </div>
                 )}
