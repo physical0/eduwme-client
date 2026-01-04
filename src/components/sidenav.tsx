@@ -7,22 +7,122 @@ import ShopIcon from "@src/assets/store.svg";
 import { useAuth } from "@src/contexts/AuthContext";
 import { useSideNav } from "@src/contexts/SideNavContext";
 
+// Navigation item configuration for cleaner code
+interface NavItem {
+  to: string;
+  icon: string;
+  label: string;
+  iconSize?: string;
+}
+
 const SideNavBar = () => {
   const { user } = useAuth();
   const { isCollapsed, setIsCollapsed } = useSideNav();
 
   const profileLink = `/profile/${user?._id}`;
 
+  // Navigation items configuration
+  const navItems: NavItem[] = [
+    { to: "/home", icon: HomeIcon, label: "Home" },
+    { to: "/leaderboard", icon: TrophyIcon, label: "Ranks" },
+    { to: profileLink, icon: ProfileIcon, label: "Profile" },
+    { to: "/shop", icon: ShopIcon, label: "Shop", iconSize: "w-7 md:w-8 lg:w-9" },
+    { to: "/settings", icon: SettingsIcon, label: "Settings" },
+  ];
+
+  // Reusable NavItem component for cleaner rendering
+  const NavItemComponent = ({ item }: { item: NavItem }) => (
+    <li className="w-full px-2 md:px-3">
+      <NavLink to={item.to} className="block">
+        {({ isActive }) => (
+          <div
+            className={`
+              relative flex items-center gap-3 px-3 py-2.5 md:py-3
+              rounded-xl transition-all duration-300 ease-out group
+              ${isActive
+                ? "bg-gradient-to-r from-cyan-500/90 to-cyan-600/90 text-white shadow-lg shadow-cyan-500/25 dark:shadow-cyan-400/20"
+                : "text-gray-600 dark:text-gray-300 hover:bg-white/50 dark:hover:bg-white/5 hover:text-gray-900 dark:hover:text-white"
+              }
+            `}
+          >
+            {/* Active indicator bar */}
+            {isActive && (
+              <div className="absolute left-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-white rounded-r-full shadow-sm" />
+            )}
+
+            {/* Icon container - fixed alignment */}
+            <div className={`
+              w-6 h-6 md:w-7 md:h-7 flex items-center justify-center flex-shrink-0
+              transition-transform duration-300
+              ${isActive ? "scale-105" : "group-hover:scale-105"}
+            `}>
+              <img
+                src={item.icon}
+                alt={item.label}
+                className={`
+                  ${item.iconSize || "w-6 h-6 md:w-7 md:h-7"}
+                  object-contain
+                  transition-all duration-300
+                  ${isActive
+                    ? "brightness-0 invert drop-shadow-sm"
+                    : "opacity-90 contrast-125 group-hover:opacity-100"
+                  }
+                `}
+              />
+            </div>
+
+            {/* Label - with smooth expand/collapse */}
+            <span
+              className={`
+                font-medium text-sm md:text-base whitespace-nowrap
+                transition-all duration-300 overflow-hidden
+                ${isCollapsed ? "md:w-0 md:opacity-0" : "md:w-auto md:opacity-100"}
+              `}
+            >
+              {item.label}
+            </span>
+
+            {/* Hover glow effect for inactive items */}
+            {!isActive && (
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-r from-cyan-400/0 to-cyan-500/0 group-hover:from-cyan-400/5 group-hover:to-cyan-500/5 transition-all duration-300 pointer-events-none" />
+            )}
+          </div>
+        )}
+      </NavLink>
+    </li>
+  );
+
   return (
     <>
       {/* Side Navigation */}
-      <nav className={`fixed left-0 top-0 h-full pt-20 pb-6 glass-card border-r-2 border-white/20 dark:border-white/10 shadow-2xl z-40 backdrop-blur-xl transition-all duration-300 ease-in-out ${isCollapsed ? '-translate-x-full md:translate-x-0 md:w-20' : 'translate-x-0 w-20 md:w-64'
-        }`}>
+      <nav
+        className={`
+          fixed left-0 top-0 h-full pt-16 pb-4
+          glass-card border-r-2 border-white/20 dark:border-white/10
+          shadow-2xl backdrop-blur-xl
+          z-40 transition-all duration-300 ease-out
+          ${isCollapsed
+            ? "-translate-x-full md:translate-x-0 md:w-[72px]"
+            : "translate-x-0 w-[72px] md:w-60"
+          }
+        `}
+      >
+        {/* Subtle gradient overlay */}
+        <div className="absolute inset-0 bg-gradient-to-b from-cyan-50/30 via-transparent to-purple-50/20 dark:from-cyan-900/10 dark:to-purple-900/10 pointer-events-none" />
 
-        {/* Enhanced Chevron Toggle Button - More visible */}
+        {/* Toggle Button - Refined design */}
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="hidden md:flex absolute -right-4 top-1/2 transform -translate-y-1/2 bg-gradient-to-r from-cyan-400 to-cyan-600 hover:from-cyan-500 hover:to-cyan-700 p-2 rounded-full transition-all duration-300 shadow-xl hover:shadow-2xl z-50 hover:scale-110 animate-cyan-wave"
+          className={`
+            hidden md:flex absolute -right-3 top-1/2 -translate-y-1/2
+            w-6 h-12 items-center justify-center
+            bg-white dark:bg-gray-800 
+            border border-gray-200/80 dark:border-gray-700/80
+            rounded-r-lg shadow-md hover:shadow-lg
+            transition-all duration-300 z-50
+            hover:bg-gray-50 dark:hover:bg-gray-750
+            group
+          `}
           aria-label="Toggle navigation"
         >
           <svg
@@ -30,193 +130,90 @@ const SideNavBar = () => {
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="3"
+            strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
-            className={`w-5 h-5 text-white transition-transform duration-300 ${isCollapsed ? 'rotate-0' : 'rotate-180'
-              }`}
+            className={`
+              w-3.5 h-3.5 text-gray-400 dark:text-gray-500
+              group-hover:text-cyan-500 dark:group-hover:text-cyan-400
+              transition-all duration-300
+              ${isCollapsed ? "rotate-0" : "rotate-180"}
+            `}
           >
-            <polyline points="15 18 9 12 15 6"></polyline>
+            <polyline points="15 18 9 12 15 6" />
           </svg>
         </button>
 
-        <div className="h-full flex pt-10 flex-col justify-start">
-          <ul className="flex flex-col items-center gap-4 md:gap-5">
-            {/* Home Link */}
-            <li className="w-full flex justify-center">
-              <NavLink to="/home">
-                {({ isActive }) => (
-                  <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
-                    ? "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-lg scale-110 animate-cyan-wave"
-                    : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
-                    }`}>
-                    <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
-                      <img
-                        src={HomeIcon}
-                        className={`w-6 md:w-7 lg:w-8 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
-                          }`}
-                        alt="Home"
-                      />
-                      <span className={`text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block ${!isCollapsed ? 'md:inline' : 'md:hidden'}`}>Home</span>
-                    </div>
-                    {isActive && (
-                      <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
-                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-300 via-cyan-100 to-cyan-300 shadow-lg animate-pulse"></div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </NavLink>
-            </li>
+        {/* Navigation Content */}
+        <div className="h-full flex flex-col pt-6 relative z-10">
+          {/* Navigation Links */}
+          <ul className="flex flex-col gap-1 md:gap-1.5">
+            {navItems.map((item) => (
+              <NavItemComponent key={item.to} item={item} />
+            ))}
+          </ul>
 
-            {/* Leaderboard Link */}
-            <li className="w-full flex justify-center">
-              <NavLink to="/leaderboard">
-                {({ isActive }) => (
-                  <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
-                    ? "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-lg scale-110 animate-cyan-wave"
-                    : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
-                    }`}>
-                    <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
-                      <img
-                        src={TrophyIcon}
-                        className={`w-6 md:w-7 lg:w-8 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
-                          }`}
-                        alt="Leaderboard"
-                      />
-                      <span className={`text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block ${!isCollapsed ? 'md:inline' : 'md:hidden'}`}>Ranks</span>
-                    </div>
-                    {isActive && (
-                      <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
-                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-300 via-cyan-100 to-cyan-300 shadow-lg animate-pulse"></div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </NavLink>
-            </li>
+          {/* Divider */}
+          <div className="mx-4 my-4 md:my-6 border-t border-gray-200/60 dark:border-gray-700/60" />
 
-            {/* Profile Link */}
-            <li className="w-full flex justify-center">
-              <NavLink to={profileLink}>
-                {({ isActive }) => (
-                  <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
-                    ? "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-lg scale-110 animate-cyan-wave"
-                    : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
-                    }`}>
-                    <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
-                      <img
-                        src={ProfileIcon}
-                        className={`w-6 md:w-7 lg:w-8 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
-                          }`}
-                        alt="Profile"
-                      />
-                      <span className={`text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block ${!isCollapsed ? 'md:inline' : 'md:hidden'}`}>Profile</span>
-                    </div>
-                    {isActive && (
-                      <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
-                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-300 via-cyan-100 to-cyan-300 shadow-lg animate-pulse"></div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </NavLink>
-            </li>
+          {/* Streak Display - Refined */}
+          <div className="mt-auto px-2 md:px-3 pb-2">
+            <div
+              className={`
+                relative overflow-hidden
+                rounded-xl p-3 md:p-4
+                bg-gradient-to-br from-amber-50 to-orange-50 
+                dark:from-amber-900/20 dark:to-orange-900/20
+                border border-amber-200/50 dark:border-amber-700/30
+                group cursor-default
+                transition-all duration-300 hover:shadow-md hover:shadow-amber-200/30 dark:hover:shadow-amber-900/20
+              `}
+            >
+              {/* Decorative gradient blob */}
+              <div className="absolute -top-8 -right-8 w-20 h-20 bg-gradient-to-br from-orange-300/30 to-yellow-300/30 dark:from-orange-500/10 dark:to-yellow-500/10 rounded-full blur-2xl transition-transform duration-500 group-hover:scale-150" />
 
-            {/* Shop Link */}
-            <li className="w-full flex justify-center">
-              <NavLink to="/shop">
-                {({ isActive }) => (
-                  <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
-                    ? "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-lg scale-110 animate-cyan-wave"
-                    : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
-                    }`}>
-                    <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
-                      <img
-                        src={ShopIcon}
-                        className={`w-9 md:w-10 lg:w-11 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
-                          }`}
-                        alt="Shop"
-                      />
-                      <span className={`text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block ${!isCollapsed ? 'md:inline' : 'md:hidden'}`}>Shop</span>
-                    </div>
-                    {isActive && (
-                      <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
-                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-300 via-cyan-100 to-cyan-300 shadow-lg animate-pulse"></div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </NavLink>
-            </li>
-
-            {/* Settings Link */}
-            <li className="w-full flex justify-center">
-              <NavLink to="/settings">
-                {({ isActive }) => (
-                  <div className={`relative flex flex-col items-center w-12 md:w-14 py-2 md:py-2.5 px-1.5 rounded-xl transition-all duration-300 group ${isActive
-                    ? "bg-gradient-to-br from-cyan-400 to-cyan-600 text-white shadow-lg scale-110 animate-cyan-wave"
-                    : "text-gray-700 dark:text-gray-200 hover:bg-white/20 dark:hover:bg-white/10 hover:scale-105"
-                    }`}>
-                    <div className={`transition-all duration-300 ${isActive ? "scale-110" : "group-hover:scale-110"}`}>
-                      <img
-                        src={SettingsIcon}
-                        className={`w-6 md:w-7 lg:w-8 mx-auto transition-all duration-300 ${isActive ? "drop-shadow-lg brightness-0 invert" : "opacity-80 drop-shadow-md contrast-125 brightness-90 group-hover:opacity-100 group-hover:drop-shadow-lg group-hover:brightness-100"
-                          }`}
-                        alt="Settings"
-                      />
-                      <span className={`text-[10px] sm:text-xs md:text-sm mt-0.5 font-semibold text-center block ${!isCollapsed ? 'md:inline' : 'md:hidden'}`}>Settings</span>
-                    </div>
-                    {isActive && (
-                      <div className="absolute -bottom-1 left-0 right-0 flex justify-center">
-                        <div className="h-1 w-10 rounded-full bg-gradient-to-r from-cyan-300 via-cyan-100 to-cyan-300 shadow-lg animate-pulse"></div>
-                      </div>
-                    )}
-                  </div>
-                )}
-              </NavLink>
-            </li>
-
-
-            {/* Enhanced Streak display */}
-            <li className="mt-auto w-full flex justify-center">
-              <div className="relative w-14 h-14 md:w-16 md:h-16 rounded-2xl glass-card flex flex-col items-center justify-center group shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105">
-                {/* Gradient ring around streak */}
-                <div className="absolute inset-0 rounded-2xl bg-gradient-to-br from-orange-400 via-yellow-400 to-orange-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 blur-sm"></div>
-
-                {/* Content */}
-                <div className="relative z-10 flex flex-col items-center">
-                  <span className="text-base md:text-lg lg:text-xl font-bold bg-gradient-to-r from-orange-500 to-yellow-500 bg-clip-text text-transparent">
-                    {user?.streak || 0}
-                  </span>
-                  <span className="text-[10px] sm:text-xs md:text-sm font-semibold text-gray-600 dark:text-gray-400">
-                    {user?.streak === 1 ? "day" : "days"}
-                  </span>
-                </div>
-
-                {/* Flame emoji for active streaks */}
-                {(user?.streak || 0) > 0 && (
-                  <span className="absolute -top-1 -right-1 text-lg md:text-xl animate-bounce">
+              {/* Content */}
+              <div className="relative flex items-center gap-3">
+                {/* Flame icon with animation */}
+                <div className="flex-shrink-0">
+                  <span className={`
+                    text-2xl md:text-3xl
+                    ${(user?.streak || 0) > 0 ? "animate-pulse" : "grayscale opacity-50"}
+                  `}>
                     🔥
                   </span>
-                )}
+                </div>
 
-                {/* Enhanced tooltip */}
-                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-3 w-36 md:w-40 glass-card shadow-2xl rounded-xl p-3 text-xs opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none border border-white/20 dark:border-white/10">
-                  <p className="text-gray-700 dark:text-gray-300 text-center font-medium">
-                    {user?.lastLoginDate ?
-                      `Last login: ${new Date(user.lastLoginDate).toLocaleDateString()}` :
-                      'Start your streak by completing lessons daily!'}
-                  </p>
-                  {/* Arrow */}
-                  <div className="absolute top-full left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    <div className="w-3 h-3 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm rotate-45 border-r border-b border-white/20 dark:border-white/10"></div>
-                  </div>
+                {/* Stats - shown when expanded */}
+                <div className={`
+                  flex flex-col overflow-hidden transition-all duration-300
+                  ${isCollapsed ? "md:w-0 md:opacity-0" : "md:w-auto md:opacity-100"}
+                `}>
+                  <span className="text-lg md:text-xl font-bold bg-gradient-to-r from-orange-500 to-amber-500 bg-clip-text text-transparent">
+                    {user?.streak || 0}
+                  </span>
+                  <span className="text-xs text-gray-500 dark:text-gray-400 font-medium">
+                    day{(user?.streak || 0) !== 1 ? "s" : ""} streak
+                  </span>
                 </div>
               </div>
-            </li>
 
-          </ul>
+              {/* Tooltip - only shows when collapsed */}
+              <div
+                className={`
+                  absolute left-full top-1/2 -translate-y-1/2 ml-3
+                  px-3 py-2 rounded-lg
+                  bg-gray-900 dark:bg-gray-700 text-white text-xs font-medium
+                  opacity-0 pointer-events-none whitespace-nowrap
+                  transition-all duration-200 shadow-lg
+                  ${isCollapsed ? "md:group-hover:opacity-100" : ""}
+                `}
+              >
+                {user?.streak || 0} day{(user?.streak || 0) !== 1 ? "s" : ""} streak
+                <div className="absolute right-full top-1/2 -translate-y-1/2 border-4 border-transparent border-r-gray-900 dark:border-r-gray-700" />
+              </div>
+            </div>
+          </div>
         </div>
       </nav>
     </>
