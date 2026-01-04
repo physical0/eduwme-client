@@ -467,12 +467,12 @@ const AutoExercise = () => {
 
   return (
     // Main container with gradient background
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20">
-      <div className="max-w-full md:max-w-3xl mx-auto px-2 sm:px-3 py-1 md:py-2">
-        {/* Reduced gap and min-height */}
-        <div className="flex flex-col gap-1 sm:gap-1.5 min-h-[calc(100vh-80px)]">
+    <div className="h-[calc(100vh-64px)] overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20">
+      <div className="max-w-full md:max-w-3xl mx-auto px-2 sm:px-3 py-0.5 md:py-1 h-full">
+        {/* Compact layout for laptop screens */}
+        <div className="flex flex-col gap-0.5 sm:gap-1 h-full">
           {/* Enhanced header with glassmorphism */}
-          <div className="flex justify-between items-center mb-2 sm:mb-3">
+          <div className="flex justify-between items-center mb-1 sm:mb-1.5">
             <button
               onClick={handleReturn}
               className="group glass-card flex items-center gap-1.5 sm:gap-2 px-3 py-1 sm:px-4 sm:py-1.5 md:px-5 md:py-2 rounded-xl sm:rounded-2xl
@@ -520,33 +520,33 @@ const AutoExercise = () => {
           </div>
 
           {/* Enhanced main content */}
-          <div className="text-center mb-2">
-            <h1 className="text-base sm:text-lg md:text-xl lg:text-2xl font-bold gradient-text mb-1">
+          <div className="text-center mb-1">
+            <h1 className="text-sm sm:text-base md:text-lg lg:text-xl font-bold gradient-text mb-0.5">
               {currentExercise.title}
             </h1>
-            <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            <p className="text-[10px] sm:text-xs text-gray-600 dark:text-gray-400">
               {currentExercise.type} • Difficulty: {currentExercise.difficultyLevel}
             </p>
           </div>
 
-          <div className="glass-card border-2 border-white/20 dark:border-white/10 shadow-xl rounded-xl sm:rounded-2xl p-2 sm:p-3 md:p-4 mb-2 sm:mb-3">
-            <p className="text-xs sm:text-sm md:text-base text-gray-800 dark:text-white font-medium">
+          <div className="glass-card border-2 border-white/20 dark:border-white/10 shadow-xl rounded-lg sm:rounded-xl p-1.5 sm:p-2 md:p-2.5 mb-1 sm:mb-1.5">
+            <p className="text-xs sm:text-sm text-gray-800 dark:text-white font-medium">
               {currentExercise.question}
             </p>
           </div>
 
-          <div className="glass-card border-2 border-white/30 dark:border-white/10 rounded-xl sm:rounded-2xl p-2 sm:p-2.5 md:p-3 min-h-[5rem] sm:min-h-[6rem] md:min-h-[8rem] flex flex-col items-center justify-center overflow-auto mb-2 sm:mb-3 shadow-lg">
+          <div className="glass-card border-2 border-white/30 dark:border-white/10 rounded-lg sm:rounded-xl p-2 sm:p-3 min-h-[6rem] sm:min-h-[8rem] md:min-h-[10rem] max-h-[35vh] flex flex-col items-center justify-center overflow-auto mb-1 sm:mb-1.5 shadow-lg flex-shrink-0">
             {currentExercise.animType ? (
               <ExerciseAnimation
                 animType={currentExercise.animType}
                 question={currentExercise.question}
               />
             ) : (
-              <p className="text-gray-500 dark:text-gray-400 text-xs sm:text-sm">No animation for this exercise</p>
+              <p className="text-gray-500 dark:text-gray-400 text-[10px] sm:text-xs">No animation for this exercise</p>
             )}
           </div>
 
-          <div className="grid grid-cols-2 gap-2 sm:gap-2.5 mb-2 sm:mb-3">
+          <div className="grid grid-cols-2 gap-1.5 sm:gap-2 mb-1 sm:mb-1.5">
             {currentExercise.type === 'multiple-choice' ? (
               currentExercise.options.map((option, index) => (
                 <button
@@ -554,8 +554,8 @@ const AutoExercise = () => {
                   onClick={() => handleOptionSelect(option)}
                   disabled={!isTimerRunning || showResult}
                   className={`
-                  glass-card p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl border-2 text-left transition-all duration-300 text-xs sm:text-sm md:text-base
-                  flex items-center min-h-[2.5rem] sm:min-h-[3rem] font-medium
+                  glass-card p-1.5 sm:p-2 rounded-lg sm:rounded-xl border-2 text-left transition-all duration-300 text-[11px] sm:text-xs md:text-sm
+                  flex items-center min-h-[2rem] sm:min-h-[2.25rem] font-medium
                   ${selectedOption === option
                       ? 'bg-gradient-to-br from-purple-500 to-blue-500 border-purple-400/50 shadow-xl scale-105 text-gray-800 dark:text-gray-200 glow'
                       : 'border-white/40 dark:border-white/20 hover:border-purple-400/50 dark:hover:border-purple-500/50 hover:scale-105 hover:shadow-xl text-gray-800 dark:text-white'
@@ -575,8 +575,8 @@ const AutoExercise = () => {
                   disabled={!isTimerRunning || showResult}
                   placeholder="Type your answer here..."
                   className={`
-                  glass-card w-full p-2 sm:p-2.5 md:p-3 rounded-xl sm:rounded-2xl border-2 text-xs sm:text-sm md:text-base
-                  min-h-[2.5rem] sm:min-h-[3rem] font-medium
+                  glass-card w-full p-1.5 sm:p-2 rounded-lg sm:rounded-xl border-2 text-[11px] sm:text-xs md:text-sm
+                  min-h-[2rem] sm:min-h-[2.25rem] font-medium
                   border-white/40 dark:border-white/20
                   focus:border-cyan-400/50 dark:focus:border-cyan-500/50 focus:outline-none focus:ring-2 focus:ring-cyan-200 dark:focus:ring-cyan-800
                   text-gray-800 dark:text-white placeholder-gray-500 dark:placeholder-gray-400
@@ -597,7 +597,7 @@ const AutoExercise = () => {
               showResult
             }
             className={`
-              w-full py-2 sm:py-2.5 md:py-3 text-sm sm:text-base md:text-lg font-bold rounded-xl sm:rounded-2xl transition-all duration-300
+              w-full py-1.5 sm:py-2 text-xs sm:text-sm md:text-base font-bold rounded-lg sm:rounded-xl transition-all duration-300
               ${((currentExercise.type === 'multiple-choice' && !selectedOption) ||
                 (currentExercise.type === 'fill-in' && !textAnswer.trim()) ||
                 !isTimerRunning ||
@@ -653,8 +653,8 @@ const AutoExercise = () => {
               </div>
             </div>
           )}
-          {/* Optional spacer div to push content up from bottom */}
-          <div className="flex-grow"></div>
+          {/* Minimal spacer */}
+          <div className="flex-grow min-h-0"></div>
         </div>
       </div>
     </div>
