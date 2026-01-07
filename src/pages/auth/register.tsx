@@ -23,20 +23,19 @@ const Register = () => {
   // Responsive form container
   const formContainerClass =
     "flex flex-col items-center justify-center w-full p-5 gap-4 md:gap-5";
-    
+
   // Responsive input with larger width on laptop
   const inputBaseClass =
     "appearance-none bg-[#A7B5E7] w-full max-w-sm px-3 py-2 md:py-3 rounded-full text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm md:text-base placeholder-[#E0E7FF]";
-    
+
   const inputErrorBorderClass = "border border-red-300";
   const inputNormalBorderClass = "border border-[#7895FC]";
-  
+
   // Responsive button with better sizing for laptop
-  const submitButtonClass = `w-full max-w-[160px] md:max-w-[180px] flex justify-center py-2 px-4 md:py-2.5 md:px-5 rounded-full text-sm md:text-base font-medium text-white ${
-    isSubmitting
-      ? "bg-[#303442] cursor-not-allowed"
-      : "bg-[#303442] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#303442]"
-  }`;
+  const submitButtonClass = `w-full max-w-[160px] md:max-w-[180px] flex justify-center py-2 px-4 md:py-2.5 md:px-5 rounded-full text-sm md:text-base font-medium text-white ${isSubmitting
+    ? "bg-[#303442] cursor-not-allowed"
+    : "bg-[#303442] hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#303442]"
+    }`;
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,7 +54,7 @@ const Register = () => {
     setConfirmPasswordVisibility(!confirmPasswordVisibility);
   };
 
-  
+
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
 
@@ -143,9 +142,8 @@ const Register = () => {
           placeholder="Username"
           value={formData.username}
           onChange={handleChange}
-          className={`${inputBaseClass} ${
-            errors.username ? inputErrorBorderClass : inputNormalBorderClass
-          }`}
+          className={`${inputBaseClass} ${errors.username ? inputErrorBorderClass : inputNormalBorderClass
+            }`}
         />
         {errors.username && (
           <p className="mt-1 text-sm text-red-600">{errors.username}</p>
@@ -165,9 +163,8 @@ const Register = () => {
           placeholder="Email address"
           value={formData.email}
           onChange={handleChange}
-          className={`${inputBaseClass} ${
-            errors.email ? inputErrorBorderClass : inputNormalBorderClass
-          }`}
+          className={`${inputBaseClass} ${errors.email ? inputErrorBorderClass : inputNormalBorderClass
+            }`}
         />
         {errors.email && (
           <p className="mt-1 text-sm text-red-600">{errors.email}</p>
@@ -175,74 +172,74 @@ const Register = () => {
       </div>
 
       <div className="w-full max-w-sm relative">
-      <label htmlFor="password" className="sr-only">
-        Password
-      </label>
-      <input
-        id="password"
-        name="password"
-        type={passwordVisibility ? "text" : "password"}
-        autoComplete="new-password"
-        required
-        placeholder="Password"
-        value={formData.password}
-        onChange={handleChange}
-        className={`${inputBaseClass} ${
-          errors.password ? inputErrorBorderClass : inputNormalBorderClass
-        }`}
-      />
-      <button
-        type="button"
-        onClick={togglePasswordVisibility}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 focus:outline-none"
-        aria-label={passwordVisibility ? "Hide password" : "Show password"}
-      >
-        {passwordVisibility ? (
-          <FaEyeSlash className="w-5 h-5" />
-        ) : (
-          <FaEye className="w-5 h-5" />
+        <label htmlFor="password" className="sr-only">
+          Password
+        </label>
+        <input
+          id="password"
+          name="password"
+          type={passwordVisibility ? "text" : "password"}
+          autoComplete="new-password"
+          required
+          placeholder="Password"
+          value={formData.password}
+          onChange={handleChange}
+          className={`${inputBaseClass} ${errors.password ? inputErrorBorderClass : inputNormalBorderClass
+            }`}
+        />
+        <button
+          type="button"
+          onClick={togglePasswordVisibility}
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 focus:outline-none"
+          aria-label={passwordVisibility ? "Hide password" : "Show password"}
+        >
+          {passwordVisibility ? (
+            <FaEyeSlash className="w-5 h-5" />
+          ) : (
+            <FaEye className="w-5 h-5" />
+          )}
+        </button>
+        {errors.password && (
+          <p className="mt-1 text-sm text-red-600">{errors.password}</p>
         )}
-      </button>
-      {errors.password && (
-        <p className="mt-1 text-sm text-red-600">{errors.password}</p>
-      )}
       </div>
 
-    <div className="w-full max-w-sm relative">
-      <label htmlFor="confirmPassword" className="sr-only">
-        Confirm Password
-      </label>
-      <input
-        id="confirmPassword"
-        name="confirmPassword"
-        type={confirmPasswordVisibility ? "text" : "password"}
-        autoComplete="new-password"
-        required
-        placeholder="Confirm Password"
-        value={formData.confirmPassword}
-        onChange={handleChange}
-        className={`${inputBaseClass} ${
-          errors.confirmPassword
-            ? inputErrorBorderClass
-            : inputNormalBorderClass
-        }`}
-      />
-      <button
-        type="button"
-        onClick={toggleConfirmPasswordVisibility}
-        className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 focus:outline-none"
-        aria-label={confirmPasswordVisibility ? "Hide password" : "Show password"}
-      >
-        {confirmPasswordVisibility ? (
-          <FaEyeSlash className="w-5 h-5" />
-        ) : (
-          <FaEye className="w-5 h-5" />
+      <div className="w-full max-w-sm">
+        <div className="relative">
+          <label htmlFor="confirmPassword" className="sr-only">
+            Confirm Password
+          </label>
+          <input
+            id="confirmPassword"
+            name="confirmPassword"
+            type={confirmPasswordVisibility ? "text" : "password"}
+            autoComplete="new-password"
+            required
+            placeholder="Confirm Password"
+            value={formData.confirmPassword}
+            onChange={handleChange}
+            className={`${inputBaseClass} ${errors.confirmPassword
+              ? inputErrorBorderClass
+              : inputNormalBorderClass
+              }`}
+          />
+          <button
+            type="button"
+            onClick={toggleConfirmPasswordVisibility}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 focus:outline-none"
+            aria-label={confirmPasswordVisibility ? "Hide password" : "Show password"}
+          >
+            {confirmPasswordVisibility ? (
+              <FaEyeSlash className="w-5 h-5" />
+            ) : (
+              <FaEye className="w-5 h-5" />
+            )}
+          </button>
+        </div>
+        {errors.confirmPassword && (
+          <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
         )}
-      </button>
-      {errors.confirmPassword && (
-        <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
-      )}
-    </div>
+      </div>
 
       {submitError && (
         <div className="p-2 text-sm md:text-base bg-red-100 text-red-700 rounded-md w-full max-w-sm">
@@ -263,7 +260,7 @@ const Register = () => {
       >
         {isSubmitting ? "Creating account..." : "Sign up"}
       </button>
-      
+
       <Link to="/login">
         <div className="text-sm md:text-base text-gray-500 mt-2">
           Already have an account?{" "}
