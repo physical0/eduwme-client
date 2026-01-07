@@ -81,7 +81,7 @@ const AutoExercise = () => {
   const [textAnswer, setTextAnswer] = useState<string>("");
   const [allCompleted, setAllCompleted] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
-  const { getAuthHeader } = useAuth();
+  const { getAuthHeader, fetchUser } = useAuth();
 
   const MAX_TIME: number = 50;
 
@@ -342,6 +342,7 @@ const AutoExercise = () => {
               ? "You've already completed this exercise before."
               : `You earned ${completionResult.awardedXp} XP${completionResult.awardedGems ? ` and ${completionResult.awardedGems} Gems` : ''}!`}`
           });
+          await fetchUser();
         } catch (err) {
           setResult({
             correct: true,

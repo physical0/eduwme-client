@@ -33,6 +33,7 @@ interface AuthContextType {
   login: (username: string, password: string) => Promise<boolean>;
   updateUserStreak: () => Promise<void>;
   getAuthHeader: () => Promise<{ Authorization?: string | undefined }>;
+  fetchUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -57,6 +58,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   // Fixed: Use import.meta.env for Vite
   const API_BASE_URL =
     import.meta.env.VITE_API_URL || "http://localhost:3000";
+
+  useEffect(() => {
+    fetchUser();
+  }, []);
 
   // ...existing code...
   const fetchUser = async () => {
@@ -112,11 +117,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       setIsLoading(false);
     }
   };
-
-  useEffect(() => {
-    fetchUser();
-  }, []);
-
 
   const logout = async () => {
     try {
@@ -218,7 +218,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     login,
     updateUserStreak,
-    getAuthHeader
+    getAuthHeader,
+    fetchUser
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

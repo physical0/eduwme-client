@@ -62,7 +62,7 @@ const Exercise = () => {
   const [showResult, setShowResult] = useState<boolean>(false);
   const [retryCount, setRetryCount] = useState<number>(0);
   const [textAnswer, setTextAnswer] = useState<string>("");
-  const { getAuthHeader } = useAuth();
+  const { getAuthHeader, fetchUser } = useAuth();
 
 
   const MAX_TIME: number = 50;
@@ -232,6 +232,7 @@ const Exercise = () => {
               ? "You've already completed this exercise before."
               : `You earned ${completionResult.awardedXp} XP${completionResult.awardedGems ? ` and ${completionResult.awardedGems} Gems` : ''}!`}`
           });
+          await fetchUser();
         } catch (err) {
           setResult({
             correct: true,
