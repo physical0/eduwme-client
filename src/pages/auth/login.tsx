@@ -80,7 +80,11 @@ const Login = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Login failed");
+        let msg = data.message || data.error || "Login failed";
+        try {
+          const parsed = JSON.parse(msg);
+          if (Array.isArray(parsed)) msg = [...new Set(parsed.map((e: { message: string }) => e.message))].join(", ");
+        } catch { throw new Error(msg); }
       }
       await login(formData.username, formData.password);
 
@@ -153,14 +157,12 @@ const Login = () => {
         {isSubmitting ? "Signing in..." : "Sign in"}
       </button>
 
-      <Link to="/register">
-        <div className="text-sm md:text-base text-gray-500 mt-2">
+      <div className="mt-4 flex flex-col items-center text-sm md:text-base text-gray-500">
+        <Link to="/register">
           Don't have an account?{" "}
-          <span className="text-amber-300 hover:underline">
-            Register
-          </span>
-        </div>
-      </Link>
+          <span className="text-amber-300 hover:underline">Register</span>
+        </Link>
+      </div>
     </form>
   );
 };

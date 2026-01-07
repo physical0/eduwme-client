@@ -72,8 +72,8 @@ const Register = () => {
 
     if (!formData.password) {
       newErrors.password = "Password is required";
-    } else if (formData.password.length < 6) {
-      newErrors.password = "Password must be at least 6 characters";
+    } else if (formData.password.length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
     }
 
     if (formData.confirmPassword !== formData.password) {
@@ -110,7 +110,14 @@ const Register = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || "Registration failed");
+        let msg = data.message || data.error || "Registration failed";
+        try {
+          const parsed = JSON.parse(msg);
+          if (Array.isArray(parsed)) msg = [...new Set(parsed.map((e: { message: string }) => e.message))].join(", ");
+        }
+        catch {
+          throw new Error(msg);
+        }
       }
 
       setSubmitSuccess("Registration successful! Redirecting to login...");
@@ -146,7 +153,7 @@ const Register = () => {
             }`}
         />
         {errors.username && (
-          <p className="mt-1 text-sm text-red-600">{errors.username}</p>
+          <p className="mt-1 pl-3 text-sm text-red-600">{errors.username}</p>
         )}
       </div>
 
@@ -167,40 +174,42 @@ const Register = () => {
             }`}
         />
         {errors.email && (
-          <p className="mt-1 text-sm text-red-600">{errors.email}</p>
+          <p className="mt-1 pl-3 text-sm text-red-600">{errors.email}</p>
         )}
       </div>
 
-      <div className="w-full max-w-sm relative">
-        <label htmlFor="password" className="sr-only">
-          Password
-        </label>
-        <input
-          id="password"
-          name="password"
-          type={passwordVisibility ? "text" : "password"}
-          autoComplete="new-password"
-          required
-          placeholder="Password"
-          value={formData.password}
-          onChange={handleChange}
-          className={`${inputBaseClass} ${errors.password ? inputErrorBorderClass : inputNormalBorderClass
-            }`}
-        />
-        <button
-          type="button"
-          onClick={togglePasswordVisibility}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 focus:outline-none"
-          aria-label={passwordVisibility ? "Hide password" : "Show password"}
-        >
-          {passwordVisibility ? (
-            <FaEyeSlash className="w-5 h-5" />
-          ) : (
-            <FaEye className="w-5 h-5" />
-          )}
-        </button>
+      <div className="w-full max-w-sm">
+        <div className="relative">
+          <label htmlFor="password" className="sr-only">
+            Password
+          </label>
+          <input
+            id="password"
+            name="password"
+            type={passwordVisibility ? "text" : "password"}
+            autoComplete="new-password"
+            required
+            placeholder="Password"
+            value={formData.password}
+            onChange={handleChange}
+            className={`${inputBaseClass} ${errors.password ? inputErrorBorderClass : inputNormalBorderClass
+              }`}
+          />
+          <button
+            type="button"
+            onClick={togglePasswordVisibility}
+            className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-600 hover:text-gray-800 focus:outline-none"
+            aria-label={passwordVisibility ? "Hide password" : "Show password"}
+          >
+            {passwordVisibility ? (
+              <FaEyeSlash className="w-5 h-5" />
+            ) : (
+              <FaEye className="w-5 h-5" />
+            )}
+          </button>
+        </div>
         {errors.password && (
-          <p className="mt-1 text-sm text-red-600">{errors.password}</p>
+          <p className="mt-1 pl-3 text-sm text-red-600">{errors.password}</p>
         )}
       </div>
 
@@ -237,7 +246,7 @@ const Register = () => {
           </button>
         </div>
         {errors.confirmPassword && (
-          <p className="mt-1 text-sm text-red-600">{errors.confirmPassword}</p>
+          <p className="mt-1 pl-3 text-sm text-red-600">{errors.confirmPassword}</p>
         )}
       </div>
 
