@@ -458,6 +458,11 @@ const ProfilePage = () => {
     }
   };
 
+  // Calculate XP progress to next level (assuming 100 XP per level)
+  const xpPerLevel = 100;
+  const xpProgress = userProfile ? (userProfile.xp % xpPerLevel) : 0;
+  const xpProgressPercent = (xpProgress / xpPerLevel) * 100;
+
   // Loading state with responsive styling and dark mode support
   if (isLoading) {
     return <LoadingPage message="Loading profile..." fullScreen={false} />;
@@ -466,17 +471,22 @@ const ProfilePage = () => {
   // Error state with responsive styling and dark mode support
   if (error) {
     return (
-      <div className="flex flex-col justify-center items-center min-h-[70vh] p-4">
-        <p className="text-lg sm:text-xl text-red-600 dark:text-red-400">Error loading profile:</p>
-        <p className="text-sm sm:text-md text-red-500 dark:text-red-400 bg-red-100 dark:bg-red-900/20 p-3 rounded-md mt-2 max-w-md">
-          {error}
-        </p>
-        <button
-          onClick={() => window.location.reload()}
-          className="mt-4 px-3 py-1.5 sm:px-4 sm:py-2 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white rounded-md hover:from-cyan-500 hover:to-cyan-700 dark:bg-cyan-600 dark:hover:bg-cyan-700 transition-all text-sm sm:text-base animate-cyan-wave"
-        >
-          Try Again
-        </button>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 flex flex-col items-center justify-center px-4">
+        <div className="glass-card rounded-2xl p-8 text-center max-w-md fade-in-stagger">
+          <div className="text-5xl mb-4">😔</div>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">
+            Error loading profile
+          </h2>
+          <p className="text-sm sm:text-base text-red-600 dark:text-red-400 mb-6 bg-red-100/50 dark:bg-red-900/20 p-3 rounded-xl">
+            {error}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            Try Again
+          </button>
+        </div>
       </div>
     );
   }
@@ -484,58 +494,46 @@ const ProfilePage = () => {
   // Not found state with responsive styling and dark mode support
   if (!userProfile) {
     return (
-      <div className="flex justify-center items-center min-h-[70vh]">
-        <p className="text-lg sm:text-xl text-gray-700 dark:text-gray-300">User profile not found.</p>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 flex flex-col items-center justify-center px-4">
+        <div className="glass-card rounded-2xl p-8 text-center max-w-md fade-in-stagger">
+          <div className="text-5xl mb-4">🔍</div>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">
+            Profile Not Found
+          </h2>
+          <p className="text-gray-600 dark:text-gray-400">
+            We couldn't find this user's profile.
+          </p>
+        </div>
       </div>
     );
   }
 
   return (
-    // Standardized container - reduced width
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 pt-2 sm:pt-4">
-      <div className="max-w-xl mx-auto px-3 sm:px-5 py-4 pb-16 mt-2 
-      shadow-lg rounded-xl bg-white/50 dark:bg-gray-800/40 backdrop-blur-sm">
-        {/* Success message - smaller text and padding for mobile */}
+      <div className="max-w-2xl mx-auto px-3 sm:px-4 lg:px-6 py-4 pb-24 sm:pb-20">
+
+        {/* Status Messages */}
         {updateSuccess && (
-          <div className="mb-2 sm:mb-3 p-1 sm:p-2 bg-green-100 dark:bg-green-900/30 
-          text-green-700 dark:text-green-400 rounded-md text-center text-[10px] sm:text-xs">
+          <div className="mb-4 p-3 sm:p-4 rounded-xl text-sm sm:text-base font-medium shadow-lg fade-in-stagger flex items-center gap-3 bg-gradient-to-r from-green-500/10 to-emerald-500/10 border border-green-300 dark:border-green-700 text-green-700 dark:text-green-300">
+            <span className="text-xl">✅</span>
             Profile updated successfully!
           </div>
         )}
 
-        {/* Error message - smaller text and padding for mobile */}
         {updateError && (
-          <div className="mb-2 sm:mb-3 p-1 sm:p-2 bg-red-100 dark:bg-red-900/30 
-          text-red-700 dark:text-red-400 rounded-md text-center text-[10px] sm:text-xs">
-            Error: {updateError}
+          <div className="mb-4 p-3 sm:p-4 rounded-xl text-sm sm:text-base font-medium shadow-lg fade-in-stagger flex items-center gap-3 bg-gradient-to-r from-red-500/10 to-rose-500/10 border border-red-300 dark:border-red-700 text-red-700 dark:text-red-300">
+            <span className="text-xl">⚠️</span>
+            {updateError}
           </div>
         )}
 
-        {/* Header section - more compact for mobile */}
-        <div className="flex justify-between items-center mb-1 sm:mb-2 md:mb-3">
-          <h1 className="text-base sm:text-lg md:text-xl font-bold text-gray-800 dark:text-white">
-            Profile
-          </h1>
+        {/* Main Profile Card */}
+        <div className="glass-card rounded-2xl overflow-hidden shadow-xl fade-in-stagger border-2 border-white/20 dark:border-white/10">
 
-          {/* Smaller button on mobile */}
-          {isOwnProfile && (
-            <button
-              onClick={handleEditToggle}
-              className={`px-2 py-0.5 sm:px-3 sm:py-1 rounded-md transition-colors text-[10px] sm:text-sm ${isEditing
-                ? "bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600"
-                : "bg-gradient-to-r from-cyan-400 to-cyan-600 text-white hover:from-cyan-500 hover:to-cyan-700 shadow-md transform hover:scale-105 transition-all animate-cyan-wave"
-                }`}
-            >
-              {isEditing ? "Cancel" : "Edit"}
-            </button>
-          )}
-        </div>
-
-        <div className="relative">
-          {/* Banner section - display user's equipped banner */}
-          <div className="w-full h-16 sm:h-20 md:h-24 rounded-t-lg overflow-hidden relative">
+          {/* Banner Section */}
+          <div className="relative h-20 sm:h-36 md:h-44 overflow-hidden">
             {isLoadingInventory ? (
-              <div className="w-full h-full bg-gray-200 dark:bg-gray-700 animate-pulse"></div>
+              <div className="w-full h-full bg-gradient-to-r from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 animate-pulse"></div>
             ) : bannerImage ? (
               <img
                 src={bannerImage}
@@ -543,156 +541,248 @@ const ProfilePage = () => {
                 className="w-full h-full object-cover"
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-r from-cyan-100 to-cyan-200 dark:from-cyan-900/20 dark:to-cyan-800/20 animate-cyan-wave"></div>
+              <div className="w-full h-full bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 animate-gradient-shift"></div>
+            )}
+
+            {/* Gradient Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent"></div>
+
+            {/* Edit Button */}
+            {isOwnProfile && (
+              <button
+                onClick={handleEditToggle}
+                className={`absolute top-3 right-3 sm:top-4 sm:right-4 px-3 py-1.5 sm:px-4 sm:py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all duration-300 shadow-lg backdrop-blur-sm ${isEditing
+                  ? "bg-white/80 dark:bg-gray-800/80 text-gray-700 dark:text-gray-300 hover:bg-white dark:hover:bg-gray-700"
+                  : "bg-gradient-to-r from-cyan-500 to-blue-500 text-white hover:from-cyan-600 hover:to-blue-600"
+                  }`}
+              >
+                {isEditing ? (
+                  <span className="flex items-center gap-1.5">
+                    <span>✕</span> Cancel
+                  </span>
+                ) : (
+                  <span className="flex items-center gap-1.5">
+                    <span>✏️</span> Edit
+                  </span>
+                )}
+              </button>
             )}
           </div>
 
-          {/* Profile image section - with overlap on banner */}
-          <div className="flex flex-col items-center -mt-5 sm:-mt-6 md:-mt-8 relative z-10 mb-1 sm:mb-1.5 md:mb-2">
-            <input
-              type="file"
-              ref={fileInputRef}
-              onChange={handleImageChange}
-              accept="image/*"
-              className="hidden"
-            />
+          {/* Profile Info Section */}
+          <div className="relative px-4 sm:px-6 pb-5 sm:pb-6">
 
-            {/* Profile image with drop shadow for better visibility over banner */}
-            <div
-              className={`relative w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 mb-0.5 sm:mb-1 
-            ${isEditing && isOwnProfile ? 'cursor-pointer' : ''}`}
-              onClick={handleImageClick}
-            >
-              <img
-                src={previewImage || userProfile.profilePicture || AvatarPlaceholder}
-                alt="User Avatar"
-                className="w-12 h-12 sm:w-14 sm:h-14 md:w-16 md:h-16 rounded-full object-cover 
-              border-2 border-white dark:border-gray-800 shadow-md"
+            {/* Avatar */}
+            <div className="flex flex-col items-center -mt-8 sm:-mt-14 md:-mt-16 mb-3 sm:mb-4">
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleImageChange}
+                accept="image/*"
+                className="hidden"
               />
 
-              {/* Overlay icon */}
-              {isEditing && isOwnProfile && (
-                <div className="absolute inset-0 flex items-center justify-center bg-white dark:bg-gray-900 bg-opacity-40 rounded-full">
-                  <span className="text-white text-base sm:text-xl md:text-2xl"> {base64Image ? <img src={base64Image} alt="Profile" className="w-full h-full object-cover rounded-full" /> : "👤"}</span>
-                </div>
-              )}
-            </div>
-
-            {/* Smaller text for upload button */}
-            {isEditing && isOwnProfile && (
-              <button
-                type="button"
+              <div
+                className={`relative group ${isEditing && isOwnProfile ? 'cursor-pointer' : ''}`}
                 onClick={handleImageClick}
-                className=" text-cyan-500 dark:text-cyan-400 
-              hover:text-cyan-700 dark:hover:text-cyan-300 text-[9px] sm:text-xs"
               >
-                Change Photo
-              </button>
-            )}
-
-            {/* Add size warning message here - only when a NEW image has been selected */}
-            {isEditing && isOwnProfile && previewImage && base64Image && (
-              <p className="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-400 
-            mt-0 mb-1 text-center max-w-[150px] sm:max-w-[200px]">
-                Images will be automatically compressed to under 30KB.
-                Simple images with good contrast work best.
-              </p>
-            )}
-
-            {/* Username with badge */}
-            <div className="flex items-center justify-center gap-1">
-              <h2 className="text-base sm:text-lg font-semibold text-gray-800 dark:text-white">
-                {userProfile.username}
-              </h2>
-
-              {/* Badge display */}
-              {badgeImage && (
-                <div className="relative group">
+                {/* Avatar Image */}
+                <div className="w-16 h-16 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full overflow-hidden border-3 sm:border-4 border-white dark:border-gray-800 shadow-xl bg-white dark:bg-gray-800">
                   <img
-                    src={badgeImage}
-                    alt={badgeName || "User Badge"}
-                    className="w-5 h-5 sm:w-6 sm:h-6 md:w-7 md:h-7 object-contain"
+                    src={previewImage || userProfile.profilePicture || AvatarPlaceholder}
+                    alt="User Avatar"
+                    className="w-full h-full object-cover"
                   />
-                  {/* Tooltip for badge name */}
-                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white text-xs rounded py-1 px-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none">
-                    {badgeName || "User Badge"}
-                  </div>
                 </div>
+
+                {/* Edit Overlay */}
+                {isEditing && isOwnProfile && (
+                  <div className="absolute inset-0 flex items-center justify-center bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <span className="text-white text-2xl sm:text-3xl">📷</span>
+                  </div>
+                )}
+
+                {/* Online Status Indicator */}
+                {isOwnProfile && !isEditing && (
+                  <div className="absolute bottom-1 right-1 w-4 h-4 sm:w-5 sm:h-5 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                )}
+              </div>
+
+              {/* Upload Button */}
+              {isEditing && isOwnProfile && (
+                <button
+                  type="button"
+                  onClick={handleImageClick}
+                  className="mt-2 text-cyan-600 dark:text-cyan-400 hover:text-cyan-700 dark:hover:text-cyan-300 text-xs sm:text-sm font-medium transition-colors"
+                >
+                  Change Photo
+                </button>
+              )}
+
+              {/* Image Size Warning */}
+              {isEditing && isOwnProfile && previewImage && base64Image && (
+                <p className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400 mt-1 text-center max-w-[200px]">
+                  Images are automatically compressed to under 30KB
+                </p>
               )}
             </div>
+
+            {/* Username and Badge */}
+            <div className="text-center mb-3 sm:mb-4">
+              <div className="flex items-center justify-center gap-1.5 sm:gap-2 mb-1">
+                <h1 className="text-lg sm:text-2xl md:text-3xl font-bold text-gray-800 dark:text-white">
+                  {userProfile.username}
+                </h1>
+
+                {/* Badge */}
+                {badgeImage && (
+                  <div className="relative group">
+                    <img
+                      src={badgeImage}
+                      alt={badgeName || "User Badge"}
+                      className="w-5 h-5 sm:w-7 sm:h-7 md:w-8 md:h-8 object-contain drop-shadow-lg"
+                    />
+                    {/* Tooltip */}
+                    <div className="absolute -top-10 left-1/2 transform -translate-x-1/2 px-3 py-1.5 bg-gray-900 dark:bg-gray-700 text-white text-xs rounded-lg opacity-0 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap pointer-events-none shadow-lg">
+                      {badgeName || "User Badge"}
+                      <div className="absolute -bottom-1 left-1/2 transform -translate-x-1/2 w-2 h-2 bg-gray-900 dark:bg-gray-700 rotate-45"></div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Nickname Display (when not editing) */}
+              {!isEditing && userProfile.nickname && (
+                <p className="text-sm sm:text-base text-gray-500 dark:text-gray-400">
+                  "{userProfile.nickname}"
+                </p>
+              )}
+            </div>
+
+            {/* Stats Cards */}
+            {!isEditing && (
+              <div className="grid grid-cols-2 gap-2 sm:gap-4 mb-3 sm:mb-5">
+                {/* XP Card */}
+                <div className="glass-card rounded-lg sm:rounded-xl p-2 sm:p-4 text-center border border-cyan-200/50 dark:border-cyan-800/50 group hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-center justify-center gap-1 sm:gap-1.5 mb-0.5 sm:mb-1">
+                    <span className="text-sm sm:text-xl group-hover:scale-110 transition-transform">⭐</span>
+                    <span className="text-[10px] sm:text-sm font-medium text-gray-500 dark:text-gray-400">Experience</span>
+                  </div>
+                  <p className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-yellow-500 to-orange-500 bg-clip-text text-transparent">
+                    {userProfile.xp}
+                  </p>
+                  <p className="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5 sm:mt-1">XP Points</p>
+                </div>
+
+                {/* Level Card */}
+                <div className="glass-card rounded-lg sm:rounded-xl p-2 sm:p-4 text-center border border-purple-200/50 dark:border-purple-800/50 group hover:shadow-lg transition-all duration-300">
+                  <div className="flex items-center justify-center gap-1 sm:gap-1.5 mb-0.5 sm:mb-1">
+                    <span className="text-sm sm:text-xl group-hover:scale-110 transition-transform">🏆</span>
+                    <span className="text-[10px] sm:text-sm font-medium text-gray-500 dark:text-gray-400">Level</span>
+                  </div>
+                  <p className="text-xl sm:text-3xl font-bold bg-gradient-to-r from-purple-500 to-pink-500 bg-clip-text text-transparent">
+                    {userProfile.level}
+                  </p>
+                  <p className="text-[9px] sm:text-xs text-gray-500 dark:text-gray-400 mt-0.5 sm:mt-1">Current Level</p>
+                </div>
+              </div>
+            )}
+
+            {/* XP Progress Bar */}
+            {!isEditing && (
+              <div className="mb-3 sm:mb-5 glass-card rounded-lg sm:rounded-xl p-2 sm:p-4 border border-white/30 dark:border-white/10">
+                <div className="flex justify-between items-center mb-1.5 sm:mb-2">
+                  <span className="text-[10px] sm:text-sm font-medium text-gray-600 dark:text-gray-400">
+                    Progress to Level {userProfile.level + 1}
+                  </span>
+                  <span className="text-[10px] sm:text-sm font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
+                    {xpProgress}/{xpPerLevel} XP
+                  </span>
+                </div>
+                <div className="h-2 sm:h-3 bg-gray-200/50 dark:bg-gray-700/50 rounded-full overflow-hidden">
+                  <div
+                    className="h-full bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500 rounded-full transition-all duration-700 ease-out animate-cyan-wave"
+                    style={{ width: `${xpProgressPercent}%` }}
+                  ></div>
+                </div>
+              </div>
+            )}
+
+            {/* Edit Form */}
+            {isEditing ? (
+              <form onSubmit={handleSubmit} className="space-y-4 sm:space-y-5">
+                {/* Nickname Input */}
+                <div className="space-y-2">
+                  <label className="block text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300">
+                    Nickname
+                  </label>
+                  <input
+                    type="text"
+                    value={editedNickname}
+                    onChange={(e) => setEditedNickname(e.target.value)}
+                    className="w-full px-4 py-2.5 sm:py-3 bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent dark:text-white text-sm sm:text-base transition-all duration-300"
+                    placeholder="Enter a nickname"
+                  />
+                </div>
+
+                {/* Bio Input */}
+                <div className="space-y-2">
+                  <label className="block text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300">
+                    Bio
+                  </label>
+                  <textarea
+                    value={editedBiodata}
+                    onChange={(e) => setEditedBiodata(e.target.value)}
+                    className="w-full px-4 py-2.5 sm:py-3 bg-white/50 dark:bg-gray-800/50 border-2 border-gray-200 dark:border-gray-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-cyan-500 focus:border-transparent min-h-[100px] sm:min-h-[120px] dark:text-white text-sm sm:text-base transition-all duration-300 resize-none"
+                    placeholder="Tell us about yourself..."
+                  />
+                </div>
+
+                {/* Save Button */}
+                <div className="flex justify-end pt-2">
+                  <button
+                    type="submit"
+                    disabled={isSaving}
+                    className={`px-6 sm:px-8 py-2.5 sm:py-3 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 text-sm sm:text-base ${isSaving ? "opacity-70 cursor-not-allowed" : ""
+                      }`}
+                  >
+                    {isSaving ? (
+                      <span className="flex items-center gap-2">
+                        <svg className="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        Saving...
+                      </span>
+                    ) : (
+                      <span className="flex items-center gap-2">
+                        <span>💾</span> Save Changes
+                      </span>
+                    )}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              /* Bio Display */
+              <div className="glass-card rounded-xl p-4 sm:p-5 border border-white/30 dark:border-white/10">
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="text-base sm:text-lg">📝</span>
+                  <h3 className="text-sm sm:text-base font-semibold text-gray-700 dark:text-gray-300">About</h3>
+                </div>
+                <p className="text-sm sm:text-base text-gray-600 dark:text-gray-400 whitespace-pre-wrap leading-relaxed">
+                  {userProfile.biodata || "No bio provided yet."}
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
-        {isEditing ? (
-          /* Edit Form - more compact for mobile */
-          <form onSubmit={handleSubmit} className="space-y-3 sm:space-y-6">
-            <div className="space-y-1 sm:space-y-2">
-              <label className="block text-gray-700 dark:text-gray-300 font-medium text-xs sm:text-base">Nickname</label>
-              <input
-                type="text"
-                value={editedNickname}
-                onChange={(e) => setEditedNickname(e.target.value)}
-                className="w-full p-1.5 sm:p-3 border border-gray-300 dark:border-gray-600 rounded-md 
-                focus:outline-none focus:ring-2 focus:ring-cyan-500 dark:bg-gray-700 dark:text-white text-xs sm:text-base"
-                placeholder="Enter a nickname"
-              />
-            </div>
-
-            <div className="space-y-1 sm:space-y-2">
-              <label className="block text-gray-700 dark:text-gray-300 font-medium text-xs sm:text-base">Bio</label>
-              <textarea
-                value={editedBiodata}
-                onChange={(e) => setEditedBiodata(e.target.value)}
-                className="w-full p-1.5 sm:p-3 border border-gray-300 dark:border-gray-600 rounded-md 
-                focus:outline-none focus:ring-2 focus:ring-cyan-500 min-h-[80px] sm:min-h-[120px] 
-                dark:bg-gray-700 dark:text-white text-xs sm:text-base"
-                placeholder="Tell us about yourself"
-              />
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={isSaving}
-                className={`px-3 sm:px-6 py-1 sm:py-2 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white rounded-md 
-                hover:from-cyan-500 hover:to-cyan-700 transition-all shadow-md text-xs sm:text-base animate-cyan-wave ${isSaving ? "opacity-70 cursor-not-allowed" : ""
-                  }`}
-              >
-                {isSaving ? "Saving..." : "Save"}
-              </button>
-            </div>
-          </form>
-        ) : (
-          /* Display Profile Info - more compact for mobile */
-          <div className="space-y-2 sm:space-y-4">
-            <div className="p-2 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-md shadow-sm">
-              <strong className="text-gray-600 dark:text-gray-400 text-xs sm:text-base">Nickname:</strong>
-              <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-lg">
-                {userProfile.nickname || "No nickname set"}
-              </p>
-            </div>
-
-            <div className="p-2 sm:p-4 bg-gray-50 dark:bg-gray-800/50 rounded-md shadow-sm">
-              <strong className="text-gray-600 dark:text-gray-400 text-xs sm:text-base">Bio:</strong>
-              <p className="text-gray-800 dark:text-gray-200 text-sm sm:text-lg whitespace-pre-wrap">
-                {userProfile.biodata || "No bio provided."}
-              </p>
-            </div>
-
-            <div className="grid grid-cols-2 gap-2 sm:gap-4">
-              <div className="p-2 sm:p-4 bg-cyan-50 dark:bg-cyan-900/20 rounded-md shadow-sm text-center">
-                <strong className="text-cyan-600 dark:text-cyan-400 block text-[10px] sm:text-sm">XP</strong>
-                <p className="text-cyan-800 dark:text-cyan-300 text-lg sm:text-2xl font-semibold">
-                  {userProfile.xp}
-                </p>
-              </div>
-              <div className="p-2 sm:p-4 bg-cyan-100 dark:bg-cyan-800/30 rounded-md shadow-sm text-center">
-                <strong className="text-cyan-700 dark:text-cyan-300 block text-[10px] sm:text-sm">Level</strong>
-                <p className="text-cyan-900 dark:text-cyan-200 text-lg sm:text-2xl font-semibold">
-                  {userProfile.level}
-                </p>
-              </div>
-            </div>
+        {/* Additional Info Card (optional - shows when viewing other profiles) */}
+        {!isOwnProfile && !isEditing && (
+          <div className="mt-4 glass-card rounded-xl p-4 text-center border border-white/20 dark:border-white/10 fade-in-stagger" style={{ animationDelay: '200ms' }}>
+            <p className="text-sm text-gray-500 dark:text-gray-400">
+              👋 You're viewing <span className="font-semibold text-gray-700 dark:text-gray-300">{userProfile.username}</span>'s profile
+            </p>
           </div>
         )}
       </div>

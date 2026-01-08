@@ -1,9 +1,11 @@
 import LoadingPage from "@src/components/loading";
 import { useState, useEffect } from "react";
 import { useAuth } from "@src/contexts/AuthContext";
+import { NavLink } from "react-router-dom";
 
 // Interface based on your User model schema
 interface LeaderboardUser {
+  _id?: string;
   dateLastLogin: unknown;
   username: string;
   nickname?: string;
@@ -11,6 +13,7 @@ interface LeaderboardUser {
   level?: number;
   profilePicture?: string;
   gems?: number;
+  rank?: number;
 }
 
 interface currentUser {
@@ -84,20 +87,20 @@ const LeaderboardPage = () => {
     fetchLeaderboard();
   }, []);
 
-  // Generate colors based on rank
-  const getRankColor = (rank: number) => {
-    if (rank === 1) return "text-yellow-500"; // Gold
-    if (rank === 2) return "text-gray-400";   // Silver
-    if (rank === 3) return "text-amber-600";  // Bronze
-    return "text-cyan-600 dark:text-cyan-400";                  // Match your app's Cyan theme
+  // Get medal emoji for top 3
+  const getMedalEmoji = (rank: number) => {
+    if (rank === 1) return "🥇";
+    if (rank === 2) return "🥈";
+    if (rank === 3) return "🥉";
+    return null;
   };
 
-  // Generate background colors based on rank
-  const getRankBgColor = (rank: number) => {
-    if (rank === 1) return "bg-yellow-100";
-    if (rank === 2) return "bg-gray-100";
-    if (rank === 3) return "bg-amber-50";
-    return rank % 2 === 0 ? "bg-white/60" : "bg-white/40";
+  // Generate background gradient based on rank
+  const getRankGradient = (rank: number) => {
+    if (rank === 1) return "from-yellow-400 via-yellow-500 to-amber-500";
+    if (rank === 2) return "from-gray-300 via-gray-400 to-gray-500";
+    if (rank === 3) return "from-amber-500 via-orange-500 to-amber-600";
+    return "from-cyan-500 to-blue-500";
   };
 
   // Generate avatar placeholder if no profile picture
@@ -105,10 +108,11 @@ const LeaderboardPage = () => {
     return username.charAt(0).toUpperCase();
   };
 
-  // Calculate streak from last login (for demo purposes)
-  const getStreakDays = (user: LeaderboardUser) => {
-    if (!user.dateLastLogin) return null;
-    return Math.floor(Math.random() * 30) + 1;
+  // Get current user's rank
+  const getCurrentUserRank = () => {
+    if (!currentUser) return null;
+    const userIndex = users.findIndex(u => u.username === currentUser.username);
+    return userIndex >= 0 ? userIndex + 1 : null;
   };
 
   if (loading) {
@@ -117,184 +121,354 @@ const LeaderboardPage = () => {
 
   if (error) {
     return (
-      <div className="gap-4 md:gap-5 flex flex-col mt-12 md:mt-20 items-center justify-center">
-        {/* Added dark mode support */}
-        <p className="text-base md:text-lg text-red-600 dark:text-red-400">Error: {error}</p>
-        {/* Enhanced button with better responsive padding and dark mode */}
-        <button
-          onClick={() => window.location.reload()}
-          className="px-3 py-1.5 md:px-4 md:py-2 bg-gradient-to-r from-cyan-400 to-cyan-600 text-white rounded-lg hover:from-cyan-500 hover:to-cyan-700 transition-colors animate-cyan-wave"
-        >
-          Retry
-        </button>
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 flex flex-col items-center justify-center px-4">
+        <div className="glass-card rounded-2xl p-8 text-center max-w-md fade-in-stagger">
+          <div className="text-5xl mb-4">😔</div>
+          <h2 className="text-lg sm:text-xl font-bold text-gray-800 dark:text-white mb-2">
+            Failed to load leaderboard
+          </h2>
+          <p className="text-sm sm:text-base text-red-600 dark:text-red-400 mb-6 bg-red-100/50 dark:bg-red-900/20 p-3 rounded-xl">
+            {error}
+          </p>
+          <button
+            onClick={() => window.location.reload()}
+            className="px-6 py-2.5 bg-gradient-to-r from-cyan-500 to-blue-500 text-white rounded-xl font-semibold hover:from-cyan-600 hover:to-blue-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105"
+          >
+            Try Again
+          </button>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 pt-2 sm:pt-4">
-      <div className="max-w-3xl mx-auto px-3 sm:px-4 py-4 pb-20">
-        {/* Heading with dark mode outline */}
-        <h1 className="text-lg sm:text-xl md:text-2xl font-bold text-center mb-2 md:mb-3 text-gray-800 dark:text-gray-100 dark:text-outline">Leaderboard</h1>
-        {/* Subheading with dark mode outline */}
-        <p className="text-gray-600 dark:text-gray-300 dark:text-outline text-xs sm:text-sm text-center mb-3 md:mb-4">See how you stack up against other learners!</p>
+      <div className="max-w-3xl mx-auto px-3 sm:px-4 lg:px-6 py-4 pb-24 sm:pb-20">
 
-        {/* Top 3 users podium */}
-        {users.length > 0 && (
-          <div className="grid grid-cols-3 gap-1 sm:gap-2 mb-4 md:mb-5 max-w-sm sm:max-w-md md:max-w-lg mx-auto">
-            {/* Silver - 2nd place (left) */}
-            <div className="col-span-1 flex flex-col items-center bg-gray-100 dark:bg-gray-800 rounded-lg sm:rounded-xl p-1 sm:p-2 border border-gray-300 dark:border-gray-700 shadow-md">
-              <div className="relative mb-1">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center text-xs sm:text-sm md:text-base font-bold overflow-hidden">
-                  {users[1] && users[1].profilePicture ? (
-                    <img src={users[1].profilePicture} alt={users[1].username} className="w-full h-full object-cover" />
-                  ) : (
-                    <span>{getInitials(users[1]?.username || "")}</span>
-                  )}
-                </div>
-                <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-5 sm:h-5 rounded-full bg-gray-400 text-white font-bold text-[8px] sm:text-[10px] flex items-center justify-center border border-white dark:border-gray-800">
-                  2
-                </div>
-              </div>
-              <p className="font-bold text-[8px] sm:text-[10px] md:text-xs text-center truncate w-full text-gray-800 dark:text-gray-100 dark:text-outline">
-                {users[1]?.nickname || users[1]?.username || ""}
-              </p>
-              <p className="text-[8px] sm:text-[10px] text-gray-600 dark:text-gray-200 dark:text-outline">
-                {users[1]?.xp || 0} XP
-              </p>
-              <div className="mt-0.5 flex items-center gap-1">
-                <span className="text-[8px] sm:text-[10px] text-cyan-600 dark:text-cyan-400 dark:text-outline">
-                  Lvl {users[1]?.level || 1}
-                </span>
-              </div>
-            </div>
-
-            {/* Gold - 1st place (center) */}
-            <div className="col-span-1 flex flex-col items-center bg-yellow-100 dark:bg-yellow-900/40 rounded-lg sm:rounded-xl p-1 sm:p-2 border-2 border-yellow-300 dark:border-yellow-600 shadow-md transform scale-105 sm:scale-110 -mt-2 z-10">
-              <div className="relative mb-1">
-                <div className="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-yellow-300 dark:bg-yellow-600 flex items-center justify-center text-sm sm:text-base md:text-lg font-bold overflow-hidden">
-                  {users[0] && users[0].profilePicture ? (
-                    <img src={users[0].profilePicture} alt={users[0].username} className="w-full h-full object-cover" />
-                  ) : (
-                    <span>{getInitials(users[0]?.username || "")}</span>
-                  )}
-                </div>
-                <div className="absolute -top-1 -right-1 w-4 h-4 sm:w-6 sm:h-6 rounded-full bg-yellow-500 text-white font-bold text-[9px] sm:text-[11px] flex items-center justify-center border border-white dark:border-yellow-900">
-                  1
-                </div>
-              </div>
-              <p className="font-bold text-[9px] sm:text-xs md:text-sm text-center truncate w-full text-gray-800 dark:text-gray-100 dark:text-outline">
-                {users[0]?.nickname || users[0]?.username || ""}
-              </p>
-              <p className="text-[9px] sm:text-xs text-gray-600 dark:text-gray-200 dark:text-outline">
-                {users[0]?.xp || 0} XP
-              </p>
-              <div className="mt-0.5 flex items-center gap-1">
-                <span className="text-[8px] sm:text-[10px] text-cyan-600 dark:text-cyan-400 dark:text-outline">
-                  Lvl {users[0]?.level || 1}
-                </span>
-              </div>
-            </div>
-
-            {/* Bronze - 3rd place (right) */}
-            <div className="col-span-1 flex flex-col items-center bg-amber-50 dark:bg-amber-900/30 rounded-lg sm:rounded-xl p-1 sm:p-2 border border-amber-300 dark:border-amber-700 shadow-md">
-              <div className="relative mb-1">
-                <div className="w-8 h-8 sm:w-10 sm:h-10 md:w-12 md:h-12 rounded-full bg-amber-300 dark:bg-amber-600 flex items-center justify-center text-xs sm:text-sm md:text-base font-bold overflow-hidden">
-                  {users[2] && users[2].profilePicture ? (
-                    <img src={users[2].profilePicture} alt={users[2].username} className="w-full h-full object-cover" />
-                  ) : (
-                    <span>{getInitials(users[2]?.username || "")}</span>
-                  )}
-                </div>
-                <div className="absolute -top-1 -right-1 w-3 h-3 sm:w-5 sm:h-5 rounded-full bg-amber-600 text-white font-bold text-[8px] sm:text-[10px] flex items-center justify-center border border-white dark:border-amber-900">
-                  3
-                </div>
-              </div>
-              <p className="font-bold text-[8px] sm:text-[10px] md:text-xs text-center truncate w-full text-gray-800 dark:text-gray-100 dark:text-outline">
-                {users[2]?.nickname || users[2]?.username || ""}
-              </p>
-              <p className="text-[8px] sm:text-[10px] text-gray-600 dark:text-gray-200 dark:text-outline">
-                {users[2]?.xp || 0} XP
-              </p>
-              <div className="mt-0.5 flex items-center gap-1">
-                <span className="text-[8px] sm:text-[10px] text-cyan-600 dark:text-cyan-400 dark:text-outline">
-                  Lvl {users[2]?.level || 1}
-                </span>
-              </div>
-            </div>
+        {/* Header Section */}
+        <div className="glass-card rounded-lg sm:rounded-2xl p-2.5 sm:p-5 mb-3 sm:mb-6 fade-in-stagger border border-white/20 dark:border-white/10 text-center">
+          <div className="flex items-center justify-center gap-2 sm:gap-3 mb-1 sm:mb-2">
+            <span className="text-2xl sm:text-4xl">🏆</span>
+            <h1 className="text-lg sm:text-3xl md:text-4xl font-bold gradient-text">
+              Leaderboard
+            </h1>
           </div>
-        )}
+          <p className="text-xs sm:text-base text-gray-600 dark:text-gray-400">
+            See how you stack up against other learners!
+          </p>
 
-        {/* Full leaderboard table */}
-        <div className="bg-white/60 dark:bg-gray-800/60 rounded-lg sm:rounded-xl shadow-md overflow-hidden border border-cyan-200 dark:border-cyan-800/40">
-          {/* Table header - Changed to cyan animated wave in dark mode */}
-          <div className="bg-gradient-to-r from-cyan-400 to-cyan-600 animate-cyan-wave px-2 sm:px-3 py-1.5 sm:py-2 text-white grid grid-cols-12 gap-1">
-            <div className="col-span-2 sm:col-span-1 text-[9px] sm:text-[10px] font-medium uppercase dark:text-purple-600">Rank</div>
-            <div className="col-span-6 sm:col-span-7 md:col-span-8 text-[9px] sm:text-[10px] font-medium uppercase dark:text-purple-600">User</div>
-            <div className="col-span-4 sm:col-span-4 md:col-span-3 text-right text-[9px] sm:text-[10px] font-medium uppercase dark:text-purple-600">XP</div>
-          </div>
-
-          {/* Table rows */}
-          <div className="divide-y divide-gray-200 dark:divide-gray-700">
-            {users.map((user, index) => (
-              <div
-                key={user.username}
-                className={`px-2 sm:px-3 py-1.5 sm:py-2 grid grid-cols-12 gap-1 items-center ${getRankBgColor(index + 1)} ${currentUser?.username === user.username ? 'border-l-4 border-cyan-500 dark:border-cyan-400' : ''} transition-colors hover:bg-cyan-50 dark:hover:bg-cyan-900/10`}
-              >
-                {/* Rank column - Purple text in dark mode */}
-                <div className="col-span-2 sm:col-span-1">
-                  <div className={`text-[9px] sm:text-[10px] md:text-xs font-bold ${getRankColor(index + 1)} dark:text-purple-600`}>
-                    #{index + 1}
-                  </div>
-                </div>
-
-                {/* User column */}
-                <div className="col-span-6 sm:col-span-7 md:col-span-8">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-5 w-5 sm:h-7 sm:w-7 md:h-8 md:w-8 rounded-full flex items-center justify-center bg-cyan-100 dark:bg-cyan-900/30 text-cyan-600 dark:text-cyan-400 font-bold">
-                      {user.profilePicture ? (
-                        <img src={user.profilePicture} alt={user.username} className="h-5 w-5 sm:h-7 sm:w-7 md:h-8 md:w-8 rounded-full" />
-                      ) : (
-                        getInitials(user.username)
-                      )}
-                    </div>
-                    <div className="ml-1 sm:ml-2">
-                      {/* Username - Purple text in dark mode */}
-                      <div className="text-[9px] sm:text-[10px] md:text-xs font-medium text-gray-900 dark:text-purple-200 truncate max-w-[70px] sm:max-w-[100px] md:max-w-full">
-                        {user.nickname || user.username}
-                      </div>
-                      <div className="hidden sm:flex items-center">
-                        {getStreakDays(user) && (
-                          <div className="text-[7px] sm:text-[9px] text-yellow-600 dark:text-yellow-300 mr-1.5">🔥 {getStreakDays(user)}</div>
-                        )}
-                        {/* Level badge - Purple in dark mode */}
-                        <span className="px-1 py-0.5 text-[7px] sm:text-[9px] rounded-full bg-cyan-100 dark:bg-cyan-900/30 text-cyan-700 dark:text-cyan-400">
-                          Lvl {user.level || 1}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* XP column - Purple text in dark mode */}
-                <div className="col-span-4 sm:col-span-4 md:col-span-3 text-right">
-                  <div className="text-[9px] sm:text-[10px] md:text-xs text-gray-900 dark:text-purple-200 font-medium">{user.xp} XP</div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Current User's Rank Badge */}
+          {currentUser && getCurrentUserRank() && (
+            <div className="mt-2 sm:mt-4 inline-flex items-center gap-1.5 sm:gap-2 px-2.5 py-1 sm:px-4 sm:py-2 glass-card rounded-full border border-cyan-200/50 dark:border-cyan-800/50">
+              <span className="text-xs sm:text-base">📍</span>
+              <span className="text-xs sm:text-base font-semibold text-gray-700 dark:text-gray-300">
+                Your Rank:
+              </span>
+              <span className="text-sm sm:text-xl font-bold bg-gradient-to-r from-cyan-500 to-blue-500 bg-clip-text text-transparent">
+                #{getCurrentUserRank()}
+              </span>
+            </div>
+          )}
         </div>
 
-        {users.length === 0 && (
-          <div className="text-center py-8 sm:py-10 bg-white/60 dark:bg-gray-800/60 rounded-xl sm:rounded-2xl shadow-md border border-cyan-200/20 dark:border-cyan-800/40">
-            <p className="text-gray-500 dark:text-purple-200">No users on the leaderboard yet.</p>
+        {/* Top 3 Podium */}
+        {users.length >= 3 && (
+          <div className="mb-4 sm:mb-8 fade-in-stagger" style={{ animationDelay: '100ms' }}>
+            <div className="flex items-end justify-center gap-1.5 sm:gap-3 md:gap-4 max-w-md mx-auto px-1">
+
+              {/* 2nd Place - Silver */}
+              <div className="flex-1 max-w-[90px] sm:max-w-[140px]">
+                <div className="glass-card rounded-lg sm:rounded-2xl p-2 sm:p-4 text-center border border-gray-300/50 dark:border-gray-600/50 hover:shadow-xl transition-all duration-300 group">
+                  {/* Avatar */}
+                  <div className="relative mx-auto mb-1.5 sm:mb-3">
+                    <div className="w-10 h-10 sm:w-16 md:w-20 sm:h-16 md:h-20 rounded-full overflow-hidden border-2 sm:border-3 border-gray-400 shadow-lg mx-auto bg-gradient-to-br from-gray-200 to-gray-400 group-hover:scale-105 transition-transform duration-300">
+                      {users[1]?.profilePicture ? (
+                        <img src={users[1].profilePicture} alt={users[1].username} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-sm sm:text-xl font-bold text-gray-600">
+                          {getInitials(users[1]?.username || "")}
+                        </div>
+                      )}
+                    </div>
+                    {/* Rank Badge */}
+                    <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-5 h-5 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-gray-400 to-gray-600 text-white font-bold text-[10px] sm:text-base flex items-center justify-center shadow-lg border-2 border-white dark:border-gray-800">
+                      2
+                    </div>
+                  </div>
+
+                  {/* Medal */}
+                  <div className="text-lg sm:text-3xl mb-0.5 sm:mb-1">🥈</div>
+
+                  {/* Name */}
+                  <NavLink
+                    to={`/profile/${users[1]?._id}`}
+                    className="font-bold text-[10px] sm:text-sm text-gray-800 dark:text-white truncate block hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                  >
+                    {users[1]?.nickname || users[1]?.username || ""}
+                  </NavLink>
+
+                  {/* XP */}
+                  <p className="text-[10px] sm:text-sm font-semibold bg-gradient-to-r from-gray-500 to-gray-700 bg-clip-text text-transparent">
+                    {users[1]?.xp?.toLocaleString() || 0} XP
+                  </p>
+
+                  {/* Level */}
+                  <span className="hidden sm:inline-block mt-1 px-2 py-0.5 text-[10px] sm:text-xs rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">
+                    Level {users[1]?.level || 1}
+                  </span>
+                </div>
+                {/* Podium Bar */}
+                <div className="h-8 sm:h-16 bg-gradient-to-b from-gray-300 to-gray-500 rounded-b-lg mt-[-6px] sm:mt-[-8px] relative overflow-hidden">
+                  <div className="absolute inset-0 bg-white/20 shimmer"></div>
+                </div>
+              </div>
+
+              {/* 1st Place - Gold (Center, Tallest) */}
+              <div className="flex-1 max-w-[100px] sm:max-w-[160px] -mt-2 sm:-mt-6">
+                <div className="glass-card rounded-lg sm:rounded-2xl p-2 sm:p-4 text-center border border-yellow-400/50 dark:border-yellow-600/50 hover:shadow-xl transition-all duration-300 group relative overflow-hidden">
+                  {/* Crown */}
+                  <div className="absolute -top-0.5 sm:-top-1 left-1/2 transform -translate-x-1/2 text-lg sm:text-3xl animate-bounce">
+                    👑
+                  </div>
+
+                  {/* Avatar */}
+                  <div className="relative mx-auto mb-1.5 sm:mb-3 mt-4 sm:mt-6">
+                    <div className="w-12 h-12 sm:w-20 sm:h-20 md:w-24 md:h-24 rounded-full overflow-hidden border-2 sm:border-4 border-yellow-500 shadow-xl mx-auto bg-gradient-to-br from-yellow-300 to-yellow-500 group-hover:scale-105 transition-transform duration-300">
+                      {users[0]?.profilePicture ? (
+                        <img src={users[0].profilePicture} alt={users[0].username} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-base sm:text-2xl font-bold text-yellow-700">
+                          {getInitials(users[0]?.username || "")}
+                        </div>
+                      )}
+                    </div>
+                    {/* Rank Badge */}
+                    <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-5 h-5 sm:w-9 sm:h-9 rounded-full bg-gradient-to-br from-yellow-400 to-amber-600 text-white font-bold text-xs sm:text-lg flex items-center justify-center shadow-lg border-2 border-white dark:border-yellow-900">
+                      1
+                    </div>
+                  </div>
+
+                  {/* Medal */}
+                  <div className="text-xl sm:text-4xl mb-0.5 sm:mb-1">🥇</div>
+
+                  {/* Name */}
+                  <NavLink
+                    to={`/profile/${users[0]?._id}`}
+                    className="font-bold text-xs sm:text-base text-gray-800 dark:text-white truncate block hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                  >
+                    {users[0]?.nickname || users[0]?.username || ""}
+                  </NavLink>
+
+                  {/* XP */}
+                  <p className="text-xs sm:text-base font-bold bg-gradient-to-r from-yellow-500 to-amber-600 bg-clip-text text-transparent">
+                    {users[0]?.xp?.toLocaleString() || 0} XP
+                  </p>
+
+                  {/* Level */}
+                  <span className="hidden sm:inline-block mt-1 px-2 py-0.5 text-[10px] sm:text-xs rounded-full bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400 font-medium">
+                    Level {users[0]?.level || 1}
+                  </span>
+
+                  {/* Glow Effect */}
+                  <div className="absolute inset-0 bg-gradient-to-t from-yellow-500/10 to-transparent pointer-events-none"></div>
+                </div>
+                {/* Podium Bar */}
+                <div className="h-12 sm:h-24 bg-gradient-to-b from-yellow-400 to-amber-600 rounded-b-lg mt-[-6px] sm:mt-[-8px] relative overflow-hidden">
+                  <div className="absolute inset-0 bg-white/20 shimmer"></div>
+                </div>
+              </div>
+
+              {/* 3rd Place - Bronze */}
+              <div className="flex-1 max-w-[90px] sm:max-w-[140px]">
+                <div className="glass-card rounded-lg sm:rounded-2xl p-2 sm:p-4 text-center border border-amber-400/50 dark:border-amber-700/50 hover:shadow-xl transition-all duration-300 group">
+                  {/* Avatar */}
+                  <div className="relative mx-auto mb-1.5 sm:mb-3">
+                    <div className="w-10 h-10 sm:w-16 sm:h-16 md:w-20 md:h-20 rounded-full overflow-hidden border-2 sm:border-3 border-amber-500 shadow-lg mx-auto bg-gradient-to-br from-amber-300 to-orange-500 group-hover:scale-105 transition-transform duration-300">
+                      {users[2]?.profilePicture ? (
+                        <img src={users[2].profilePicture} alt={users[2].username} className="w-full h-full object-cover" />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-sm sm:text-xl font-bold text-amber-700">
+                          {getInitials(users[2]?.username || "")}
+                        </div>
+                      )}
+                    </div>
+                    {/* Rank Badge */}
+                    <div className="absolute -top-0.5 -right-0.5 sm:-top-1 sm:-right-1 w-5 h-5 sm:w-8 sm:h-8 rounded-full bg-gradient-to-br from-amber-500 to-orange-600 text-white font-bold text-[10px] sm:text-base flex items-center justify-center shadow-lg border-2 border-white dark:border-amber-900">
+                      3
+                    </div>
+                  </div>
+
+                  {/* Medal */}
+                  <div className="text-lg sm:text-3xl mb-0.5 sm:mb-1">🥉</div>
+
+                  {/* Name */}
+                  <NavLink
+                    to={`/profile/${users[2]?._id}`}
+                    className="font-bold text-[10px] sm:text-sm text-gray-800 dark:text-white truncate block hover:text-cyan-600 dark:hover:text-cyan-400 transition-colors"
+                  >
+                    {users[2]?.nickname || users[2]?.username || ""}
+                  </NavLink>
+
+                  {/* XP */}
+                  <p className="text-[10px] sm:text-sm font-semibold bg-gradient-to-r from-amber-500 to-orange-600 bg-clip-text text-transparent">
+                    {users[2]?.xp?.toLocaleString() || 0} XP
+                  </p>
+
+                  {/* Level */}
+                  <span className="hidden sm:inline-block mt-1 px-2 py-0.5 text-[10px] sm:text-xs rounded-full bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400">
+                    Level {users[2]?.level || 1}
+                  </span>
+                </div>
+                {/* Podium Bar */}
+                <div className="h-6 sm:h-12 bg-gradient-to-b from-amber-400 to-orange-600 rounded-b-lg mt-[-6px] sm:mt-[-8px] relative overflow-hidden">
+                  <div className="absolute inset-0 bg-white/20 shimmer"></div>
+                </div>
+              </div>
+            </div>
           </div>
         )}
+
+        {/* Full Leaderboard List */}
+        <div className="glass-card rounded-lg sm:rounded-2xl overflow-hidden shadow-xl fade-in-stagger border border-white/20 dark:border-white/10" style={{ animationDelay: '200ms' }}>
+          {/* Table Header */}
+          <div className="bg-gradient-to-r from-cyan-500 to-blue-600 px-2.5 sm:px-5 py-2 sm:py-4">
+            <div className="grid grid-cols-12 gap-1 sm:gap-2 items-center">
+              <div className="col-span-2 sm:col-span-1">
+                <span className="text-[10px] sm:text-sm font-bold text-white/90 uppercase tracking-wide">#</span>
+              </div>
+              <div className="col-span-6 sm:col-span-7 md:col-span-8">
+                <span className="text-[10px] sm:text-sm font-bold text-white/90 uppercase tracking-wide">Player</span>
+              </div>
+              <div className="col-span-4 sm:col-span-4 md:col-span-3 text-right">
+                <span className="text-[10px] sm:text-sm font-bold text-white/90 uppercase tracking-wide">XP</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Table Body */}
+          <div className="divide-y divide-gray-100 dark:divide-gray-800">
+            {users.map((user, index) => {
+              const rank = index + 1;
+              const isCurrentUser = currentUser?.username === user.username;
+              const isTopThree = rank <= 3;
+
+              return (
+                <div
+                  key={user.username}
+                  className={`px-2.5 sm:px-5 py-2 sm:py-4 grid grid-cols-12 gap-1 sm:gap-2 items-center transition-all duration-300 hover:bg-cyan-50/50 dark:hover:bg-cyan-900/20 group ${isCurrentUser
+                    ? 'bg-gradient-to-r from-cyan-50 to-blue-50 dark:from-cyan-900/30 dark:to-blue-900/30 border-l-4 border-cyan-500'
+                    : ''
+                    }`}
+                  style={{ animationDelay: `${(index + 3) * 50}ms` }}
+                >
+                  {/* Rank Column */}
+                  <div className="col-span-2 sm:col-span-1">
+                    {isTopThree ? (
+                      <div className="flex items-center gap-1">
+                        <span className="text-base sm:text-xl">{getMedalEmoji(rank)}</span>
+                      </div>
+                    ) : (
+                      <div className={`w-5 h-5 sm:w-8 sm:h-8 rounded-full flex items-center justify-center text-[10px] sm:text-sm font-bold ${isCurrentUser
+                        ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white'
+                        : 'bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400'
+                        }`}>
+                        {rank}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* User Column */}
+                  <div className="col-span-6 sm:col-span-7 md:col-span-8">
+                    <NavLink
+                      to={`/profile/${user._id}`}
+                      className="flex items-center gap-1.5 sm:gap-3 group-hover:translate-x-1 transition-transform duration-300"
+                    >
+                      {/* Avatar */}
+                      <div className={`relative flex-shrink-0 w-7 h-7 sm:w-11 sm:h-11 rounded-full overflow-hidden shadow-md ${isTopThree
+                        ? `bg-gradient-to-br ${getRankGradient(rank)}`
+                        : 'bg-gradient-to-br from-cyan-400 to-blue-500'
+                        }`}>
+                        {user.profilePicture ? (
+                          <img src={user.profilePicture} alt={user.username} className="w-full h-full object-cover" />
+                        ) : (
+                          <div className="w-full h-full flex items-center justify-center text-white font-bold text-[10px] sm:text-base">
+                            {getInitials(user.username)}
+                          </div>
+                        )}
+
+                        {/* Current User Indicator */}
+                        {isCurrentUser && (
+                          <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 sm:w-4 sm:h-4 bg-green-500 rounded-full border-2 border-white dark:border-gray-800"></div>
+                        )}
+                      </div>
+
+                      {/* Name & Level */}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-1">
+                          <span className={`font-semibold text-[11px] sm:text-base truncate ${isCurrentUser
+                            ? 'text-cyan-700 dark:text-cyan-300'
+                            : 'text-gray-800 dark:text-white'
+                            }`}>
+                            {user.nickname || user.username}
+                          </span>
+                          {isCurrentUser && (
+                            <span className="text-[8px] sm:text-xs px-1 py-0.5 sm:px-1.5 bg-cyan-100 dark:bg-cyan-900/50 text-cyan-700 dark:text-cyan-300 rounded-full font-medium">
+                              You
+                            </span>
+                          )}
+                        </div>
+                        <div className="hidden sm:flex items-center gap-2 mt-0.5">
+                          <span className="text-[10px] sm:text-xs px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 rounded-full">
+                            Lvl {user.level || 1}
+                          </span>
+                        </div>
+                      </div>
+                    </NavLink>
+                  </div>
+
+                  {/* XP Column */}
+                  <div className="col-span-4 sm:col-span-4 md:col-span-3 text-right">
+                    <div className="flex flex-col items-end">
+                      <span className={`font-bold text-sm sm:text-base ${isTopThree
+                        ? `bg-gradient-to-r ${getRankGradient(rank)} bg-clip-text text-transparent`
+                        : isCurrentUser
+                          ? 'text-cyan-600 dark:text-cyan-400'
+                          : 'text-gray-800 dark:text-white'
+                        }`}>
+                        {user.xp?.toLocaleString() || 0}
+                      </span>
+                      <span className="text-[10px] sm:text-xs text-gray-500 dark:text-gray-400">XP</span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Empty State */}
+          {users.length === 0 && (
+            <div className="p-12 text-center">
+              <div className="text-5xl mb-4">🏆</div>
+              <h3 className="text-lg font-bold text-gray-800 dark:text-white mb-2">
+                No players yet
+              </h3>
+              <p className="text-gray-500 dark:text-gray-400">
+                Be the first to join the leaderboard!
+              </p>
+            </div>
+          )}
+        </div>
+
+        {/* Motivational Footer */}
+        <div className="mt-6 text-center fade-in-stagger" style={{ animationDelay: '300ms' }}>
+          <div className="inline-flex items-center gap-2 px-4 py-2 glass-card rounded-full text-sm text-gray-600 dark:text-gray-400 border border-white/30 dark:border-white/10">
+            <span>💡</span>
+            <span>Complete exercises and earn XP to climb the ranks!</span>
+          </div>
+        </div>
       </div>
     </div>
   );
 };
-
-
 
 export default LeaderboardPage;
