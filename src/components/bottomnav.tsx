@@ -4,6 +4,7 @@ import HomeIcon from "@src/assets/home.svg";
 import ProfileIcon from "@src/assets/profile.svg";
 import SettingsIcon from "@src/assets/settings.svg";
 import ShopIcon from "@src/assets/store.svg";
+import BattleIcon from "@src/assets/battle.svg";
 
 import { useAuth } from "@src/contexts/AuthContext.tsx";
 import { useState } from "react";
@@ -96,6 +97,16 @@ const BottomNavBar = () => {
               }
             >
               <img src={HomeIcon} className="w-7 h-7" alt="Home" />
+            </NavLink>
+          </li>
+          <li>
+            <NavLink
+              to="/battle"
+              className={({ isActive }) =>
+                isActive ? "scale-110" : "opacity-70 hover:opacity-100 transition-transform"
+              }
+            >
+              <img src={BattleIcon} className="w-9 h-9" alt="Battle" />
             </NavLink>
           </li>
           <li>

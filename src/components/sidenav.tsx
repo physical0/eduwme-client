@@ -4,6 +4,7 @@ import HomeIcon from "@src/assets/home.svg";
 import ProfileIcon from "@src/assets/profile.svg";
 import SettingsIcon from "@src/assets/settings.svg";
 import ShopIcon from "@src/assets/store.svg";
+import BattleIcon from "@src/assets/battle.svg";
 import { useAuth } from "@src/contexts/AuthContext";
 import { useSideNav } from "@src/contexts/SideNavContext";
 
@@ -13,7 +14,6 @@ interface NavItem {
   icon: string;
   label: string;
   iconSize?: string;
-  isEmoji?: boolean; // For emoji-based icons
 }
 
 const SideNavBar = () => {
@@ -25,7 +25,7 @@ const SideNavBar = () => {
   // Navigation items configuration
   const navItems: NavItem[] = [
     { to: "/home", icon: HomeIcon, label: "Home" },
-    { to: "/battle", icon: "⚔️", label: "Battle", isEmoji: true },
+    { to: "/battle", icon: BattleIcon, label: "Battle", iconSize: "w-8 h-8 md:w-10 md:h-10" },
     { to: "/leaderboard", icon: TrophyIcon, label: "Ranks" },
     { to: profileLink, icon: ProfileIcon, label: "Profile" },
     { to: "/shop", icon: ShopIcon, label: "Shop", iconSize: "w-7 md:w-8 lg:w-9" },
@@ -58,25 +58,19 @@ const SideNavBar = () => {
               transition-transform duration-300
               ${isActive ? "scale-105" : "group-hover:scale-105"}
             `}>
-              {item.isEmoji ? (
-                <span className={`text-xl md:text-2xl ${isActive ? "drop-shadow-sm" : ""}`}>
-                  {item.icon}
-                </span>
-              ) : (
-                <img
-                  src={item.icon}
-                  alt={item.label}
-                  className={`
-                    ${item.iconSize || "w-6 h-6 md:w-7 md:h-7"}
-                    object-contain
-                    transition-all duration-300
-                    ${isActive
-                      ? "brightness-0 invert drop-shadow-sm"
-                      : "opacity-90 contrast-125 group-hover:opacity-100"
-                    }
-                  `}
-                />
-              )}
+              <img
+                src={item.icon}
+                alt={item.label}
+                className={`
+                  ${item.iconSize || "w-6 h-6 md:w-7 md:h-7"}
+                  object-contain max-w-none
+                  transition-all duration-300
+                  ${isActive
+                    ? "brightness-0 invert drop-shadow-sm"
+                    : "opacity-90 contrast-125 group-hover:opacity-100"
+                  }
+                `}
+              />
             </div>
 
             {/* Label - with smooth expand/collapse */}
