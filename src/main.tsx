@@ -11,6 +11,8 @@ import { AuthProvider } from "./contexts/AuthContext.tsx";
 import { ThemeProvider } from "./contexts/ThemeContext.tsx";
 // SideNav Provider import
 import { SideNavProvider } from "./contexts/SideNavContext.tsx";
+// Socket Provider import (for battle feature)
+import { SocketProvider } from "./contexts/SocketContext.tsx";
 
 // Layout Import
 import RootLayout from "./rootlayout.tsx";
@@ -25,6 +27,12 @@ import Courses from "./pages/main/course/Course.tsx";
 import ExercisePage from "./pages/main/course/Exercise.tsx";
 import Settings from "./pages/main/settings.tsx";
 import ShopPage from "./pages/main/shop.tsx";
+import TrialApp from "./pages/non-auth/trial-App.tsx";
+import TrialHome from "./pages/non-auth/trial-home.tsx";
+
+// Battle Pages Import
+import BattleLobby from "./pages/main/battle/BattleLobby.tsx";
+import BattleArena from "./pages/main/battle/BattleArena.tsx";
 
 // Auth Pages Import
 import Register from "./pages/auth/register.tsx";
@@ -39,39 +47,48 @@ createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <ThemeProvider>
       <AuthProvider>
-        <SideNavProvider>
-          <BrowserRouter>
-            <Routes>
-              <Route element={<RootLayout />}>
-                {/* Tanpa layout, standalone */}
-                <Route path="/" element={<App />} />
+        <SocketProvider>
+          <SideNavProvider>
+            <BrowserRouter>
+              <Routes>
+                <Route element={<RootLayout />}>
+                  {/* Tanpa layout, standalone */}
+                  <Route path="/" element={<App />} />
+                  <Route path="/trialApp" element={<TrialApp />} />
+                  <Route path="/trialHome" element={<TrialHome />} />
 
-                {/* Protected routes - Require authentication */}
-                <Route element={
-                  <RequireAuth>
-                    <MainLayout />
-                  </RequireAuth>
-                }>
-                  <Route path="/home" element={<HomePage />} />
-                  <Route path="/dashboard" element={<HomePage />} />
-                  <Route path="/leaderboard" element={<LeaderboardPage />} />
-                  <Route path="/shop" element={<ShopPage />} />
-                  <Route path="/profile/:userId" element={<ProfilePage />} />
-                  <Route path="/courses/:courseId" element={<Courses />} />
-                  <Route path="/exercise/:exerciseId" element={<ExercisePage />} />
-                  <Route path="/auto-exercise/:courseId" element={<AutoExercise />} />               <Route path="/settings" element={<Settings />} />
-                </Route>
+                  {/* Protected routes - Require authentication */}
+                  <Route element={
+                    <RequireAuth>
+                      <MainLayout />
+                    </RequireAuth>
+                  }>
+                    <Route path="/home" element={<HomePage />} />
+                    <Route path="/leaderboard" element={<LeaderboardPage />} />
+                    <Route path="/shop" element={<ShopPage />} />
+                    <Route path="/profile/:userId" element={<ProfilePage />} />
+                    <Route path="/courses/:courseId" element={<Courses />} />
+                    <Route path="/exercise/:exerciseId" element={<ExercisePage />} />
+                    <Route path="/auto-exercise/:courseId" element={<AutoExercise />} />
+                    <Route path="/settings" element={<Settings />} />
+                    {/* Battle routes */}
+                    <Route path="/battle" element={<BattleLobby />} />
+                    <Route path="/battle/arena" element={<BattleArena />} />
+                  </Route>
 
-                {/* Dengan layout auth */}
-                <Route element={<AuthGuard><AuthLayout /></AuthGuard>}>
-                  <Route path="/login" element={<Login />} />
-                  <Route path="/register" element={<Register />} />
+                  {/* Dengan layout auth */}
+                  <Route element={<AuthGuard><AuthLayout /></AuthGuard>}>
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                  </Route>
+
                 </Route>
-              </Route>
-            </Routes>
-          </BrowserRouter>
-        </SideNavProvider>
+              </Routes>
+            </BrowserRouter>
+          </SideNavProvider>
+        </SocketProvider>
       </AuthProvider>
     </ThemeProvider>
   </StrictMode>,
 );
+

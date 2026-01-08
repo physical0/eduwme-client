@@ -14,9 +14,22 @@ interface NewsItem {
 }
 
 const EducationalNews = () => {
-  const [news, setNewsItem] = useState<NewsItem | null>(null);
+  let [news, setNewsItem] = useState<NewsItem | null>(null);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  // Placeholder data for API failure (Nasa APOD API is currently down - 504)
+  const placeholderNews: NewsItem = {
+    title: "Simeis 147: The Spaghetti Nebula Supernova Remnant",
+    description: "Seen toward the boundary of the constellations of the Bull (Taurus) and the Charioteer (Auriga), the impressive gas structure covers nearly 3 degrees on the sky, equivalent to 6 full moons.",
+    url: "https://apod.nasa.gov/apod/image/2601/Simeis147_Ferritti_4112.jpg",
+    image_url: "https://apod.nasa.gov/apod/image/2601/Simeis147_Ferritti_4112.jpg",
+    source: 'NASA',
+    type: 'space',
+    explanation: "",
+    media_type: 'image',
+    date: "2026-01-07",
+    article_url: "https://apod.nasa.gov/apod/"
+  }
 
   useEffect(() => {
     const fetchSpaceNews = async () => {
@@ -33,7 +46,7 @@ const EducationalNews = () => {
           const data = JSON.parse(cachedData);
           setNewsItem({
             title: data.title,
-            description: data.explanation.substring(0, 150) + '...',
+            description: data.description || (data.explanation ? data.explanation.substring(0, 150) + '...' : ''),
             explanation: data.explanation,
             url: data.url,
             image_url: data.url, // Set image_url to the media URL
@@ -51,47 +64,55 @@ const EducationalNews = () => {
         }
       }
 
-      
+
       // NASA FREE API 
       const API_KEY = import.meta.env.VITE_NASA_API_KEY || 'HKaauhzFPjstNB0fCgf3ySJF0HyMeImt0Pfi4vOJ'
 
-      let newResponse: Response | undefined;
-      
       try {
-        const response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`);
+        let response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=${API_KEY}`);
+
+        // Fallback to DEMO_KEY if primary API fails
         if (!response.ok) {
-          try {
-            newResponse = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY`);
+          console.warn(`Primary API failed with status ${response.status}, trying DEMO_KEY...`);
+          response = await fetch(`https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY`);
 
-          } catch (err) {
-            throw new Error(`Failed to fetch demo API: ${err instanceof Error ? err.message : 'Unknown error'}`);
+          if (!response.ok) {
+            console.warn(`Failed to fetch space news: ${response.status}`);
           }
-          throw new Error(`Failed to fetch space news: ${response.status}`);
-        }
-        let data = await response.json();
-        if (!data || !data.url || !data.title || !data.explanation) {
-          data = await newResponse?.json();
         }
 
-        // Save to cache
+        let data = await response.json();
+
+        if (!data?.url || !data?.title || !data?.explanation || !data?.date) {
+          console.warn('Invalid or missing data received from NASA API, using fallback');
+          setNewsItem(placeholderNews);
+          localStorage.setItem('nasaAPOD', JSON.stringify(placeholderNews));
+          localStorage.setItem('nasaAPODTime', now.toString());
+          setLoading(false);
+          return;
+        }
+
         localStorage.setItem('nasaAPOD', JSON.stringify(data));
         localStorage.setItem('nasaAPODTime', now.toString());
-        
-        setNewsItem({
+
+        news = {
           title: data.title,
           description: data.explanation.substring(0, 150) + '...',
           explanation: data.explanation,
           url: data.url,
-          image_url: data.url, // Set image_url to the media URL
+          image_url: data.url,
           media_type: data.media_type,
           date: data.date,
           source: 'NASA',
           type: 'space',
-          article_url: 'https://apod.nasa.gov/apod/' // Link to NASA APOD page
-        });
+          article_url: 'https://apod.nasa.gov/apod/'
+        }
+
+        setNewsItem(news);
+
       } catch (err) {
         console.error("Error fetching space news:", err);
-        setError(err instanceof Error ? err.message : "Failed to load space news");
+        setError(err instanceof Error ? err.message : "Failed to load space news.");
       } finally {
         setLoading(false);
       }
@@ -133,15 +154,15 @@ const EducationalNews = () => {
       <h3 className="text-base sm:text-lg md:text-xl font-semibold text-gray-700 dark:text-white mb-2 sm:mb-3 pb-1 sm:pb-2 border-b border-gray-200 dark:border-gray-700">
         Space Discovery
       </h3>
-      
+
       {news ? (
         <div className="flex flex-row gap-3">
           {/* Image on the left - smaller size for mobile too */}
           {news.media_type === 'image' && (
             <div className="w-20 sm:w-24 md:w-28 h-20 sm:h-24 md:h-28 overflow-hidden rounded-md flex-shrink-0">
-              <img 
-                src={news.url} 
-                alt={news.title} 
+              <img
+                src={news.url}
+                alt={news.title}
                 className="w-full h-full object-cover"
                 onError={(e) => {
                   (e.target as HTMLImageElement).style.display = 'none';
@@ -149,7 +170,7 @@ const EducationalNews = () => {
               />
             </div>
           )}
-          
+
           {/* Text content on the right */}
           <div className="flex-1 flex flex-col gap-2">
             <div className="flex items-start justify-between">
@@ -160,23 +181,23 @@ const EducationalNews = () => {
                 {news.source}
               </span>
             </div>
-            
+
             {news.date && (
               <p className="text-xs text-gray-500 dark:text-gray-400">
                 {new Date(news.date).toLocaleDateString('en-US', {
-                  year: 'numeric', 
-                  month: 'long', 
+                  year: 'numeric',
+                  month: 'long',
                   day: 'numeric'
                 })}
               </p>
             )}
-            
+
             <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
               {news.description}
             </p>
-            
+
             <div className="flex flex-wrap gap-2 mt-auto pt-1">
-              <button 
+              <button
                 onClick={() => window.open('https://apod.nasa.gov/apod/', '_blank')}
                 className="text-xs px-2 py-1 bg-blue-100 hover:bg-blue-200 dark:bg-blue-900 dark:hover:bg-blue-800 text-blue-700 dark:text-blue-300 rounded transition-colors duration-200 font-medium flex items-center"
               >
@@ -186,9 +207,9 @@ const EducationalNews = () => {
                 </svg>
                 Visit APOD
               </button>
-              
-              <button 
-                onClick={() => window.open(news.url, '_blank')}
+
+              <button
+                onClick={() => window.open(news!.url, '_blank')}
                 className="text-xs px-2 py-1 bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-300 rounded transition-colors duration-200 font-medium flex items-center"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-3 w-3 mr-1" viewBox="0 0 20 20" fill="currentColor">

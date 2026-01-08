@@ -13,6 +13,7 @@ interface NavItem {
   icon: string;
   label: string;
   iconSize?: string;
+  isEmoji?: boolean; // For emoji-based icons
 }
 
 const SideNavBar = () => {
@@ -24,6 +25,7 @@ const SideNavBar = () => {
   // Navigation items configuration
   const navItems: NavItem[] = [
     { to: "/home", icon: HomeIcon, label: "Home" },
+    { to: "/battle", icon: "⚔️", label: "Battle", isEmoji: true },
     { to: "/leaderboard", icon: TrophyIcon, label: "Ranks" },
     { to: profileLink, icon: ProfileIcon, label: "Profile" },
     { to: "/shop", icon: ShopIcon, label: "Shop", iconSize: "w-7 md:w-8 lg:w-9" },
@@ -56,19 +58,25 @@ const SideNavBar = () => {
               transition-transform duration-300
               ${isActive ? "scale-105" : "group-hover:scale-105"}
             `}>
-              <img
-                src={item.icon}
-                alt={item.label}
-                className={`
-                  ${item.iconSize || "w-6 h-6 md:w-7 md:h-7"}
-                  object-contain
-                  transition-all duration-300
-                  ${isActive
-                    ? "brightness-0 invert drop-shadow-sm"
-                    : "opacity-90 contrast-125 group-hover:opacity-100"
-                  }
-                `}
-              />
+              {item.isEmoji ? (
+                <span className={`text-xl md:text-2xl ${isActive ? "drop-shadow-sm" : ""}`}>
+                  {item.icon}
+                </span>
+              ) : (
+                <img
+                  src={item.icon}
+                  alt={item.label}
+                  className={`
+                    ${item.iconSize || "w-6 h-6 md:w-7 md:h-7"}
+                    object-contain
+                    transition-all duration-300
+                    ${isActive
+                      ? "brightness-0 invert drop-shadow-sm"
+                      : "opacity-90 contrast-125 group-hover:opacity-100"
+                    }
+                  `}
+                />
+              )}
             </div>
 
             {/* Label - with smooth expand/collapse */}

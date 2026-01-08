@@ -154,6 +154,7 @@ const Home = () => {
   const [userProgress, setUserProgress] = useState<UserProgress[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
   const { user } = useAuth();
   const { getAuthHeader } = useAuth();
 
@@ -161,6 +162,7 @@ const Home = () => {
 
   useEffect(() => {
     const fetchAllData = async () => {
+
       setLoading(true);
       setError(null);
       try {
@@ -174,16 +176,17 @@ const Home = () => {
           });
           if (userResponse.ok) {
             const userData = await userResponse.json();
-            // Fixed: userData directly contains the user object, not nested under a "user" property
+
             if (userData.courseBatchesProgress) {
               currentUserProgress = userData.courseBatchesProgress;
               setUserProgress(currentUserProgress);
             }
-          } else {
+          }
+          else {
             console.error("Failed to fetch user data, status:", userResponse.status);
-            // Potentially set an error or handle anonymous users differently
           }
         }
+
 
         const courseBatchesResponse = await fetch(
           `${API_BASE_URL}/courses/getCourseBatches`,
@@ -313,6 +316,32 @@ const Home = () => {
         <div className="lg:col-span-1 mb-3 sm:mb-4">
           <EducationalNews />
         </div>
+
+        {/* Battle Mode Banner */}
+        <NavLink to="/battle" className="block mb-3 sm:mb-4">
+          <div className="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-5 border-2 border-purple-300/50 dark:border-purple-700/50 hover:border-purple-400 dark:hover:border-purple-500 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-[1.02] group overflow-hidden relative">
+            {/* Background gradient effect */}
+            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/10 via-pink-500/10 to-cyan-500/10 dark:from-purple-500/20 dark:via-pink-500/20 dark:to-cyan-500/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+
+            <div className="relative flex items-center justify-between">
+              <div className="flex items-center gap-3 sm:gap-4">
+                <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-xl bg-gradient-to-br from-purple-500 to-pink-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <span className="text-2xl sm:text-3xl">⚔️</span>
+                </div>
+                <div>
+                  <h3 className="text-base sm:text-lg font-bold gradient-text">Quiz Battle</h3>
+                  <p className="text-xs sm:text-sm text-gray-600 dark:text-gray-400">Challenge players in real-time 1v1 battles!</p>
+                </div>
+              </div>
+              <div className="hidden sm:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-purple-500 to-pink-600 text-white rounded-full font-semibold text-sm shadow-lg group-hover:shadow-xl transition-all duration-300">
+                Play Now
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </div>
+          </div>
+        </NavLink>
 
         {/* Map through course batches with enhanced styling */}
         {courseBatches.map((batch, batchIndex) => {

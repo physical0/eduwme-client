@@ -14,6 +14,7 @@ interface User {
   role: string;
   xp?: number; // Make optional with ?
   gems?: number; // Make optional with ?
+  profilePicture?: string; // Base64 or URL string for profile picture
   inventory?: Array<{
     itemId: string;
     dateAcquired: Date;
@@ -155,8 +156,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Get the response data which includes token and fallbackRequired flag
       const responseData = await response.json();
 
-      // Store token in sessionStorage as fallback
-      if (responseData.fallbackRequired && responseData.token) {
+      // Always store token in sessionStorage when available (needed for WebSocket auth)
+      if (responseData.token) {
         sessionStorage.setItem("authToken", responseData.token);
       }
 
